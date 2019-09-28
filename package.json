@@ -1,0 +1,26 @@
+{
+  "name": "react-three-composition",
+  "version": "1.0.0",
+  "description": "React Three Composition",
+  "main": "dist/index.js",
+  "scripts": {
+    "transpile": "babel ./src --out-dir ./dist -s inline"
+  },
+  "author": "Skomorox",
+  "license": "MIT",
+  "dependencies": {
+    "@johh/three-effectcomposer": "0.0.7",
+    "@tweenjs/tween.js": "^17.3.0",
+    "three": "^0.107.0",
+    "three-obj-mtl-loader": "^1.0.3",
+    "three-renderer-css3d": "^1.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-react": "^7.0.0",
+    "react": "^16.9.0"
+  }
+}
