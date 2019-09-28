@@ -11,8 +11,9 @@ Composition includes the following features:
 - Adaptive positioning of objects on the scene
 - Post Processing support
 
-Getting started.
+# Usage
 
+```javascript
 <Composition
   camera={{
     type: 'perspective',
@@ -29,3 +30,4 @@ Getting started.
 >
   <MainScene id={'Main'} />
 </Composition>
+```
