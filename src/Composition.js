@@ -76,7 +76,7 @@ export class Composition extends Component {
         this.glRenderer.autoClear = glRenderer.autoClear;
       }
     } else {
-      this.setState({ loading: false });
+      this.state.loading = false; 
     }
 
     if (cssRenderer) {
@@ -95,9 +95,20 @@ export class Composition extends Component {
   }
 
   componentDidMount() {
-    this.glContainer.appendChild(this.glRenderer.domElement);
-    this.cssContainer.appendChild(this.cssRenderer.domElement);
-    this.activateScene(this.activeScene.id);
+    if (this.glRenderer) {
+      this.glContainer.appendChild(this.glRenderer.domElement);
+      setTimeout(() => {
+        if (!this.state.total) {
+          this.setState({ loading: false });
+        }
+      }, 100);
+    }
+    if (this.cssRenderer) {
+      this.cssContainer.appendChild(this.cssRenderer.domElement);
+    }
+    if (this.activeScene) {
+      this.activateScene(this.activeScene.id);
+    }
     this.setEventListeners();
     this.update();
     this.resize();
@@ -162,14 +173,16 @@ export class Composition extends Component {
       this.mouse.x = ((clientX - left) / offsetWidth) * 2 - 1;
       this.mouse.y = - ((clientY - top) / offsetHeight) * 2 + 1;
       
-      if (this.onMouseStop) clearTimeout(this.onMouseStop);
-      this.onMouseStop = setTimeout(() => {
-        this.findIntersects();
-        if (this.intersects.length) {
-          const visual = this.intersects[0].object;
-          if (visual.onMouseOver) visual.onMouseOver(visual);  
-        }
-      }, 25);
+      if (this.glRenderer) {
+        if (this.onMouseStop) clearTimeout(this.onMouseStop);
+        this.onMouseStop = setTimeout(() => {
+          this.findIntersects();
+          if (this.intersects.length) {
+            const visual = this.intersects[0].object;
+            if (visual.onMouseOver) visual.onMouseOver(visual);  
+          }
+        }, 25);
+      }
     });
     window.addEventListener('click', () => {
       if (this.intersects.length) {
@@ -185,8 +198,12 @@ export class Composition extends Component {
    */
   resize = () => {
     const { clientWidth, clientHeight } = this.container;
-    this.glRenderer.setSize(clientWidth, clientHeight);
-    this.cssRenderer.setSize(clientWidth, clientHeight);
+    if (this.glRenderer) {
+      this.glRenderer.setSize(clientWidth, clientHeight);
+    }
+    if (this.cssRenderer) {
+      this.cssRenderer.setSize(clientWidth, clientHeight);
+    }
     if (this.isPPEnabled) {
       this.composer.setSize(clientWidth, clientHeight);
     }
@@ -237,8 +254,12 @@ export class Composition extends Component {
    */
   findIntersects = () => {
     this.raycaster.setFromCamera(this.mouse, this.camera);
-    if (this.activeScene.glEvents) {
-      this.intersects = this.raycaster.intersectObjects(this.activeScene.visual.children, true);
+    if (this.activeScene) {
+      if (this.activeScene.glEvents) {
+        this.intersects = this.raycaster.intersectObjects(this.activeScene.visual.children, true);
+      }
+    } else {
+      this.intersects = this.raycaster.intersectObjects(this.scene.children, true);
     }
   };
 

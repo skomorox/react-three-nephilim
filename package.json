@@ -1,7 +1,13 @@
 {
   "name": "react-three-composition",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React Three Composition",
+  "keywords": [ "react", "three", "mvc", "spa"],
+  "homepage": "https://github.com/Skomorox/react-three-composition",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Skomorox/react-three-composition.git"
+  },
   "main": "dist/index.js",
   "scripts": {
     "transpile": "babel ./src --out-dir ./dist -s inline"
