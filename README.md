@@ -176,4 +176,4 @@ export class ExampleScene extends Scene {
 }
 ```
 
-Advanced examples you can find here: http://skomorox.herokuapp.com/ --> Intro --> Usage Examples
+Advanced examples you can find <a href="http://skomorox.herokuapp.com">here</a> --> Intro --> Usage Examples.
