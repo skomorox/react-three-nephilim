@@ -1,6 +1,6 @@
 {
   "name": "react-three-composition",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "React Three Composition",
   "keywords": [ "react", "three", "mvc", "spa"],
   "homepage": "https://github.com/Skomorox/react-three-composition",
