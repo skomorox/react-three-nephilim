@@ -3,7 +3,7 @@ Composition is a React wrapper around Three.js allowing you to easily create sop
 Composition introducing Scene-Controller concept, where instead of regular Views, navigation is carried out between Scenes in 3D space.
 The idea is that global THREE.Scene consists of several Composition Scenes (THREE.Group) - "Views", and Compostion carries out "routing" between them -
 moves currently active Scene behind the scenes and brings another Scene to front.
-This allows to achieve pretty interesting behaviour of SPA that could be checked out <a href="http://skomorox.herokuapp.com">here</a>
+This allows to achieve pretty interesting behaviour of SPA that could be checked out <a href="http://skomorox.herokuapp.com">here</a>.
 It is not absolutely necessary to use controllers in your app and just follow regular React approach, but they provide some useful methods to manage Scenes.
 
 Composition includes following features:
