@@ -39,6 +39,8 @@ export class Decoration extends Component {
       this.visual.layers.enable(layer);
       this.manager.layers[layer] = layer;
     }
+
+    this.connect(this._reactInternalFiber);
   }
 
   /**
@@ -48,6 +50,25 @@ export class Decoration extends Component {
   componentWillUnmount() {
     this.visual.parent.remove(this.visual);
   }
+
+  /**
+   * @function connect
+   * @param {Object} fiberNode
+   * Connect current Decoration to the parent
+   */
+  connect = fiberNode => {
+    const { stateNode } = fiberNode.return;
+    if (!stateNode) {
+      this.connect(fiberNode.return);
+    } else {
+       if (!stateNode.visual) {
+         this.connect(stateNode._reactInternalFiber);
+       } else {
+        stateNode.visual.add(this.visual);
+        stateNode.children[this.id] = this;
+       }
+    }
+  };
 
   /**
    * @function setVisualState

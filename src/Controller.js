@@ -8,29 +8,16 @@
 
 export class Controller {
 
-  constructor() {
-    this.scene = null;
-    this.scenes = {};
-  }
-
   /**
-   * @function setDefaultScene
-   * @param {Scene} scene
-   * Set default Scene for controller
+   * @function connect
+   * @param {Object} components
+   * Connect the components that this controller should manage
    */
-  setDefaultScene = scene => this.scene = scene;
-
-  /**
-   * @function setScene
-   * @param {Scene} scene
-   * Add Scene to controller
-   */
-  setScene = scene => this.scenes[scene.id] = scene;
-
-  /**
-   * @function isSceneActive
-   * Check if default scene of this controller is currently active
-   */
-  isSceneActive = () => this.scene.id === this.manager.activeScene.id;
-
+  connect = components => {
+    for (let c in components) {
+      if (c === 'manager') return false;
+      this[c] = components[c];
+    }
+  };
+  
 }

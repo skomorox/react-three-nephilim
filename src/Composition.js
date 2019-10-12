@@ -7,7 +7,7 @@
  *****************************************************************************************************
  */
 
-import React, { Component, Children, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import * as Three from 'three';
 import { CSS3DRenderer } from 'three-renderer-css3d';
 import { OBJLoader, MTLLoader } from 'three-obj-mtl-loader';
@@ -55,7 +55,7 @@ export class Composition extends Component {
     this.isActionsEnabled = true;
     this.isLayerRendering = layerRendering || false;
     this.mouse = new Three.Vector2(-1, -1);
-    this.scene = new Three.Scene();
+    this.visual = new Three.Scene();
     this.camera = new Three[`${this.capitalize(camera.type)}Camera`](
       camera.fov, 1,
       camera.near,
@@ -85,13 +85,13 @@ export class Composition extends Component {
 
     if (postProcessing) {
       this.composer = new EffectComposer(this.glRenderer);
-      this.composer.addPass(new EffectComposer.RenderPass(this.scene, this.camera));
+      this.composer.addPass(new EffectComposer.RenderPass(this.visual, this.camera));
     }
 
     Decoration.prototype.manager = this;
+    Controller.prototype.manager = this;
     Action.prototype.manager = this;
     Motion.prototype.manager = this;
-    Controller.prototype.manager = this;
   }
 
   componentDidMount() {
@@ -125,6 +125,10 @@ export class Composition extends Component {
           className={'container'}
         >
           <div
+            id={'portal'}
+            className={'renderer-container'}
+          />
+          <div
             ref={c => this.glContainer = c}
             className={'renderer-container'}
           />
@@ -147,13 +151,7 @@ export class Composition extends Component {
             </div>
           )}
         </div>
-        {Children.map(this.props.children, child => {
-          return child ? React.cloneElement(child, { ref: c => {
-            if (!c || c.visual.parent === this.visual) return false;
-            this.children[c.id] = c;
-            this.scene.add(c.visual);
-          }}) : false;
-        })}  
+        {this.props.children}
       </Fragment>
     );
   }
@@ -231,15 +229,15 @@ export class Composition extends Component {
         }
         this.glRenderer.clearDepth();
         this.camera.layers.set(0);
-        this.glRenderer.render(this.scene, this.camera);
+        this.glRenderer.render(this.visual, this.camera);
       } else {
         this.composer.render();
       }
     } else if (this.glRenderer) {
-      this.glRenderer.render(this.scene, this.camera);
+      this.glRenderer.render(this.visual, this.camera);
     }
     if (this.cssRenderer) {
-      this.cssRenderer.render(this.scene, this.camera);
+      this.cssRenderer.render(this.visual, this.camera);
     }
     TWEEN.update();
     requestAnimationFrame(this.update);
@@ -259,7 +257,7 @@ export class Composition extends Component {
         this.intersects = this.raycaster.intersectObjects(this.activeScene.visual.children, true);
       }
     } else {
-      this.intersects = this.raycaster.intersectObjects(this.scene.children, true);
+      this.intersects = this.raycaster.intersectObjects(this.visual.children, true);
     }
   };
 
@@ -404,6 +402,13 @@ export class Composition extends Component {
       || navigator.userAgent.match(/BlackBerry/i)
       || navigator.userAgent.match(/Windows Phone/i);
   };
+
+  /**
+   * @function isSceneActive
+   * @param {String} id
+   * Check if scene is currently active
+   */
+  isSceneActive = id => id === this.activeScene.id;
   
   /**
    * @function capitalize

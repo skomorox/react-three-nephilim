@@ -20,13 +20,24 @@ npm i react-three-composition
 
 # Usage
 
+```javascript
+.composition {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+```
+
 Basic html example:
 ```javascript
 import React from 'react';
 import Composition, { Hypertext } from 'react-three-composition';
+import './css/style.css';
 
 export const App = () => (
-  <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+  <div className={'composition'}>
     <Composition
       camera={{
         type: 'perspective',
@@ -65,9 +76,10 @@ Basic mesh example:
 ```javascript
 import React from 'react';
 import Composition, { Mesh } from 'react-three-composition';
+import './css/style.css';
 
 export const App = () => (
-  <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+  <div className={'composition'}>
     <Composition
       camera={{
         type: 'perspective',
@@ -77,7 +89,7 @@ export const App = () => (
       }}
       glRenderer={true}
     >
-     <Mesh
+      <Mesh
         position={{ z: -300 }}
         geometry={{
           type: 'box',
@@ -103,9 +115,10 @@ Mixed example:
 ```javascript
 import React from 'react';
 import Composition, { Mesh, Hypertext } from 'react-three-composition';
+import './css/style.css';
 
 export const App = () => (
-  <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+  <div className={'composition'}>
     <Composition
       camera={{
         type: 'perspective',

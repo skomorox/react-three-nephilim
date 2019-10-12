@@ -7,25 +7,17 @@
  *****************************************************************************************************
  */
 
-import { Group } from 'three';
-import { Decoration } from './Decoration';
+import { Container } from './Container';
 
-export class Scene extends Decoration {
+export class Scene extends Container {
 
   constructor() {
     super();
     this.isScene = true;
-    this.children = {};
-    this.visual = new Group();
   }
-
+  
   componentDidMount() {
-    if (this.props.default) {
-      this.manager.activeScene = this;
-    }
-    for (let c in this.children) {
-      this.visual.add(this.children[c].visual);
-    }
+    if (this.props.default) this.manager.activeScene = this;
     super.componentDidMount();
   }
 }

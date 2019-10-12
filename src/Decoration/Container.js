@@ -7,7 +7,6 @@
  *****************************************************************************************************
  */
 
-import React, { Fragment, Children } from 'react'; 
 import { Group, Vector3 } from 'three';
 import { Decoration } from './Decoration';
 
@@ -19,19 +18,16 @@ export class Container extends Decoration {
     this.visual = new Group();
   }
 
+  componentDidMount() {
+    Object.keys(this.children).forEach((k, i) => {
+      const c = this.children[k];
+      this.buildComposition(c.visual, i);
+    });
+    super.componentDidMount();
+  }
+
   render() {
-    return (
-      <Fragment>
-        {Children.map(this.props.children, (child, i) => {
-          return child ? React.cloneElement(child, { ref: c => {
-            if (!c || c.visual.parent === this.visual) return false;
-            this.children[c.id] = c;
-            this.buildComposition(c.visual, i);
-            this.visual.add(c.visual);
-          }}) : false;
-        })}
-      </Fragment>
-    );
+    return this.props.children;
   }
 
   /**
