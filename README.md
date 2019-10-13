@@ -15,12 +15,12 @@ Composition includes following features:
 - Post Processing support;
 
 # Installation
-npm i react-three-composition
+- $npm i react-three-composition
 
 # Build
-cd react-three-composition
-npm i
-npm run transpile
+- $cd react-three-composition
+- $npm i
+- $npm run transpile
 
 # Usage
 
