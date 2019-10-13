@@ -1,7 +1,5 @@
 /*****************************************************************************************************
  * @author Skomorox
- * v3.0.0
- *
  * @class Decoration
  * Abstract: Class Decoration. Basic class.
  *****************************************************************************************************
@@ -188,4 +186,5 @@ export class Decoration extends Component {
   };
 
   render() { return false; }
+  
 }

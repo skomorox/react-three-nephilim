@@ -9,13 +9,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-/*****************************************************************************************************
- * @author Skomorox
- * v3.0.0
- * 
- * @class Controller
- *****************************************************************************************************
- */
 var Controller = function Controller() {
   var _this = this;
 

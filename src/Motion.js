@@ -1,7 +1,5 @@
 /***************************************************************************************************************
  * @author Skomorox
- * v3.0.0
- * 
  * @class Motion
  * Abstract: Motion represents different types of random or preset
  *           Decoration movement. Currently available motion types are:
@@ -114,4 +112,5 @@ export class Motion {
       }
     });
   };
+  
 }

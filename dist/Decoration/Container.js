@@ -33,9 +33,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var Container =
-/*#__PURE__*/
-function (_Decoration) {
+var Container = function (_Decoration) {
   _inherits(Container, _Decoration);
 
   function Container() {
@@ -155,12 +153,6 @@ function (_Decoration) {
     value: function render() {
       return this.props.children;
     }
-    /**
-     * @function buildComposition
-     * Add Decoration to the Сontainer according to composition settings
-     * Acceptable options are: grid, z-grid, cylinder
-     */
-
   }]);
 
   return Container;

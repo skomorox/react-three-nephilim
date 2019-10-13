@@ -1,7 +1,5 @@
 /*****************************************************************************************************
  * @author Skomorox
- * v3.0.0
- *
  * @class Hypertext
  * Abstract: Class Hypertext. THREE.CSS3DObject wrapper.
  *****************************************************************************************************
@@ -27,4 +25,5 @@ export class Hypertext extends Decoration {
   render() {
     return ReactDOM.createPortal(this.props.children, this.element);
   }
+  
 }

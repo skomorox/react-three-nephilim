@@ -1,7 +1,5 @@
 /*****************************************************************************************************
  * @author Skomorox
- * v3.0.0
- *
  * @class Mesh
  * Abstract: Class Mesh. THREE.Mesh wrapper.
  *****************************************************************************************************
@@ -55,4 +53,5 @@ export class Mesh extends Decoration {
       this.visual = new Three.Mesh(this.geometry, this.material);
     }
   };
+  
 }

@@ -13,7 +13,7 @@ var _threeRendererCss3d = require("three-renderer-css3d");
 
 var _threeObjMtlLoader = require("three-obj-mtl-loader");
 
-var _EffectComposer = require("./EffectComposer/EffectComposer");
+var _EffectComposer = require("./EffectComposer");
 
 var _Decoration = require("./Decoration/Decoration");
 
@@ -73,27 +73,9 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var Composition =
-/*#__PURE__*/
-function (_Component) {
+var Composition = function (_Component) {
   _inherits(Composition, _Component);
 
-  /**
-   * @function constructor
-   * @param {Object} params
-   * @param {Object} camera
-   * @param {Object} glRenderer
-   * @param {Object} cssRenderer
-   * @param {Object} postProcessing
-   * @param {Boolean} layerRendering
-   * 
-   * Init application
-   * 1. Setup mouse, global Scene and Camera
-   * 2. Setup THREE.WebGLRenderer
-   * 3. Setup THREE.CSS3DRenderer
-   * 4. Setup THREE.EffectComposer
-   * 5. Inject this as manager in Decoration, Action, Motion, Controller classes
-   */
   function Composition(_ref) {
     var _this;
 
@@ -211,7 +193,7 @@ function (_Component) {
       }
     });
 
-    _defineProperty(_assertThisInitialized(_this), "activateScene", function (id, params) {
+    _defineProperty(_assertThisInitialized(_this), "navigate", function (id, params) {
       var _loop = function _loop(k) {
         var scene = _this.children[k].find(id);
 
@@ -227,8 +209,8 @@ function (_Component) {
         _loop(k);
       }
 
-      _this.actions["".concat(id, ":ActivateScene")].begin(_objectSpread({
-        duration: _this.activeScene.props.activationDuration
+      _this.actions["".concat(id, ":Navigate")].begin(_objectSpread({
+        duration: _this.activeScene.props.navigationDuration
       }, params, {
         enforce: true
       }));
@@ -279,8 +261,9 @@ function (_Component) {
         var ppEffect = null;
 
         if (eff.indexOf('Shader') === -1) {
+          var Pass = _EffectComposer.EffectComposer["".concat(eff, "Pass")] || pp[eff].src;
           var params = pp[eff].params || [];
-          ppEffect = _construct(_EffectComposer.EffectComposer["".concat(eff, "Pass")], _toConsumableArray(params));
+          ppEffect = _construct(Pass, _toConsumableArray(params));
         } else {
           ppEffect = new _EffectComposer.EffectComposer.ShaderPass(pp[eff].src);
 
@@ -454,13 +437,6 @@ function (_Component) {
         className: 'loader text-loader'
       }, "Loading resources (", loaded, " of ", total, ")")))), this.props.children);
     }
-    /**
-     * @function setEventListeners
-     * Set window event listeners
-     * onMouseStop - intersectObjects should not be called each time
-     * since this leads to critical decrease of performance
-     */
-
   }]);
 
   return Composition;

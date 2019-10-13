@@ -1,7 +1,5 @@
 /*****************************************************************************************************
  * @author Skomorox
- * v3.0.0
- *
  * @class Scene
  * Abstract: Class Scene. Routing is being carried out between Scenes. THREE.Group wrapper.
  *****************************************************************************************************
@@ -20,4 +18,5 @@ export class Scene extends Container {
     if (this.props.default) this.manager.activeScene = this;
     super.componentDidMount();
   }
+  
 }

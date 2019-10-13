@@ -182,20 +182,6 @@ var Action = function Action() {
   });
 
   this.decorations = {};
-}
-/**
- * @function begin
- * @param {Object} params
- * @param {Object[]} decorations
- * @param {String} easing
- * @param {Number} duration
- * @param {Boolean} affectAll
- * @param {Boolean} enforce
- * @param {Function} callback
- * 1. Check if other Action is currently in progress and if Scene is locked
- * 2. Generate a list of affected Decorations and destination objects
- * 3. Begin animation
- */
-;
+};
 
 exports.Action = Action;

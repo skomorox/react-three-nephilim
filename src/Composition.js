@@ -1,7 +1,5 @@
 /*****************************************************************************************************
  * @author Skomorox
- * v3.0.0
- *
  * @class Composition
  * Abstract: Class Composition
  *****************************************************************************************************
@@ -11,7 +9,7 @@ import React, { Component, Fragment } from 'react';
 import * as Three from 'three';
 import { CSS3DRenderer } from 'three-renderer-css3d';
 import { OBJLoader, MTLLoader } from 'three-obj-mtl-loader';
-import { EffectComposer } from './EffectComposer/EffectComposer';
+import { EffectComposer } from './EffectComposer';
 import { Decoration } from './Decoration/Decoration';
 import { Controller } from './Controller';
 import { Action } from './Action';
@@ -262,12 +260,12 @@ export class Composition extends Component {
   };
 
   /**
-   * @function activateScene
+   * @function navigate
    * @param {String} id
    * @param {Object} params
-   * Activate Scene by id
+   * Navigate to Scene by id
    */
-  activateScene = (id, params) => {
+  navigate = (id, params) => {
     for (let k in this.children) {
       const scene = this.children[k].find(id);
       if (scene) {
@@ -277,8 +275,8 @@ export class Composition extends Component {
         this.activeScene = scene;
       }
     }
-    this.actions[`${id}:ActivateScene`].begin({
-      duration: this.activeScene.props.activationDuration,
+    this.actions[`${id}:Navigate`].begin({
+      duration: this.activeScene.props.navigationDuration,
       ...params,
       enforce: true
     });
@@ -351,8 +349,9 @@ export class Composition extends Component {
     effects.forEach((eff, ei) => {
       let ppEffect = null;
       if (eff.indexOf('Shader') === -1) {
+        const Pass = EffectComposer[`${eff}Pass`] || pp[eff].src;
         const params = pp[eff].params || [];
-        ppEffect = new EffectComposer[`${eff}Pass`](...params);
+        ppEffect = new Pass(...params);
       } else {
         ppEffect = new EffectComposer.ShaderPass(pp[eff].src);
         if (pp[eff].uniforms) {

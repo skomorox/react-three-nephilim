@@ -9,26 +9,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-/***************************************************************************************************************
- * @author Skomorox
- * v3.0.0
- * 
- * @class Motion
- * Abstract: Motion represents different types of random or preset
- *           Decoration movement. Currently available motion types are:
- *           1. Random / static position (randSpeed / speed, changes direction when maxValue is reached, if set)
- *           2. Random / static rotation (randSpeed / speed, changes direction when maxValue is reached, if set)
- *           3. Random / static scale (randSpeed / speed, changes direction when maxValue is reached, if set)
- *           4. Track mouse position - change position, rotation, scale (x, y, z) + custom modifiers
- *           5. Update shader uniforms
- *           6. Update morph targets
- ***************************************************************************************************************
- */
-var Motion =
-/**
- * @function constructor
- */
-function Motion(visual, params) {
+var Motion = function Motion(visual, params) {
   var _this = this;
 
   _classCallCheck(this, Motion);
@@ -142,11 +123,6 @@ function Motion(visual, params) {
   for (var m in params) {
     _loop(m);
   }
-}
-/**
- * @function update
- * Update Motion
- */
-;
+};
 
 exports.Motion = Motion;

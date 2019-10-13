@@ -1,6 +1,6 @@
 {
   "name": "react-three-composition",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "React Three Composition",
   "keywords": [
     "react",
@@ -15,7 +15,7 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "transpile": "babel ./src --out-dir ./dist"
+    "transpile": "babel ./src --out-dir ./dist --no-comments"
   },
   "author": "Skomorox",
   "license": "MIT",

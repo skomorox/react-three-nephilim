@@ -31,9 +31,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var Decoration =
-/*#__PURE__*/
-function (_Component) {
+var Decoration = function (_Component) {
   _inherits(Decoration, _Component);
 
   function Decoration() {
@@ -172,17 +170,6 @@ function (_Component) {
 
   _createClass(Decoration, [{
     key: "componentDidMount",
-
-    /**
-     * @function componentDidMount
-     * Set settings for mounted component:
-     * 1. Basic settings
-     * 2. Position, rotation and scale
-     * 3. Motion
-     * 4. Actions
-     * 5. Event listeners
-     * 6. Enable layer if defined
-     */
     value: function componentDidMount() {
       var _this$props = this.props,
           id = _this$props.id,
@@ -209,22 +196,11 @@ function (_Component) {
 
       this.connect(this._reactInternalFiber);
     }
-    /**
-     * @function componentWillUnmount
-     * Remove object from Scene on unmount
-     */
-
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       this.visual.parent.remove(this.visual);
     }
-    /**
-     * @function connect
-     * @param {Object} fiberNode
-     * Connect current Decoration to the parent
-     */
-
   }, {
     key: "render",
     value: function render() {

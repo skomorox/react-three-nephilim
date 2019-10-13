@@ -2,8 +2,6 @@
 
 /*****************************************************************************************************
  * @author Skomorox
- * v3.0.0
- *
  * @class Action
  * Abstract: Actions are finalized acts which affect Decorations or Scenes.
  *           Only one Action can be performed at the same time.
