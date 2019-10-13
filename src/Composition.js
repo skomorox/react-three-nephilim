@@ -105,7 +105,7 @@ export class Composition extends Component {
       this.cssContainer.appendChild(this.cssRenderer.domElement);
     }
     if (this.activeScene) {
-      this.activateScene(this.activeScene.id);
+      this.navigate(this.activeScene.id);
     }
     this.setEventListeners();
     this.update();
