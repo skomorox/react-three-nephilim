@@ -86,6 +86,10 @@ export class Composition extends Component {
       this.composer.addPass(new EffectComposer.RenderPass(this.visual, this.camera));
     }
 
+    if (window.location.pathname !== '/') {
+      this.route = window.location.pathname;
+    }
+
     Decoration.prototype.manager = this;
     Controller.prototype.manager = this;
     Action.prototype.manager = this;
@@ -104,10 +108,8 @@ export class Composition extends Component {
     if (this.cssRenderer) {
       this.cssContainer.appendChild(this.cssRenderer.domElement);
     }
-    if (this.activeScene) {
-      this.navigate(this.activeScene.id);
-    }
     this.setEventListeners();
+    this.setInitialRoute();
     this.update();
     this.resize();
   }
@@ -186,6 +188,30 @@ export class Composition extends Component {
         if (visual.onClick) visual.onClick(visual);  
       }
     });
+  };
+
+  /**
+   * @function setInitialRoute
+   * Check if there is any route and navigate.
+   * Execute callback after navigation
+   */
+  setInitialRoute = () => {
+    const { routes } = this.props;
+    let sceneId = null;
+    if (this.route) {
+      const origin = `/${this.route.split('/')[1]}`;
+      for (let r in routes) {
+        if (routes[r] === origin || routes[r].path === origin) {
+          sceneId = r;
+        }
+      }
+    } else if (this.activeScene) {
+      sceneId = this.activeScene.id;
+    }
+    if (sceneId) {
+      const callback = routes[sceneId].callback ? () => routes[sceneId].callback(this, this.route) : false;
+      this.navigate(sceneId, { callback });
+    }
   };
   
   /**
@@ -266,14 +292,22 @@ export class Composition extends Component {
    * Navigate to Scene by id
    */
   navigate = (id, params) => {
-    for (let k in this.children) {
-      const scene = this.children[k].find(id);
-      if (scene) {
-        ['onMouseWheel', 'onMouseMove', 'onClick', 'onKeyUp'].forEach(e => {
-          window[e.toLowerCase()] = scene.props[e] || null;
-        });
-        this.activeScene = scene;
+
+    const { routes } = this.props;
+    const scene = this.find(id);
+
+    if (scene) {
+      const events = ['onMouseWheel', 'onMouseMove', 'onClick', 'onKeyUp'];
+      for (let e = 0; e < events.length; e++) {
+        window[events[e].toLowerCase()] = scene.props[events[e]] || null;
       }
+      this.activeScene = scene;
+    }
+    if (routes) {
+      window.history.pushState({}, this.activeScene.id, routes[id].path || routes[id]);
+    }
+    if (this.activeScene.ppEffects) {
+      this.setPPEffects(this.activeScene.ppEffects);
     }
     this.actions[`${id}:Navigate`].begin({
       duration: this.activeScene.props.navigationDuration,
@@ -379,6 +413,18 @@ export class Composition extends Component {
    * Enable / disable layer by layer rendering
    */
   enableLayerRendering = enabled => this.isLayerRendering = enabled;
+
+  /**
+   * @function find
+   * @param {String} id
+   * Find Decoration by id
+   */
+  find = id => {
+    for (let k in this.children) {
+      const c = this.children[k].find(id);
+      if (c) return c;
+    }
+  };
 
   /**
    * @function isMobileScreen

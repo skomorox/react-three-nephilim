@@ -15,7 +15,10 @@ export class Scene extends Container {
   }
   
   componentDidMount() {
-    if (this.props.default) this.manager.activeScene = this;
+    const { initial, navigationDuration, ppEffects } = this.props;
+    if (initial) this.manager.activeScene = this;
+    this.navigationDuration = navigationDuration;
+    this.ppEffects = ppEffects;
     super.componentDidMount();
   }
   
