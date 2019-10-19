@@ -34,7 +34,6 @@ Composition includes following features:
   height: 100%;
 }
 .button {
-  font-size: 12px;
   cursor: pointer;
 }
 ```
