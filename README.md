@@ -13,6 +13,7 @@ Composition includes following features:
 - Several types of composition of GL and/or HTML objects within a container;
 - Adaptive positioning of objects on the Scene;
 - Post Processing support;
+- Basic Routing.
 
 # Installation
 - $npm i react-three-composition
@@ -212,7 +213,7 @@ const MainScene = () => {
     <Scene
       ref={s => s && setManager(s.manager)}
       id={'Main'}
-      default={true}
+      initial={true}
       position={{ y: -1000, z: -500 }}
       navigationDuration={1000}
       actions={actions.main}
@@ -312,6 +313,55 @@ export const App = () => (
   </div>
 );
 ```
+
+Composition settings:
+```javascript
+const routes = {
+  MainScene: '/',
+  SecondScene: '/second'
+};
+const postProcessing = {
+  UnrealBloom: {
+    src: UnrealBloomPass,
+    params: [...]
+  },
+  BleachBypassShader: {
+    src: BleachBypassShader,
+    uniforms: {
+      opacity: 0.7
+    }
+  },
+  FreiChenShader: {
+    src: FreiChenShader
+  }
+};
+
+export const App = () => (
+  <div className={'composition'}>
+    <Composition
+      camera={{
+        type: 'perspective',
+        fov: 40,
+        near: 1,
+        far: 200000
+      }}
+      glRenderer={{
+        alpha: true,
+        antialias: true,
+        autoClear: false
+      }}
+      cssRenderer={true}
+      layerRendering={true}
+      routes={routes}
+      postProcessing={postProcessing}
+    >
+      {...}
+    </Composition>
+  </div>
+);
+```
+
+
 It is not absolutely necessary to use controllers in your app and just follow regular React approach as described in examples,
 but they provide some useful functionality to separate control logic and manage Scenes.
-Advanced examples you can find <a href="http://skomorox.herokuapp.com">here</a> --> Intro --> Usage Examples.
+Advanced examples you can find <a href="http://skomorox.herokuapp.com/examples">here</a>.
