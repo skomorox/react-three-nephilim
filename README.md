@@ -316,8 +316,9 @@ export const App = () => (
 Composition settings:
 ```javascript
 const routes = {
-  MainScene: '/',
-  SecondScene: '/second'
+  Main: '/', // <Scene id={'Main'} />
+  Second: '/second' // Also <id>: { path: '/...', callback: (manager, route) => {...} } is acceptable
+  // where callback is a function that should be executed after navigation to the Scene
 };
 const postProcessing = {
   UnrealBloom: {
