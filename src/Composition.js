@@ -209,7 +209,7 @@ export class Composition extends Component {
       sceneId = this.activeScene.id;
     }
     if (sceneId) {
-      const callback = routes[sceneId].callback ? () => routes[sceneId].callback(this, this.route) : false;
+      const callback = (routes && routes[sceneId].callback) ? () => routes[sceneId].callback(this, this.route) : false;
       this.navigate(sceneId, { callback });
     }
   };
