@@ -22,7 +22,7 @@
   "dependencies": {
     "@johh/three-effectcomposer": "0.0.7",
     "@tweenjs/tween.js": "^17.3.0",
-    "three": "^0.107.0",
+    "three": "^0.125.0",
     "three-obj-mtl-loader": "^1.0.3",
     "three-renderer-css3d": "^1.0.0"
   },
