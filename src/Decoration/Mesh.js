@@ -53,5 +53,5 @@ export class Mesh extends Decoration {
       this.visual = new Three.Mesh(this.geometry, this.material);
     }
   };
-  
+
 }

@@ -185,6 +185,6 @@ export class Decoration extends Component {
     }
   };
 
-  render() { return false; }
-  
+  render() { return null; }
+
 }

@@ -17,11 +17,10 @@ export class Container extends Decoration {
   }
 
   componentDidMount() {
-    const keys = Object.keys(this.children);
-    for (let k = 0; k < keys.length; k++) {
-      const { visual } = this.children[keys[k]];
-      this.buildComposition(visual, k);
-    }
+    Object.keys(this.children).forEach((k, i) => {
+      const c = this.children[k];
+      this.buildComposition(c.visual, i);
+    });
     super.componentDidMount();
   }
 

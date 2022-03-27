@@ -98,9 +98,7 @@ export class Motion {
    * Track mouse by axis
    */
   trackMouseByAxis = ({ track, axis }) => {
-    const types = ['position', 'rotation', 'scale'];
-    for (let t = 0; t < types.length; t++) {
-      const type = types[t];
+    ['position', 'rotation', 'scale'].forEach(type => {
       if (track[type]) {
         if (track[type].x) {
           this.visual[type].x = axis * track[type].x + (track[type].modX || 0);
@@ -112,7 +110,7 @@ export class Motion {
           this.visual[type].z = axis * track[type].z + (track[type].modZ || 0);
         }
       }
-    }
+    });
   };
-  
+
 }
