@@ -20,6 +20,7 @@
   "author": "Skomorox",
   "license": "MIT",
   "dependencies": {
+    "lodash": "^4.17.21",
     "path-parse": "^1.0.7",
     "@tweenjs/tween.js": "^18.6.4",
     "three": "^0.139.0",
