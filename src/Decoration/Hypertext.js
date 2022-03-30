@@ -6,7 +6,7 @@
  */
 
 import ReactDOM from 'react-dom';
-import { CSS3DObject } from 'three-renderer-css3d';
+import { CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
 import { Decoration } from './Decoration';
 
 export class Hypertext extends Decoration {

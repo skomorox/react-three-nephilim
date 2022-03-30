@@ -7,7 +7,7 @@
 
 import React, { Component, Fragment } from 'react';
 import * as Three from 'three';
-import { CSS3DRenderer } from 'three-renderer-css3d';
+import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
 import { OBJLoader, MTLLoader } from 'three-obj-mtl-loader';
 import { EffectComposer } from './EffectComposer';
 import { Decoration } from './Decoration/Decoration';
