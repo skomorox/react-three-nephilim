@@ -18,8 +18,8 @@ export class Mesh extends Decoration {
 
   setMaterial = ({ type, params, onlyDesktop }) => {
     if (type === 'shader') {
-      if (params.uniforms.texture) {
-        this.texture = this.manager.textureLoader.load(params.uniforms.texture.value);
+      if (params.uniforms.map) {
+        this.texture = this.manager.textureLoader.load(params.uniforms.map.value);
       }
       if (onlyDesktop && this.manager.isMobileDevice()) {
         this.material = new Three.MeshBasicMaterial({
@@ -27,7 +27,7 @@ export class Mesh extends Decoration {
           map: this.texture
         });
       } else {
-        params.uniforms.texture.value = this.texture;
+        params.uniforms.map.value = this.texture;
         this.material = new Three.ShaderMaterial(params);
       }
     } else if (type !== 'mtl') {
