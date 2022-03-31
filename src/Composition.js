@@ -8,7 +8,8 @@
 import React, { Component, Fragment } from 'react';
 import * as Three from 'three';
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
-import { OBJLoader, MTLLoader } from 'three-obj-mtl-loader';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { EffectComposer } from './EffectComposer';
 import { Decoration } from './Decoration/Decoration';
 import { Controller } from './Controller';

@@ -42,7 +42,7 @@ export class Mesh extends Decoration {
   setGeometry = ({ type, params, custom, src }, material) => {
     if (type === 'obj') {
       this.visual = new Three.Group();
-      this.manager.mtlLoader.setTexturePath(material.params.texturePath).load(material.params.src, materials => {
+      this.manager.mtlLoader.load(material.params.src, materials => {
         materials.preload();
         this.manager.objLoader.setMaterials(materials).load(src, obj => {
           this.visual.add(obj);
