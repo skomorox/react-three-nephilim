@@ -384,14 +384,14 @@ export class Composition extends Component {
     effects.forEach((eff, ei) => {
       let ppEffect = null;
       if (eff.includes('Shader')) {
-        ppEffect = new Passes.ShaderPass(Shaders[eff] || pp[eff].src);
+        ppEffect = new Passes.ShaderPass(pp[eff].src || Shaders[eff]);
         if (pp[eff].uniforms) {
           for (let u in pp[eff].uniforms) {
             ppEffect.uniforms[u].value = pp[eff].uniforms[u];
           }
         }
       } else {
-        const Pass = Passes[eff] || pp[eff].src;
+        const Pass = pp[eff].src || Passes[eff];
         const params = pp[eff].params || [];
         ppEffect = new Pass(...params);
       }
