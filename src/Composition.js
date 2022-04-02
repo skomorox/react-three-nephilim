@@ -8,9 +8,8 @@
 import React, { Component, Fragment } from 'react';
 import * as Three from 'three';
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
-import { EffectComposer } from './EffectComposer';
+import { EffectComposer, Passes, Shaders } from './EffectComposer';
+import { Loaders } from './Loader';
 import { Decoration } from './Decoration/Decoration';
 import { Controller } from './Controller';
 import { Action } from './Action';
@@ -66,9 +65,10 @@ export class Composition extends Component {
       this.glRenderer.setPixelRatio(window.devicePixelRatio);
       this.raycaster = new Three.Raycaster();
       this.loadingManager = new Three.LoadingManager();
+      this.animationLoader = new Three.AnimationLoader(this.loadingManager);
+      this.audioLoader = new Three.AudioLoader(this.loadingManager);
       this.textureLoader = new Three.TextureLoader(this.loadingManager);
-      this.objLoader = new OBJLoader(this.loadingManager);
-      this.mtlLoader = new MTLLoader(this.loadingManager);
+      this.loaders = {};
       this.loadingManager.onProgress = (item, loaded, total) => this.setState({ loaded, total });
       this.loadingManager.onLoad = () => this.setState({ loading: false });
       if (glRenderer.autoClear !== undefined) {
@@ -84,7 +84,7 @@ export class Composition extends Component {
 
     if (postProcessing) {
       this.composer = new EffectComposer(this.glRenderer);
-      this.composer.addPass(new EffectComposer.RenderPass(this.visual, this.camera));
+      this.composer.addPass(new Passes.RenderPass(this.visual, this.camera));
     }
 
     if (window.location.pathname !== '/') {
@@ -383,22 +383,35 @@ export class Composition extends Component {
 
     effects.forEach((eff, ei) => {
       let ppEffect = null;
-      if (eff.indexOf('Shader') === -1) {
-        const Pass = EffectComposer[`${eff}Pass`] || pp[eff].src;
-        const params = pp[eff].params || [];
-        ppEffect = new Pass(...params);
-      } else {
-        ppEffect = new EffectComposer.ShaderPass(pp[eff].src);
+      if (eff.includes('Shader')) {
+        ppEffect = new Passes.ShaderPass(Shaders[eff] || pp[eff].src);
         if (pp[eff].uniforms) {
           for (let u in pp[eff].uniforms) {
             ppEffect.uniforms[u].value = pp[eff].uniforms[u];
           }
         }
+      } else {
+        const Pass = Passes[eff] || pp[eff].src;
+        const params = pp[eff].params || [];
+        ppEffect = new Pass(...params);
       }
       ppEffect.renderToScreen = ei === effects.length - 1;
       this.composer.addPass(ppEffect);
     });
     this.composer.setSize(clientWidth, clientHeight);
+  };
+
+  /**
+   * @function setLoader
+   * @param {String} type
+   * Add resource loader by type
+   */
+  setLoaders = types => {
+    types.forEach(t => {
+      if (Loaders[`${t}Loader`] && !this.loaders[`${t}Loader`]) {
+        this.loaders[`${t}Loader`] = new Loaders[`${t}Loader`](this.loadingManager);
+      }
+    });
   };
 
   /**
