@@ -58,7 +58,7 @@ export class Action {
       const state = ad[d].state;
 
       from.push(deco.visual);
-      to.push(deco.buildVisualState(state));    
+      to.push(deco.calcVisualState(state));    
 
       if (state.uniforms) {
         for (let u in state.uniforms) {
@@ -71,7 +71,7 @@ export class Action {
     if (enforce) this.manager.isActionsEnabled = false;
 
     this.animate({ from, to, easing, duration, callback });
-  }
+  };
 
   /**
    * @function animate
@@ -142,7 +142,7 @@ export class Action {
   onActionComplete = ({ callback }) => {
     this.manager.isActionsEnabled = true;
     if (callback) callback();
-  }
+  };
 
   /**
    * @function getDecorations

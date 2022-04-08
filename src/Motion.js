@@ -19,19 +19,18 @@ export class Motion {
    */
   constructor(visual, params) {
 
-    this.modes = {};
     this.visual = visual;
-
+    this.modes = {};
+    
     for (let m in params) {
       if (params[m].axes) {
         const axes = params[m].axes.split('');
         this.modes[m] = { axes: {} };
-        axes.forEach(a => {
-          this.modes[m].axes[a] = {};
-          this.modes[m].axes[a].speed = params[m].speed ? params[m].speed : Math.random() * params[m].randSpeed;
-          this.modes[m].axes[a].currentValue = 0;
-          this.modes[m].axes[a].maxValue = params[m].maxValue;
-          this.modes[m].axes[a].direction = params[m].speed ? true : Math.random() > 0.5;
+        axes.forEach(a => this.modes[m].axes[a] = {
+          currentValue: 0,
+          maxValue: params[m].maxValue,
+          direction: params[m].speed ? true : Math.random() > 0.5,
+          speed: params[m].speed || Math.random() * params[m].randSpeed
         });
       } else {
         this.modes[m] = params[m];
@@ -91,7 +90,7 @@ export class Motion {
           break;
       }
     }
-  }
+  };
 
   /**
    * @function trackMouseByAxis

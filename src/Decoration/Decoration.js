@@ -23,13 +23,16 @@ export class Decoration extends Component {
    */
   componentDidMount() {
 
-    const { id, motion, actions, layer, global, glEvents, onClick, onMouseOver } = this.props;
+    const {
+      id, motion, actions, layer, global,
+      glEvents, onClick, onMouseOver
+    } = this.props;
     this.id = id || this.id || this.visual.uuid;
     this.glEvents = this.glEvents || glEvents;
     this.isGlobal = global || false;
     this.setVisualState(this.props);
 
-    if (motion) this.motion = new Motion(this.visual, motion);
+    if (motion) this.setMotion(motion);
     if (actions) this.setActions(actions);
     if (onClick) this.visual.onClick = onClick;
     if (onMouseOver) this.visual.onMouseOver = onMouseOver;
@@ -42,6 +45,17 @@ export class Decoration extends Component {
   }
 
   /**
+   * @function componentDidUpdate
+   * Update Motion
+   */
+  componentDidUpdate({ motion: prevMotion }) {
+    const { motion } = this.props;
+    if (motion !== prevMotion) {
+      this.setMotion(motion);
+    }
+  }
+
+  /**
    * @function componentWillUnmount
    * Remove object from Scene on unmount
    */
@@ -49,24 +63,9 @@ export class Decoration extends Component {
     this.visual.parent.remove(this.visual);
   }
 
-  /**
-   * @function connect
-   * @param {Object} fiberNode
-   * Connect current Decoration to the parent
-   */
-  connect = fiberNode => {
-    const { stateNode } = fiberNode.return;
-    if (!stateNode) {
-      this.connect(fiberNode.return);
-    } else {
-       if (!stateNode.visual) {
-         this.connect(stateNode._reactInternalFiber);
-       } else {
-        stateNode.visual.add(this.visual);
-        stateNode.children[this.id] = this;
-       }
-    }
-  };
+  render() {
+    return null;
+  }
 
   /**
    * @function setVisualState
@@ -74,7 +73,7 @@ export class Decoration extends Component {
    * Set position, rotation and scale of the object
    */
   setVisualState = state => {
-    const vs = this.buildVisualState(state);    
+    const vs = this.calcVisualState(state);    
     this.visual.position.set(vs.position.x, vs.position.y, vs.position.z);
     this.visual.scale.set(vs.scale.x, vs.scale.y, vs.scale.z);
     if (vs.lookAt) {
@@ -85,11 +84,53 @@ export class Decoration extends Component {
   };
 
   /**
-   * @function buildVisualState
+   * @function setStateValue
+   * @param {Number | Array} sv - state value
+   * @param {Number} vv - visual value
+   * Calculate given state value based on current and new value
+   */
+  setStateValue = (sv, vv) => (
+    sv === undefined ?
+      vv :
+      Array.isArray(sv) ?
+        this.manager.isMobileScreen() ?
+          sv[0] :
+          sv[1] :
+        sv
+  );
+
+  /**
+   * @function setMotion
+   * @param {Object} motion
+   * Set Motion for current Decoration
+   */
+  setMotion = motion => {
+    this.motion = new Motion(this.visual, motion);
+  };
+
+  /**
+   * @function setActions
+   * @param {Object} actions
+   * Set Actions for current Decoration
+   */
+  setActions = actions => {
+    this.actions = actions;
+    this.manager.connectActions(this, actions);
+  };
+
+  /**
+   * @function getActionState
+   * @param {String} actions
+   * Set Actions for current Decoration
+   */
+  getActionState = a => this.actions[a];
+
+  /**
+   * @function calcVisualState
    * @param {Object} state
    * Calculate position, rotation and scale based on current and new state
    */
-  buildVisualState = state => {
+  calcVisualState = state => {
     
     const visPos = this.visual.position;
     const visRot = this.visual.rotation;
@@ -125,16 +166,6 @@ export class Decoration extends Component {
   };
 
   /**
-   * @function setStateValue
-   * @param {Number | Array} sv - state value
-   * @param {Number} vv - visual value
-   * Calculate given state value based on current and new value
-   */
-  setStateValue = (sv, vv) => {
-    return sv === undefined ? vv : Array.isArray(sv) ? this.manager.isMobileScreen() ? sv[0] : sv[1] : sv;
-  };
-
-  /**
    * @function update
    * @param {Boolean} onlyGlobal
    * Update Decorations for current active Scene
@@ -155,21 +186,23 @@ export class Decoration extends Component {
   };
 
   /**
-   * @function setActions
-   * @param {Object} actions
-   * Set Actions for current Decoration
+   * @function connect
+   * @param {Object} fiberNode
+   * Connect current Decoration to the parent
    */
-  setActions = actions => {
-    this.actions = actions;
-    this.manager.connectActions(this, actions);
+  connect = fiberNode => {
+    const { stateNode } = fiberNode.return;
+    if (!stateNode) {
+      this.connect(fiberNode.return);
+    } else {
+      if (!stateNode.visual) {
+        this.connect(stateNode._reactInternalFiber);
+      } else {
+        stateNode.visual.add(this.visual);
+        stateNode.children[this.id] = this;
+      }
+    }
   };
-
-  /**
-   * @function getActionState
-   * @param {String} actions
-   * Set Actions for current Decoration
-   */
-  getActionState = a => this.actions[a];
 
   /**
    * @function find
@@ -184,7 +217,5 @@ export class Decoration extends Component {
       if (c) return c;
     }
   };
-
-  render() { return null; }
 
 }

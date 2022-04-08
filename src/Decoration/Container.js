@@ -19,7 +19,7 @@ export class Container extends Decoration {
   componentDidMount() {
     Object.keys(this.children).forEach((k, i) => {
       const c = this.children[k];
-      this.buildComposition(c.visual, i);
+      this.calcCompositionState(c.visual, i);
     });
     super.componentDidMount();
   }
@@ -29,17 +29,22 @@ export class Container extends Decoration {
   }
 
   /**
-   * @function buildComposition
+   * @function calcCompositionState
    * Add Decoration to the Сontainer according to composition settings
    * Acceptable options are: grid, z-grid, cylinder
    */  
-  buildComposition = (visual, i) => {
+   calcCompositionState = (visual, i) => {
 
     const { composition } = this.props;
 
     if (!composition) return false;
-    let { type, cols, rows, xStart, xStep, xRand, yStart, yStep, yRand, zStart, zStep, zRand, radius, shift } = composition;
 
+    let {
+      type, cols, rows, radius, shift,
+      xStart, xStep, xRand,
+      yStart, yStep, yRand,
+      zStart, zStep, zRand
+    } = composition;
     let column;
     let row;
     let layer;

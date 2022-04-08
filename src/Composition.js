@@ -210,10 +210,68 @@ export class Composition extends Component {
       sceneId = this.activeScene.id;
     }
     if (sceneId) {
-      const callback = (routes && routes[sceneId].callback) ? () => routes[sceneId].callback(this, this.route) : false;
+      const callback = (routes && routes[sceneId].callback) ?
+        () => routes[sceneId].callback(this, this.route) :
+        false;
       this.navigate(sceneId, { callback });
     }
   };
+
+  /**
+   * @function setPPEffects
+   * @param {String[]} effects
+   * Set post processing effects only for desktop
+   */
+  setPPEffects = effects => {
+
+    const { clientWidth, clientHeight } = this.container;
+    const pp = this.props.postProcessing;
+
+    if (!pp || this.isMobileDevice()) return false;
+    if (!effects || !effects.length) return false;
+
+    this.isPPEnabled = true;
+    this.composer.passes.length = 1;
+
+    effects.forEach((eff, ei) => {
+      let ppEffect = null;
+      if (eff.includes('Shader')) {
+        ppEffect = new Passes.ShaderPass(pp[eff].src || Shaders[eff]);
+        if (pp[eff].uniforms) {
+          for (let u in pp[eff].uniforms) {
+            ppEffect.uniforms[u].value = pp[eff].uniforms[u];
+          }
+        }
+      } else {
+        const Pass = pp[eff].src || Passes[eff];
+        const params = pp[eff].params || [];
+        ppEffect = new Pass(...params);
+      }
+      ppEffect.renderToScreen = ei === effects.length - 1;
+      this.composer.addPass(ppEffect);
+    });
+    this.composer.setSize(clientWidth, clientHeight);
+  };
+
+  /**
+   * @function setLoaders
+   * @param {String} type
+   * Add resource loader by type
+   */
+  setLoaders = types => {
+    types.forEach(t => {
+      if (Loaders[`${t}Loader`] && !this.loaders[`${t}Loader`]) {
+        this.loaders[`${t}Loader`] = new Loaders[`${t}Loader`](this.loadingManager);
+      }
+    });
+  };
+
+  /**
+   * @function getAction
+   * @param {String} id
+   * Get Action by id
+   */
+  getAction = id => this.actions[id];
   
   /**
    * @function resize
@@ -269,24 +327,6 @@ export class Composition extends Component {
   };
 
   /**
-   * @function findIntersects
-   * @param {Object} params
-   * @param {Number} clientX
-   * @param {Number} clientY
-   * In case glEvents are enabled for active Scene, get intersected objects
-   */
-  findIntersects = () => {
-    this.raycaster.setFromCamera(this.mouse, this.camera);
-    if (this.activeScene) {
-      if (this.activeScene.glEvents) {
-        this.intersects = this.raycaster.intersectObjects(this.activeScene.visual.children, true);
-      }
-    } else {
-      this.intersects = this.raycaster.intersectObjects(this.visual.children, true);
-    }
-  };
-
-  /**
    * @function navigate
    * @param {String} id
    * @param {Object} params
@@ -318,6 +358,24 @@ export class Composition extends Component {
   };
 
   /**
+   * @function findIntersects
+   * @param {Object} params
+   * @param {Number} clientX
+   * @param {Number} clientY
+   * In case glEvents are enabled for active Scene, get intersected objects
+   */
+  findIntersects = () => {
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+    if (this.activeScene) {
+      if (this.activeScene.glEvents) {
+        this.intersects = this.raycaster.intersectObjects(this.activeScene.visual.children, true);
+      }
+    } else {
+      this.intersects = this.raycaster.intersectObjects(this.visual.children, true);
+    }
+  };
+
+  /**
    * @function connectActions
    * @param {Decoration} decoration
    * @param {Object} actions
@@ -329,13 +387,6 @@ export class Composition extends Component {
       this.actions[a].addDecoration(decoration, actions[a]);
     }
   };
-
-  /**
-   * @function getAction
-   * @param {String} id
-   * Get Action by id
-   */
-  getAction = id => this.actions[id];
 
   /**
    * @function execActionsSequence
@@ -366,55 +417,6 @@ export class Composition extends Component {
   };
 
   /**
-   * @function setPPEffects
-   * @param {String[]} effects
-   * Set post processing effects only for desktop
-   */
-  setPPEffects = effects => {
-
-    const { clientWidth, clientHeight } = this.container;
-    const pp = this.props.postProcessing;
-
-    if (!pp || this.isMobileDevice()) return false;
-    if (!effects || !effects.length) return false;
-
-    this.isPPEnabled = true;
-    this.composer.passes.length = 1;
-
-    effects.forEach((eff, ei) => {
-      let ppEffect = null;
-      if (eff.includes('Shader')) {
-        ppEffect = new Passes.ShaderPass(pp[eff].src || Shaders[eff]);
-        if (pp[eff].uniforms) {
-          for (let u in pp[eff].uniforms) {
-            ppEffect.uniforms[u].value = pp[eff].uniforms[u];
-          }
-        }
-      } else {
-        const Pass = pp[eff].src || Passes[eff];
-        const params = pp[eff].params || [];
-        ppEffect = new Pass(...params);
-      }
-      ppEffect.renderToScreen = ei === effects.length - 1;
-      this.composer.addPass(ppEffect);
-    });
-    this.composer.setSize(clientWidth, clientHeight);
-  };
-
-  /**
-   * @function setLoader
-   * @param {String} type
-   * Add resource loader by type
-   */
-  setLoaders = types => {
-    types.forEach(t => {
-      if (Loaders[`${t}Loader`] && !this.loaders[`${t}Loader`]) {
-        this.loaders[`${t}Loader`] = new Loaders[`${t}Loader`](this.loadingManager);
-      }
-    });
-  };
-
-  /**
    * @function enablePostProcessing
    * @param {Boolean} enabled
    * Enable / disable post processing
@@ -441,26 +443,24 @@ export class Composition extends Component {
   };
 
   /**
-   * @function isMobileScreen
-   * Check current client width
-   */
-  isMobileScreen = () => {
-    return this.container.clientWidth <= config.MOBILE_SCREEN_WIDTH;
-  };
-  
-  /**
    * @function isMobileDevice
    * Detect mobile device using navigator.userAgent
    */
-  isMobileDevice = () => {
-    return navigator.userAgent.match(/Android/i)
-      || navigator.userAgent.match(/webOS/i)
-      || navigator.userAgent.match(/iPhone/i)
-      || navigator.userAgent.match(/iPad/i)
-      || navigator.userAgent.match(/iPod/i)
-      || navigator.userAgent.match(/BlackBerry/i)
-      || navigator.userAgent.match(/Windows Phone/i);
-  };
+  isMobileDevice = () => (
+    navigator.userAgent.match(/Android/i)
+    || navigator.userAgent.match(/webOS/i)
+    || navigator.userAgent.match(/iPhone/i)
+    || navigator.userAgent.match(/iPad/i)
+    || navigator.userAgent.match(/iPod/i)
+    || navigator.userAgent.match(/BlackBerry/i)
+    || navigator.userAgent.match(/Windows Phone/i)
+  );
+
+  /**
+   * @function isMobileScreen
+   * Check current client width
+   */
+  isMobileScreen = () => this.container.clientWidth <= config.MOBILE_SCREEN_WIDTH;
 
   /**
    * @function isSceneActive
