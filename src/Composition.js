@@ -267,6 +267,14 @@ export class Composition extends Component {
   };
 
   /**
+   * @function setMotion
+   * @param {String} id
+   * @param {Object} motion
+   * Set Motion by Decoration id
+   */
+  setMotion = (id, motion) => this.find(id).setMotion(motion);
+
+  /**
    * @function getAction
    * @param {String} id
    * Get Action by id

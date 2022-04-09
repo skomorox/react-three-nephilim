@@ -50,7 +50,7 @@ export class Decoration extends Component {
    */
   componentDidUpdate({ motion: prevMotion }) {
     const { motion } = this.props;
-    if (motion !== prevMotion) {
+    if (JSON.stringify(motion) !== JSON.stringify(prevMotion)) {
       this.setMotion(motion);
     }
   }
