@@ -267,6 +267,14 @@ export class Composition extends Component {
   };
 
   /**
+   * @function setVisualState
+   * @param {String} id
+   * @param {Object} motion
+   * Set visual state by Decoration id
+   */
+  setVisualState = (id, state) => this.find(id).setVisualState(state);
+
+  /**
    * @function setMotion
    * @param {String} id
    * @param {Object} motion

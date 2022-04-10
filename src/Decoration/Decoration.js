@@ -46,10 +46,25 @@ export class Decoration extends Component {
 
   /**
    * @function componentDidUpdate
-   * Update Motion
+   * 1. Update visual state
+   * 2. Update Motion
    */
-  componentDidUpdate({ motion: prevMotion }) {
-    const { motion } = this.props;
+  componentDidUpdate({
+    position: prevPosition,
+    rotation: prevRotation,
+    scale: prevScale,
+    lookAt: prevLookAt,
+    motion: prevMotion
+  }) {
+    const { position, rotation, scale, lookAt, motion } = this.props;
+    if (
+      (JSON.stringify(position) !== JSON.stringify(prevPosition)) ||
+      (JSON.stringify(rotation) !== JSON.stringify(prevRotation)) ||
+      (JSON.stringify(scale) !== JSON.stringify(prevScale)) ||
+      (JSON.stringify(lookAt) !== JSON.stringify(prevLookAt))
+    ) {
+      this.setVisualState({ position, rotation, scale, lookAt });
+    }
     if (JSON.stringify(motion) !== JSON.stringify(prevMotion)) {
       this.setMotion(motion);
     }
