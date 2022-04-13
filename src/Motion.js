@@ -29,7 +29,7 @@ export class Motion {
         axes.forEach(a => this.modes[m].axes[a] = {
           currentValue: 0,
           maxValue: params[m].maxValue,
-          direction: params[m].speed ? true : Math.random() > 0.5,
+          direction: params[m].speed ? !params[m].reverse : Math.random() > 0.5,
           speed: params[m].speed || Math.random() * params[m].randSpeed
         });
       } else {
