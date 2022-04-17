@@ -6,6 +6,7 @@
  */
 
 import * as Three from 'three';
+import _ from 'lodash';
 import { Decoration } from './Decoration';
 import { basicMaterialTypes, basicGeometryTypes } from '../Loader';
 
@@ -13,12 +14,17 @@ export class Mesh extends Decoration {
   
   constructor({ material, geometry }) {
     super();
+    this.isBasicGeometry = (
+      geometry.custom ||
+      basicGeometryTypes.includes(geometry.type.toLowerCase())
+    );
     this.manager.setLoaders([material.type, geometry.type]);
     this.setMaterial(material);
     this.setGeometry(geometry, material);
   }
 
   setMaterial = ({ type, params }) => {
+    params = _.cloneDeep(params);
     if (type === 'shader') {
       if (params.uniforms.map) {
         params.uniforms.map.value = this.manager.textureLoader.load(params.uniforms.map.value);
@@ -33,7 +39,7 @@ export class Mesh extends Decoration {
   };
 
   setGeometry = ({ type, params, custom, src }, material) => {
-    if (custom || basicGeometryTypes.includes(type.toLowerCase())) {
+    if (this.isBasicGeometry) {
       this.geometry = custom || new Three[`${this.manager.capitalize(type)}Geometry`](...params);
       this.visual = new Three.Mesh(this.geometry, this.material);
     } else {
@@ -46,6 +52,15 @@ export class Mesh extends Decoration {
           this.visual.add(obj);
         });
       });
+    }
+  };
+
+  updateMaterial = material => {
+    this.setMaterial(material);
+    if (this.isBasicGeometry) {
+      this.visual.material = this.material;
+    } else {
+      // TODO
     }
   };
 

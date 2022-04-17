@@ -54,9 +54,10 @@ export class Decoration extends Component {
     rotation: prevRotation,
     scale: prevScale,
     lookAt: prevLookAt,
-    motion: prevMotion
+    motion: prevMotion,
+    material: prevMaterial
   }) {
-    const { position, rotation, scale, lookAt, motion } = this.props;
+    const { position, rotation, scale, lookAt, motion, material } = this.props;
     if (
       (JSON.stringify(position) !== JSON.stringify(prevPosition)) ||
       (JSON.stringify(rotation) !== JSON.stringify(prevRotation)) ||
@@ -67,6 +68,9 @@ export class Decoration extends Component {
     }
     if (JSON.stringify(motion) !== JSON.stringify(prevMotion)) {
       this.setMotion(motion);
+    }
+    if (JSON.stringify(material) !== JSON.stringify(prevMaterial)) {
+      this.updateMaterial(material);
     }
   }
 
