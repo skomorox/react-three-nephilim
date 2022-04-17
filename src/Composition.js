@@ -462,15 +462,18 @@ export class Composition extends Component {
    * @function isMobileDevice
    * Detect mobile device using navigator.userAgent
    */
-  isMobileDevice = () => (
-    navigator.userAgent.match(/Android/i)
-    || navigator.userAgent.match(/webOS/i)
-    || navigator.userAgent.match(/iPhone/i)
-    || navigator.userAgent.match(/iPad/i)
-    || navigator.userAgent.match(/iPod/i)
-    || navigator.userAgent.match(/BlackBerry/i)
-    || navigator.userAgent.match(/Windows Phone/i)
-  );
+  isMobileDevice = () => {
+    const platforms = [
+      /Android/i,
+      /webOS/i,
+      /iPhone/i,
+      /iPad/i,
+      /iPod/i,
+      /BlackBerry/i,
+      /Windows Phone/i
+    ];
+    return platforms.some(p => navigator.userAgent.match(p));
+  };
 
   /**
    * @function isMobileScreen
