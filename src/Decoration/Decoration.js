@@ -237,4 +237,19 @@ export class Decoration extends Component {
     }
   };
 
+  /**
+   * @function findAll
+   * @param {String} id
+   * @param {Decoration[]} all
+   * Find Decorations containing given id part
+   */
+  findAll = (id, all = []) => {
+    if (this.id.includes(id)) all.push(this);
+    if (!this.children) return false;
+    for (let k in this.children) {
+      this.children[k].findAll(id, all);
+    }
+    return all;
+  };
+
 }

@@ -49,6 +49,7 @@ export class Composition extends Component {
     this.actions = {};
     this.layers = {};
     this.intersects = [];
+    this.onUpdateHandlers = [];
     this.isPPEnabled = false;
     this.isActionsEnabled = true;
     this.isLayerRendering = layerRendering || false;
@@ -288,25 +289,13 @@ export class Composition extends Component {
    * Get Action by id
    */
   getAction = id => this.actions[id];
-  
+
   /**
-   * @function resize
-   * Update Renderer sizes and adjust Camera aspect ration according to new size
+   * @function onUpdate
+   * @param {Function} handler
+   * Add onUpdate handler
    */
-  resize = () => {
-    const { clientWidth, clientHeight } = this.container;
-    if (this.glRenderer) {
-      this.glRenderer.setSize(clientWidth, clientHeight);
-    }
-    if (this.cssRenderer) {
-      this.cssRenderer.setSize(clientWidth, clientHeight);
-    }
-    if (this.isPPEnabled) {
-      this.composer.setSize(clientWidth, clientHeight);
-    }
-    this.camera.aspect = clientWidth / clientHeight;
-    this.camera.updateProjectionMatrix();
-  };
+  onUpdate = handler => this.onUpdateHandlers.push(handler);
 
   /**
    * @function update
@@ -339,6 +328,7 @@ export class Composition extends Component {
       this.cssRenderer.render(this.visual, this.camera);
     }
     TWEEN.update();
+    this.onUpdateHandlers.forEach(handler => handler());
     requestAnimationFrame(this.update);
   };
 
@@ -371,6 +361,25 @@ export class Composition extends Component {
       ...params,
       enforce: true
     });
+  };
+
+  /**
+   * @function resize
+   * Update Renderer sizes and adjust Camera aspect ration according to new size
+   */
+  resize = () => {
+    const { clientWidth, clientHeight } = this.container;
+    if (this.glRenderer) {
+      this.glRenderer.setSize(clientWidth, clientHeight);
+    }
+    if (this.cssRenderer) {
+      this.cssRenderer.setSize(clientWidth, clientHeight);
+    }
+    if (this.isPPEnabled) {
+      this.composer.setSize(clientWidth, clientHeight);
+    }
+    this.camera.aspect = clientWidth / clientHeight;
+    this.camera.updateProjectionMatrix();
   };
 
   /**
@@ -456,6 +465,19 @@ export class Composition extends Component {
       const c = this.children[k].find(id);
       if (c) return c;
     }
+  };
+
+  /**
+   * @function findAll
+   * @param {String} id
+   * Find Decorations containing given id part
+   */
+  findAll = id => {
+    const all = [];
+    for (let k in this.children) {
+      this.children[k].findAll(id, all);
+    }
+    return all;
   };
 
   /**
