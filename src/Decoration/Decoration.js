@@ -80,6 +80,7 @@ export class Decoration extends Component {
    */
   componentWillUnmount() {
     this.visual.parent.remove(this.visual);
+    delete this._compositionParentNode.children[this.id];
   }
 
   render() {
@@ -219,6 +220,7 @@ export class Decoration extends Component {
       } else {
         stateNode.visual.add(this.visual);
         stateNode.children[this.id] = this;
+        this._compositionParentNode = stateNode;
       }
     }
   };
