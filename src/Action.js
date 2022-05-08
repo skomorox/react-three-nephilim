@@ -66,6 +66,9 @@ export class Action {
           to.push(state.uniforms[u]);
         };
       }
+      if (state.withAudio && deco.audio) {
+        deco.audio.play();
+      }
     };
 
     if (enforce) this.manager.isActionsEnabled = false;

@@ -6,7 +6,7 @@
  */
 
 import { Component } from 'react';
-import { Vector3 } from 'three';
+import { Vector3, PositionalAudio } from 'three';
 import { Motion } from '../Motion';
 
 export class Decoration extends Component {
@@ -24,14 +24,15 @@ export class Decoration extends Component {
   componentDidMount() {
 
     const {
-      id, motion, actions, layer, global,
-      glEvents, onClick, onMouseOver
+      id, audio, motion, actions, layer,
+      isGlobal, isGLEvents, onClick, onMouseOver
     } = this.props;
-    this.id = id || this.id || this.visual.uuid;
-    this.glEvents = this.glEvents || glEvents;
-    this.isGlobal = global || false;
+    this.id = id || this.visual.uuid;
+    this.isGLEvents = this.isGLEvents || isGLEvents;
+    this.isGlobal = isGlobal || false;
     this.setVisualState(this.props);
 
+    if (audio) this.setAudio(audio);
     if (motion) this.setMotion(motion);
     if (actions) this.setActions(actions);
     if (onClick) this.visual.onClick = onClick;
@@ -55,9 +56,10 @@ export class Decoration extends Component {
     scale: prevScale,
     lookAt: prevLookAt,
     motion: prevMotion,
-    material: prevMaterial
+    material: prevMaterial,
+    audio: prevAudio
   }) {
-    const { position, rotation, scale, lookAt, motion, material } = this.props;
+    const { position, rotation, scale, lookAt, motion, material, audio } = this.props;
     if (
       (JSON.stringify(position) !== JSON.stringify(prevPosition)) ||
       (JSON.stringify(rotation) !== JSON.stringify(prevRotation)) ||
@@ -71,6 +73,13 @@ export class Decoration extends Component {
     }
     if (JSON.stringify(material) !== JSON.stringify(prevMaterial)) {
       this.updateMaterial(material);
+    }
+    if (JSON.stringify(audio) !== JSON.stringify(prevAudio)) {
+      if (audio.play) {
+        this.audio.play();
+      } else {
+        this.audio.stop();
+      }
     }
   }
 
@@ -118,6 +127,32 @@ export class Decoration extends Component {
           sv[1] :
         sv
   );
+
+  /**
+   * @function setAudio
+   * @param {Object} audio
+   * Set Audio for current Decoration
+   */
+  setAudio = ({ src, refDistance, maxDistance, loop, play }) => {
+    const { audioListener, audioLoader } = this.manager;
+    this.audio = new PositionalAudio(audioListener);
+    audioLoader.load(src, buffer => {
+      this.audio.setBuffer(buffer);
+      if (refDistance !== undefined) {
+        this.audio.setRefDistance(refDistance);
+      }
+      if (maxDistance !== undefined) {
+        this.audio.setMaxDistance(maxDistance);
+      }
+      if (loop !== undefined) {
+        this.audio.setLoop(loop);
+      }
+      if (play) {
+        this.audio.play();
+      }
+      this.visual.add(this.audio);
+    });
+  };
 
   /**
    * @function setMotion

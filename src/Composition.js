@@ -28,7 +28,7 @@ export class Composition extends Component {
    * @param {Object} glRenderer
    * @param {Object} cssRenderer
    * @param {Object} postProcessing
-   * @param {Boolean} layerRendering
+   * @param {Boolean} isLayerRendering
    * 
    * Init application
    * 1. Setup mouse, global Scene and Camera
@@ -37,7 +37,7 @@ export class Composition extends Component {
    * 4. Setup THREE.EffectComposer
    * 5. Inject this as manager in Decoration, Action, Motion, Controller classes
    */
-  constructor({ camera, glRenderer, cssRenderer, postProcessing, layerRendering }) {
+  constructor({ camera, glRenderer, cssRenderer, postProcessing, isLayerRendering }) {
 
     super();
     this.state = {
@@ -52,7 +52,7 @@ export class Composition extends Component {
     this.onUpdateHandlers = [];
     this.isPPEnabled = false;
     this.isActionsEnabled = true;
-    this.isLayerRendering = layerRendering || false;
+    this.isLayerRendering = isLayerRendering || false;
     this.mouse = new Three.Vector2(-1, -1);
     this.visual = new Three.Scene();
     this.camera = new Three[`${this.capitalize(camera.type)}Camera`](
@@ -65,6 +65,7 @@ export class Composition extends Component {
       this.glRenderer = new Three.WebGLRenderer(glRenderer);
       this.glRenderer.setPixelRatio(window.devicePixelRatio);
       this.raycaster = new Three.Raycaster();
+      this.audioListener = new Three.AudioListener();
       this.loadingManager = new Three.LoadingManager();
       this.animationLoader = new Three.AnimationLoader(this.loadingManager);
       this.audioLoader = new Three.AudioLoader(this.loadingManager);
@@ -72,6 +73,7 @@ export class Composition extends Component {
       this.loaders = {};
       this.loadingManager.onProgress = (item, loaded, total) => this.setState({ loaded, total });
       this.loadingManager.onLoad = () => this.setState({ loading: false });
+      this.camera.add(this.audioListener);
       if (glRenderer.autoClear !== undefined) {
         this.glRenderer.autoClear = glRenderer.autoClear;
       }
@@ -387,12 +389,12 @@ export class Composition extends Component {
    * @param {Object} params
    * @param {Number} clientX
    * @param {Number} clientY
-   * In case glEvents are enabled for active Scene, get intersected objects
+   * In case isGLEvents are enabled for active Scene, get intersected objects
    */
   findIntersects = () => {
     this.raycaster.setFromCamera(this.mouse, this.camera);
     if (this.activeScene) {
-      if (this.activeScene.glEvents) {
+      if (this.activeScene.isGLEvents) {
         this.intersects = this.raycaster.intersectObjects(this.activeScene.visual.children, true);
       }
     } else {
@@ -443,17 +445,17 @@ export class Composition extends Component {
 
   /**
    * @function enablePostProcessing
-   * @param {Boolean} enabled
+   * @param {Boolean} isEnabled
    * Enable / disable post processing
    */
-  enablePostProcessing = enabled => this.isPPEnabled = enabled;
+  enablePostProcessing = isEnabled => this.isPPEnabled = isEnabled;
 
   /**
    * @function enableLayerRendering
-   * @param {Boolean} enabled
+   * @param {Boolean} isEnabled
    * Enable / disable layer by layer rendering
    */
-  enableLayerRendering = enabled => this.isLayerRendering = enabled;
+  enableLayerRendering = isEnabled => this.isLayerRendering = isEnabled;
 
   /**
    * @function find
