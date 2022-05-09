@@ -66,8 +66,8 @@ export class Action {
           to.push(state.uniforms[u]);
         };
       }
-      if (state.withAudio && deco.audio) {
-        deco.audio.play();
+      if (state.audio && deco.audio?.[state.audio]) {
+        deco.audio[state.audio].play();
       }
     };
 

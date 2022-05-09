@@ -75,10 +75,12 @@ export class Decoration extends Component {
       this.updateMaterial(material);
     }
     if (JSON.stringify(audio) !== JSON.stringify(prevAudio)) {
-      if (audio.play) {
-        this.audio.play();
-      } else {
-        this.audio.stop();
+      for (let a in audio) {
+        if (audio[a].play) {
+          this.audio[a].play();
+        } else if (this.audio[a].isPlaying) {
+          this.audio[a].stop();
+        }
       }
     }
   }
@@ -88,6 +90,11 @@ export class Decoration extends Component {
    * Remove object from Scene on unmount
    */
   componentWillUnmount() {
+    for (let a in this.audio) {
+      if (this.audio[a]?.isPlaying) {
+        this.audio[a].stop();
+      }
+    }
     this.visual.parent.remove(this.visual);
     delete this._compositionParentNode.children[this.id];
   }
@@ -133,25 +140,31 @@ export class Decoration extends Component {
    * @param {Object} audio
    * Set Audio for current Decoration
    */
-  setAudio = ({ src, refDistance, maxDistance, loop, play }) => {
+  setAudio = audio => {
+
     const { audioListener, audioLoader } = this.manager;
-    this.audio = new PositionalAudio(audioListener);
-    audioLoader.load(src, buffer => {
-      this.audio.setBuffer(buffer);
-      if (refDistance !== undefined) {
-        this.audio.setRefDistance(refDistance);
-      }
-      if (maxDistance !== undefined) {
-        this.audio.setMaxDistance(maxDistance);
-      }
-      if (loop !== undefined) {
-        this.audio.setLoop(loop);
-      }
-      if (play) {
-        this.audio.play();
-      }
-      this.visual.add(this.audio);
-    });
+    this.audio = {};
+
+    for (let a in audio) {
+      const { src, refDistance, maxDistance, loop, play } = audio[a];
+      this.audio[a] = new PositionalAudio(audioListener);
+      audioLoader.load(src, buffer => {
+        this.audio[a].setBuffer(buffer);
+        if (refDistance !== undefined) {
+          this.audio[a].setRefDistance(refDistance);
+        }
+        if (maxDistance !== undefined) {
+          this.audio[a].setMaxDistance(maxDistance);
+        }
+        if (loop !== undefined) {
+          this.audio[a].setLoop(loop);
+        }
+        if (play) {
+          this.audio[a].play();
+        }
+        this.visual.add(this.audio[a]);
+      });
+    }
   };
 
   /**
