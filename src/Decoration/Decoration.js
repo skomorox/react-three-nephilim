@@ -146,7 +146,7 @@ export class Decoration extends Component {
     this.audio = {};
 
     for (let a in audio) {
-      const { src, refDistance, maxDistance, loop, play } = audio[a];
+      const { src, refDistance, maxDistance, volume, loop, play } = audio[a];
       this.audio[a] = new PositionalAudio(audioListener);
       audioLoader.load(src, buffer => {
         this.audio[a].setBuffer(buffer);
@@ -155,6 +155,9 @@ export class Decoration extends Component {
         }
         if (maxDistance !== undefined) {
           this.audio[a].setMaxDistance(maxDistance);
+        }
+        if (volume !== undefined) {
+          this.audio[a].setVolume(volume);
         }
         if (loop !== undefined) {
           this.audio[a].setLoop(loop);
