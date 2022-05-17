@@ -66,9 +66,9 @@ export const App = () => (
       <Hypertext
         position={{ z: -300 }}
         motion={{
-          position: { axes: 'xyz', maxValue: 10, speed: 0.1 },
-          rotation: { axes: 'xyz', maxValue: 10, speed: 0.01 },
-          scale: { axes: 'xy', maxValue: 5, speed: 0.01 }
+          position: { axes: 'xyz', maxValue: 10, velocity: 0.1 },
+          rotation: { axes: 'xyz', maxValue: 10, velocity: 0.01 },
+          scale: { axes: 'xy', maxValue: 5, velocity: 0.01 }
         }}
       >
         <div style={{ fontSize: 12 }}>
@@ -110,8 +110,8 @@ export const App = () => (
           }
         }}
         motion={{
-          rotation: { axes: 'xyz', maxValue: 10, randSpeed: 0.01 },
-          position: { axes: 'xyz', maxValue: 100, randSpeed: 1 }
+          rotation: { axes: 'xyz', maxValue: 10, randVelocity: 0.01 },
+          position: { axes: 'xyz', maxValue: 100, randVelocity: 1 }
         }}
       />
     </Composition>
@@ -140,9 +140,9 @@ export const App = () => (
       <Hypertext
         position={{ z: -300 }}
         motion={{
-          position: { axes: 'xyz', maxValue: 10, speed: 0.1 },
-          rotation: { axes: 'xyz', maxValue: 10, speed: 0.01 },
-          scale: { axes: 'xy', maxValue: 5, speed: 0.01 }
+          position: { axes: 'xyz', maxValue: 10, velocity: 0.1 },
+          rotation: { axes: 'xyz', maxValue: 10, velocity: 0.01 },
+          scale: { axes: 'xy', maxValue: 5, velocity: 0.01 }
         }}
       >
         <div style={{ fontSize: 12, color: 'white' }}>
@@ -162,8 +162,8 @@ export const App = () => (
           }
         }}
         motion={{
-          rotation: { axes: 'xyz', maxValue: 10, randSpeed: 0.01 },
-          position: { axes: 'xyz', maxValue: 100, randSpeed: 1 }
+          rotation: { axes: 'xyz', maxValue: 10, randVelocity: 0.01 },
+          position: { axes: 'xyz', maxValue: 100, randVelocity: 1 }
         }}
       />
     </Composition>
@@ -238,8 +238,8 @@ const MainScene = () => {
           }
         }}
         motion={{
-          rotation: { axes: 'xyz', maxValue: 10, randSpeed: 0.01 },
-          position: { axes: 'xyz', maxValue: 100, randSpeed: 1 }
+          rotation: { axes: 'xyz', maxValue: 10, randVelocity: 0.01 },
+          position: { axes: 'xyz', maxValue: 100, randVelocity: 1 }
         }}
       />
     </Scene>
@@ -272,8 +272,8 @@ class SecondScene extends Scene {
             }
           }}
           motion={{
-            rotation: { axes: 'xyz', maxValue: 10, randSpeed: 0.01 },
-            position: { axes: 'xyz', maxValue: 100, randSpeed: 1 }
+            rotation: { axes: 'xyz', maxValue: 10, randVelocity: 0.01 },
+            position: { axes: 'xyz', maxValue: 100, randVelocity: 1 }
           }}
         />
       </Container>

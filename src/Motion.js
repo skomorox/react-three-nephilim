@@ -3,9 +3,9 @@
  * @class Motion
  * Abstract: Motion represents different types of random or preset
  *           Decoration movement. Currently available motion types are:
- *           1. Random / static position (randSpeed / speed, changes direction when maxValue is reached, if set)
- *           2. Random / static rotation (randSpeed / speed, changes direction when maxValue is reached, if set)
- *           3. Random / static scale (randSpeed / speed, changes direction when maxValue is reached, if set)
+ *           1. Random / static position (randVelocity / velocity, changes direction when maxValue is reached, if set)
+ *           2. Random / static rotation (randVelocity / velocity, changes direction when maxValue is reached, if set)
+ *           3. Random / static scale (randVelocity / velocity, changes direction when maxValue is reached, if set)
  *           4. Track mouse position - change position, rotation, scale (x, y, z) + custom modifiers
  *           5. Update shader uniforms
  *           6. Update morph targets
@@ -23,14 +23,29 @@ export class Motion {
     this.modes = {};
     
     for (let m in params) {
-      if (params[m].axes) {
+      if (m === 'swarm') {
+        this.swarmParams = [];
+        const { count } = this.visual.geometry.attributes.position;
+        for (let c = 0; c < count; c++) {
+          const velocity = {};
+          ['x', 'y', 'z'].forEach(a => {
+            const v = params[m].randVelocity;
+            velocity[a] = params[m].axes.includes(a) ? -v + Math.random() * v * 2 : 0;
+          });
+          this.swarmParams.push({ velocity });
+        }
+        this.modes[m] = params[m];
+      } else if (params[m].axes) {
         const axes = params[m].axes.split('');
         this.modes[m] = { axes: {} };
         axes.forEach(a => this.modes[m].axes[a] = {
-          currentValue: 0,
+          relativeValue: 0,
           maxValue: params[m].maxValue,
-          direction: params[m].speed ? !params[m].reverse : Math.random() > 0.5,
-          speed: params[m].speed || Math.random() * params[m].randSpeed
+          velocity: params[m].velocity ?
+            params[m].reverse ?
+              -params[m].velocity :
+              params[m].velocity :
+            -params[m].randVelocity + Math.random() * params[m].randVelocity * 2
         });
       } else {
         this.modes[m] = params[m];
@@ -43,6 +58,9 @@ export class Motion {
    * Update Motion
    */
   update = () => {
+
+    let axes = null;
+
     for (let m in this.modes) {
       switch (m) {
         case 'trackMouse':
@@ -79,13 +97,33 @@ export class Motion {
             mti[i] += this.modes[m].step;
           }
           break;
+        case 'swarm':
+          const { array, count } = this.visual.geometry.attributes.position;
+          axes = ['x', 'y', 'z'];
+          for (let c = 0; c < count; c++) {
+            const { velocity } = this.swarmParams[c];
+            for (let a = 0; a < axes.length; a++) {
+              array[c * 3 + a] += velocity[axes[a]];
+              if (
+                array[c * 3 + a] < -this.modes[m].maxValue ||
+                array[c * 3 + a] > this.modes[m].maxValue
+              ) {
+                velocity[axes[a]] = -velocity[axes[a]];
+              }
+            }
+          }
+          break;
         default:
-          const axes = this.modes[m].axes;
+          axes = this.modes[m].axes;
           for (let a in axes) {
-            axes[a].currentValue += axes[a].direction ? axes[a].speed : -axes[a].speed;
-            this.visual[m][a] += axes[a].direction ? axes[a].speed : -axes[a].speed;
-            if (axes[a].currentValue < -axes[a].maxValue) axes[a].direction = true;
-            if (axes[a].currentValue > axes[a].maxValue) axes[a].direction = false;
+            axes[a].relativeValue += axes[a].velocity;
+            this.visual[m][a] += axes[a].velocity;
+            if (
+              axes[a].relativeValue < -axes[a].maxValue ||
+              axes[a].relativeValue > axes[a].maxValue
+            ) {
+              axes[a].velocity = -axes[a].velocity;
+            }
           }
           break;
       }
