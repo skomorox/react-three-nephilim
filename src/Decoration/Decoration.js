@@ -49,6 +49,9 @@ export class Decoration extends Component {
    * @function componentDidUpdate
    * 1. Update visual state
    * 2. Update Motion
+   * 3. Update Actions
+   * 4. Update Material
+   * 5. Update Audio
    */
   componentDidUpdate({
     position: prevPosition,
@@ -56,10 +59,11 @@ export class Decoration extends Component {
     scale: prevScale,
     lookAt: prevLookAt,
     motion: prevMotion,
+    actions: prevActions,
     material: prevMaterial,
     audio: prevAudio
   }) {
-    const { position, rotation, scale, lookAt, motion, material, audio } = this.props;
+    const { position, rotation, scale, lookAt, motion, actions, material, audio } = this.props;
     if (
       (JSON.stringify(position) !== JSON.stringify(prevPosition)) ||
       (JSON.stringify(rotation) !== JSON.stringify(prevRotation)) ||
@@ -70,6 +74,9 @@ export class Decoration extends Component {
     }
     if (JSON.stringify(motion) !== JSON.stringify(prevMotion)) {
       this.setMotion(motion);
+    }
+    if (JSON.stringify(actions) !== JSON.stringify(prevActions)) {
+      this.setActions(actions);
     }
     if (JSON.stringify(material) !== JSON.stringify(prevMaterial)) {
       this.updateMaterial(material);
