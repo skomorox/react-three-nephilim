@@ -28,7 +28,7 @@ export class Decoration extends Component {
       id, audio, motion, actions, layer,
       isGlobal, isGLEvents, onClick, onMouseOver
     } = this.props;
-    this.id = id || this.visual.uuid;
+    this.id = id || this.visual.uuid || this.visual.id;
     this.isGLEvents = this.isGLEvents || isGLEvents;
     this.isGlobal = isGlobal || false;
     this.isEmitter = this.visual.type === 'Emitter';
@@ -104,7 +104,11 @@ export class Decoration extends Component {
         this.audio[a].stop();
       }
     }
-    this.visual.parent.remove(this.visual);
+    if (this.isEmitter) {
+      this.visual.parent.destroy();
+    } else {
+      this.visual.parent.remove(this.visual);
+    }
     delete this._compositionParentNode.children[this.id];
   }
 
@@ -300,10 +304,13 @@ export class Decoration extends Component {
    * Connect Nebula Emitter Decoration to the parent
    */
   connectEmitter = stateNode => {
+    const { renderer } = this.props;
     if (!this.nebula) {
-      const renderer = new Nebula[`${this.manager.nebulaRenderer}Renderer`](stateNode.visual, Three);
       this.nebula = new ParticleSystem();
-      this.nebula.addRenderer(renderer);
+      this.nebula.addRenderer(new Nebula[`${this.manager.capitalize(renderer)}Renderer`](
+        stateNode.visual,
+        Three
+      ));
     }
     this.nebula.addEmitter(this.visual);
   };
