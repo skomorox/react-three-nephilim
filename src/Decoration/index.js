@@ -1,8 +1,10 @@
 export { Decoration } from './Decoration';
 export { Container } from './Container';
+export { Emitter } from './Emitter';
 export { Hypertext } from './Hypertext';
 export { Light } from './Light';
 export { Line } from './Line';
 export { Mesh } from './Mesh';
 export { Scene } from './Scene';
+export { Sprite } from './Sprite';
 export { Swarm } from './Swarm';

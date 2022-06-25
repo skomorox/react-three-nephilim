@@ -6,7 +6,8 @@
  */
 
 import { Component } from 'react';
-import { Vector3, PositionalAudio } from 'three';
+import * as Three from 'three';
+import ParticleSystem, * as Nebula from 'three-nebula';
 import { Motion } from '../Motion';
 
 export class Decoration extends Component {
@@ -30,6 +31,7 @@ export class Decoration extends Component {
     this.id = id || this.visual.uuid;
     this.isGLEvents = this.isGLEvents || isGLEvents;
     this.isGlobal = isGlobal || false;
+    this.isEmitter = this.visual.type === 'Emitter';
     this.setVisualState(this.props);
 
     if (audio) this.setAudio(audio);
@@ -118,9 +120,11 @@ export class Decoration extends Component {
   setVisualState = state => {
     const vs = this.calcVisualState(state);    
     this.visual.position.set(vs.position.x, vs.position.y, vs.position.z);
-    this.visual.scale.set(vs.scale.x, vs.scale.y, vs.scale.z);
+    if (!this.isEmitter) {
+      this.visual.scale.set(vs.scale.x, vs.scale.y, vs.scale.z);
+    }
     if (vs.lookAt) {
-      this.visual.lookAt(new Vector3(vs.lookAt.x, vs.lookAt.y, vs.lookAt.z));
+      this.visual.lookAt(new Three.Vector3(vs.lookAt.x, vs.lookAt.y, vs.lookAt.z));
     } else {
       this.visual.rotation.set(vs.rotation.x, vs.rotation.y, vs.rotation.z);
     }
@@ -154,7 +158,7 @@ export class Decoration extends Component {
 
     for (let a in audio) {
       const { src, refDistance, maxDistance, volume, loop, play } = audio[a];
-      this.audio[a] = new PositionalAudio(audioListener);
+      this.audio[a] = new Three.PositionalAudio(audioListener);
       audioLoader.load(src, buffer => {
         this.audio[a].setBuffer(buffer);
         if (refDistance !== undefined) {
@@ -256,6 +260,9 @@ export class Decoration extends Component {
     if ((!onlyGlobal || (onlyGlobal && this.isGlobal)) && this.motion) {
       this.motion.update();
     }
+    if (this.isEmitter) {
+      this.nebula.update();
+    }
     if (this.children) {
       for (let c in this.children) {
         this.children[c].update(onlyGlobal);
@@ -276,11 +283,29 @@ export class Decoration extends Component {
       if (!stateNode.visual) {
         this.connect(stateNode._reactInternalFiber);
       } else {
-        stateNode.visual.add(this.visual);
+        if (this.isEmitter) {
+          this.connectEmitter(stateNode);
+        } else {
+          stateNode.visual.add(this.visual);
+        }
         stateNode.children[this.id] = this;
         this._compositionParentNode = stateNode;
       }
     }
+  };
+
+  /**
+   * @function connectEmitter
+   * @param {Object} stateNode
+   * Connect Nebula Emitter Decoration to the parent
+   */
+  connectEmitter = stateNode => {
+    if (!this.nebula) {
+      const renderer = new Nebula[`${this.manager.nebulaRenderer}Renderer`](stateNode.visual, Three);
+      this.nebula = new ParticleSystem();
+      this.nebula.addRenderer(renderer);
+    }
+    this.nebula.addEmitter(this.visual);
   };
 
   /**

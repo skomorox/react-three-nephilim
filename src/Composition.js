@@ -16,8 +16,8 @@ import { Action } from './Action';
 import { Motion } from './Motion';
 import TWEEN from '@tweenjs/tween.js';
 import config from './config';
-import '../css/styles.css';
 import loader from '../images/loader.gif';
+import '../css/styles.css';
 
 export class Composition extends Component {
   
@@ -37,7 +37,7 @@ export class Composition extends Component {
    * 4. Setup THREE.EffectComposer
    * 5. Inject this as manager in Decoration, Action, Motion, Controller classes
    */
-  constructor({ camera, glRenderer, cssRenderer, postProcessing, isLayerRendering }) {
+  constructor({ camera, glRenderer, cssRenderer, nebulaRenderer, postProcessing, isLayerRendering }) {
 
     super();
     this.state = {
@@ -83,6 +83,10 @@ export class Composition extends Component {
 
     if (cssRenderer) {
       this.cssRenderer = new CSS3DRenderer();
+    }
+
+    if (nebulaRenderer) {
+      this.nebulaRenderer = this.capitalize(nebulaRenderer);
     }
 
     if (postProcessing) {

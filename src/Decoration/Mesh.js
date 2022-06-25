@@ -31,7 +31,7 @@ export class Mesh extends Decoration {
       }
       this.material = new Three.ShaderMaterial(params);
     } else if (basicMaterialTypes.includes(type.toLowerCase())) {
-      if(params.map) {
+      if (params.map) {
         params.map = this.manager.textureLoader.load(params.map)
       }
       this.material = new Three[`Mesh${this.manager.capitalize(type)}Material`](params);
