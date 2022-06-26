@@ -5,7 +5,8 @@
  *****************************************************************************************************
  */
 
-import * as Nebula from 'three-nebula';
+import * as Three from 'three';
+import ParticleSystem, * as Nebula from 'three-nebula';
 import { Decoration } from './Decoration';
 import { Mesh } from './Mesh';
 import { Sprite } from './Sprite';
@@ -13,12 +14,12 @@ import { Sprite } from './Sprite';
 export class Emitter extends Decoration {
  
   constructor({ material, geometry, rate, initializers, behaviours }) {
+    
     super();
-
     const body = geometry.type === 'sprite' ?
       new Sprite({ material }).visual :
       new Mesh({ material, geometry }).visual;
-
+    
     this.visual = new Nebula.Emitter();
 
     if (rate) {
@@ -38,5 +39,17 @@ export class Emitter extends Decoration {
     this.visual.addInitializers([new Nebula.Body(body)]);
     this.visual.emit();
   }
+   
+  connectEmitter = stateNode => {
+    const { renderer } = this.props;
+    if (!this.nebula) {
+      this.nebula = new ParticleSystem();
+      this.nebula.addRenderer(new Nebula[`${this.manager.capitalize(renderer)}Renderer`](
+        stateNode.visual,
+        Three
+      ));
+    }
+    this.nebula.addEmitter(this.visual);
+  };
 
 }

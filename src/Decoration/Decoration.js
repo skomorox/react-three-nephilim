@@ -6,8 +6,7 @@
  */
 
 import { Component } from 'react';
-import * as Three from 'three';
-import ParticleSystem, * as Nebula from 'three-nebula';
+import { Vector3, PositionalAudio } from 'three'; 
 import { Motion } from '../Motion';
 
 export class Decoration extends Component {
@@ -128,7 +127,7 @@ export class Decoration extends Component {
       this.visual.scale.set(vs.scale.x, vs.scale.y, vs.scale.z);
     }
     if (vs.lookAt) {
-      this.visual.lookAt(new Three.Vector3(vs.lookAt.x, vs.lookAt.y, vs.lookAt.z));
+      this.visual.lookAt(new Vector3(vs.lookAt.x, vs.lookAt.y, vs.lookAt.z));
     } else {
       this.visual.rotation.set(vs.rotation.x, vs.rotation.y, vs.rotation.z);
     }
@@ -162,7 +161,7 @@ export class Decoration extends Component {
 
     for (let a in audio) {
       const { src, refDistance, maxDistance, volume, loop, play } = audio[a];
-      this.audio[a] = new Three.PositionalAudio(audioListener);
+      this.audio[a] = new PositionalAudio(audioListener);
       audioLoader.load(src, buffer => {
         this.audio[a].setBuffer(buffer);
         if (refDistance !== undefined) {
@@ -296,23 +295,6 @@ export class Decoration extends Component {
         this._compositionParentNode = stateNode;
       }
     }
-  };
-
-  /**
-   * @function connectEmitter
-   * @param {Object} stateNode
-   * Connect Nebula Emitter Decoration to the parent
-   */
-  connectEmitter = stateNode => {
-    const { renderer } = this.props;
-    if (!this.nebula) {
-      this.nebula = new ParticleSystem();
-      this.nebula.addRenderer(new Nebula[`${this.manager.capitalize(renderer)}Renderer`](
-        stateNode.visual,
-        Three
-      ));
-    }
-    this.nebula.addEmitter(this.visual);
   };
 
   /**
