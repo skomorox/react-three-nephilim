@@ -14,6 +14,7 @@ Composition includes following features:
 - Adaptive positioning of objects on the Scene;
 - Post Processing support;
 - Basic Routing.
+- three-nebula integration (without json loader)
 
 # Installation
 - $npm i react-three-composition

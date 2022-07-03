@@ -230,8 +230,7 @@ export class Composition extends Component {
     const { clientWidth, clientHeight } = this.container;
     const pp = this.props.postProcessing;
 
-    if (!pp || this.isMobileDevice()) return false;
-    if (!effects || !effects.length) return false;
+    if (!pp || !effects?.length) return false;
 
     this.isPPEnabled = true;
     this.composer.passes.length = 1;
