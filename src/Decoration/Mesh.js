@@ -15,7 +15,7 @@ export class Mesh extends Decoration {
   constructor({ material, geometry }) {
     super();
     this.isBasicGeometry = (
-      geometry.custom ||
+      geometry.uuid ||
       basicGeometryTypes.includes(geometry.type.toLowerCase())
     );
     this.manager.setLoaders([material.type, geometry.type]);
@@ -38,17 +38,19 @@ export class Mesh extends Decoration {
     }
   };
 
-  setGeometry = ({ type, params, custom, src }, material) => {
+  setGeometry = (geometry, material) => {
     if (this.isBasicGeometry) {
-      this.geometry = custom || new Three[`${this.manager.capitalize(type)}Geometry`](...params);
+      this.geometry = geometry.uuid ?
+        geometry :
+        new Three[`${this.manager.capitalize(geometry.type)}Geometry`](...geometry.params);
       this.visual = new Three.Mesh(this.geometry, this.material);
     } else {
       const materialLoader = `${material.type}Loader`;
-      const geometryLoader = `${type}Loader`;
+      const geometryLoader = `${geometry.type}Loader`;
       this.visual = new Three.Group();
       this.manager.loaders[materialLoader].load(material.params.src, materials => {
         materials.preload();
-        this.manager.loaders[geometryLoader].setMaterials(materials).load(src, obj => {
+        this.manager.loaders[geometryLoader].setMaterials(materials).load(geometry.src, obj => {
           this.visual.add(obj);
         });
       });

@@ -14,7 +14,7 @@ export class Sprite extends Decoration {
   constructor({ material }) {
     super();
     this.setMaterial(material);
-    this.setGeomerty();
+    this.setGeometry();
   }
  
   setMaterial = ({ params }) => {
@@ -25,7 +25,7 @@ export class Sprite extends Decoration {
     this.material = new Three.SpriteMaterial(params);
   };
  
-  setGeomerty = () => {
+  setGeometry = () => {
     this.visual = new Three.Sprite(this.material);
   };
  
