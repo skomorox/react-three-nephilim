@@ -15,8 +15,8 @@ export class Scene extends Container {
   }
   
   componentDidMount() {
-    const { initial, navigationDuration, ppEffects } = this.props;
-    if (initial) this.manager.activeScene = this;
+    const { isInitial, navigationDuration, ppEffects } = this.props;
+    if (isInitial) this.manager.activeScene = this;
     this.navigationDuration = navigationDuration;
     this.ppEffects = ppEffects;
     super.componentDidMount();

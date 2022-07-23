@@ -345,7 +345,10 @@ export class Composition extends Component {
     const scene = this.find(id);
 
     if (scene) {
-      const events = ['onMouseWheel', 'onMouseMove', 'onClick', 'onKeyUp'];
+      const events = [
+        'onMouseWheel', 'onMouseMove', 'onClick',
+        'onKeyUp', 'onTouchMove', 'onTouchStart'
+      ];
       for (let e = 0; e < events.length; e++) {
         window[events[e].toLowerCase()] = scene.props[events[e]] || null;
       }

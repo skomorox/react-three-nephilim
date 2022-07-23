@@ -213,7 +213,7 @@ const MainScene = () => {
     <Scene
       ref={s => s && setManager(s.manager)}
       id={'Main'}
-      initial={true}
+      isInitial={true}
       position={{ y: -1000, z: -500 }}
       navigationDuration={1000}
       actions={actions.main}
