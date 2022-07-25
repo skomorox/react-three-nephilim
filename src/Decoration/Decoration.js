@@ -43,7 +43,7 @@ export class Decoration extends Component {
       this.manager.layers[layer] = layer;
     }
 
-    this.connect(this._reactInternalFiber);
+    this.connect(this._reactInternals);
   }
 
   /**
@@ -284,7 +284,7 @@ export class Decoration extends Component {
       this.connect(fiberNode.return);
     } else {
       if (!stateNode.visual) {
-        this.connect(stateNode._reactInternalFiber);
+        this.connect(stateNode._reactInternals);
       } else {
         if (this.isEmitter) {
           this.connectEmitter(stateNode);

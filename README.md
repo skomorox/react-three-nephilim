@@ -1,5 +1,5 @@
 # react-three-composition
-Composition is a React wrapper around Three.js allowing you to easily create sophisticated animated scenes.
+Composition is a React framework for Three.js allowing you to easily create sophisticated animated scenes.
 Composition introducing Scene-Controller concept, where instead of regular Views, navigation is carried out between Scenes in 3D space.
 The idea is that global THREE.Scene consists of several Composition Scenes (THREE.Group) - "Views", and Compostion carries out "routing" between them -
 moves currently active Scene behind the scenes and brings another Scene to front.
@@ -15,6 +15,9 @@ Composition includes following features:
 - Post Processing support;
 - Basic Routing.
 - three-nebula integration (without json loader)
+
+# React
+Requires react >17
 
 # Installation
 - $npm i react-three-composition
