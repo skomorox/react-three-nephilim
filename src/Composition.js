@@ -54,6 +54,7 @@ export class Composition extends Component {
     this.isActionsEnabled = true;
     this.isLayerRendering = isLayerRendering || false;
     this.mouse = new Three.Vector2(-1, -1);
+    this.touch = new Three.Vector2(-1, -1);
     this.visual = new Three.Scene();
     this.camera = new Three[`${this.capitalize(camera.type)}Camera`](
       camera.fov, 1,
@@ -191,6 +192,13 @@ export class Composition extends Component {
         const visual = this.intersects[0].object;
         if (visual.onClick) visual.onClick(visual);  
       }
+    });
+    window.addEventListener('touchmove', ({ changedTouches }) => {
+      const { clientX, clientY } = changedTouches[0];
+      const { offsetWidth, offsetHeight } = this.container;
+      const { top, left } = this.container.getBoundingClientRect();
+      this.touch.x = ((clientX - left) / offsetWidth) * 2 - 1;
+      this.touch.y = - ((clientY - top) / offsetHeight) * 2 + 1;
     });
   };
 

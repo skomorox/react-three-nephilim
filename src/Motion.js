@@ -60,26 +60,39 @@ export class Motion {
   update = () => {
 
     let axes = null;
+    const { container: { offsetWidth, offsetHeight }, mouse, touch } = this.manager;
 
     for (let m in this.modes) {
       switch (m) {
         case 'trackMouse':
           const trackMouseX = this.modes[m].mouseX;
           const trackMouseY = this.modes[m].mouseY;
-          const {
-            container: { offsetWidth, offsetHeight },
-            mouse: { x, y }
-          } = this.manager;
           if (trackMouseX) {
             this.trackMouseByAxis({
               track: trackMouseX,
-              axis: trackMouseX.symmetry ? x - offsetWidth  / 2 : x
+              axis: trackMouseX.symmetry ? mouse.x - offsetWidth  / 2 : mouse.x
             });
           }
           if (trackMouseY) {
             this.trackMouseByAxis({
               track: trackMouseY,
-              axis: trackMouseY.symmetry ? y - offsetHeight / 2 : y
+              axis: trackMouseY.symmetry ? mouse.y - offsetHeight / 2 : mouse.y
+            });
+          }
+          break;
+        case 'trackTouch':
+          const trackTouchX = this.modes[m].touchX;
+          const trackTouchY = this.modes[m].touchY;
+          if (trackTouchX) {
+            this.trackMouseByAxis({
+              track: trackTouchX,
+              axis: trackTouchX.symmetry ? touch.x - offsetWidth  / 2 : touch.x
+            });
+          }
+          if (trackTouchY) {
+            this.trackMouseByAxis({
+              track: trackTouchY,
+              axis: trackTouchY.symmetry ? touch.y - offsetHeight / 2 : touch.y
             });
           }
           break;
