@@ -293,6 +293,14 @@ export class Composition extends Component {
   setMotion = (id, motion) => this.find(id).setMotion(motion);
 
   /**
+   * @function setTouchPosition
+   * @param {Float} x
+   * @param {Float} y
+   * Set Touch position
+   */
+  setTouchPosition = (x, y) => this.touch.set(x, y);
+
+  /**
    * @function getAction
    * @param {String} id
    * Get Action by id
