@@ -18,7 +18,6 @@ export class Mesh extends Decoration {
       geometry.uuid ||
       basicGeometryTypes.includes(geometry.type.toLowerCase())
     );
-    this.manager.setLoaders([material.type, geometry.type]);
     this.setMaterial(material);
     this.setGeometry(geometry, material);
   }

@@ -37,7 +37,7 @@ export class Composition extends Component {
    * 4. Setup THREE.EffectComposer
    * 5. Inject this as manager in Decoration, Action, Motion, Controller classes
    */
-  constructor({ camera, glRenderer, cssRenderer, postProcessing, isLayerRendering }) {
+  constructor({ camera, glRenderer, cssRenderer, postProcessing, loaders, isLayerRendering }) {
 
     super();
     this.state = {
@@ -67,14 +67,8 @@ export class Composition extends Component {
       this.glRenderer.setPixelRatio(window.devicePixelRatio);
       this.raycaster = new Three.Raycaster();
       this.audioListener = new Three.AudioListener();
-      this.loadingManager = new Three.LoadingManager();
-      this.animationLoader = new Three.AnimationLoader(this.loadingManager);
-      this.audioLoader = new Three.AudioLoader(this.loadingManager);
-      this.textureLoader = new Three.TextureLoader(this.loadingManager);
-      this.loaders = {};
-      this.loadingManager.onProgress = (item, loaded, total) => this.setState({ loaded, total });
-      this.loadingManager.onLoad = () => this.setState({ loading: false });
       this.camera.add(this.audioListener);
+      this.setLoaders(loaders);
       if (glRenderer.autoClear !== undefined) {
         this.glRenderer.autoClear = glRenderer.autoClear;
       }
@@ -265,15 +259,26 @@ export class Composition extends Component {
 
   /**
    * @function setLoaders
-   * @param {String} type
-   * Add resource loader by type
+   * @param {String[]} loaders
+   * Add resource loaders
    */
-  setLoaders = types => {
-    types.forEach(t => {
-      if (Loaders[`${t}Loader`] && !this.loaders[`${t}Loader`]) {
-        this.loaders[`${t}Loader`] = new Loaders[`${t}Loader`](this.loadingManager);
-      }
-    });
+  setLoaders = loaders => {
+    
+    this.loadingManager = new Three.LoadingManager();
+    this.animationLoader = new Three.AnimationLoader(this.loadingManager);
+    this.audioLoader = new Three.AudioLoader(this.loadingManager);
+    this.textureLoader = new Three.TextureLoader(this.loadingManager);
+    this.loaders = {};
+    this.loadingManager.onProgress = (item, loaded, total) => this.setState({ loaded, total });
+    this.loadingManager.onLoad = () => this.setState({ loading: false });
+
+    if (loaders) {
+      loaders.forEach(l => {
+        if (Loaders[`${l}Loader`] && !this.loaders[`${l}Loader`]) {
+          this.loaders[`${l}Loader`] = new Loaders[`${l}Loader`](this.loadingManager);
+        }
+      });
+    }
   };
 
   /**
