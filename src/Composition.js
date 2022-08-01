@@ -28,14 +28,18 @@ export class Composition extends Component {
    * @param {Object} glRenderer
    * @param {Object} cssRenderer
    * @param {Object} postProcessing
+   * @param {String[]} loaders
    * @param {Boolean} isLayerRendering
    * 
    * Init application
-   * 1. Setup mouse, global Scene and Camera
+   * 1. Setup mouse, touch, global Scene and Camera
    * 2. Setup THREE.WebGLRenderer
-   * 3. Setup THREE.CSS3DRenderer
-   * 4. Setup THREE.EffectComposer
-   * 5. Inject this as manager in Decoration, Action, Motion, Controller classes
+   * 3. Setup THREE.Raycaster
+   * 4. Setup THREE.AudioListener
+   * 5. Setup Loaders
+   * 6. Setup THREE.CSS3DRenderer
+   * 7. Setup THREE.EffectComposer
+   * 8. Inject this as manager in Decoration, Action, Motion, Controller classes
    */
   constructor({ camera, glRenderer, cssRenderer, postProcessing, loaders, isLayerRendering }) {
 
@@ -506,18 +510,20 @@ export class Composition extends Component {
   };
 
   /**
-   * @function isMobileDevice
-   * Detect mobile device using navigator.userAgent
+   * @function isMobilePlatform
+   * Detect mobile platform using navigator.userAgent
    */
-  isMobileDevice = () => {
+   isMobilePlatform = () => {
     const platforms = [
       /Android/i,
-      /webOS/i,
+      /BlackBerry/i,
+      /IEMobile/i,
+      /Opera Mini/i,
+      /Windows Phone/i,
       /iPhone/i,
       /iPad/i,
       /iPod/i,
-      /BlackBerry/i,
-      /Windows Phone/i
+      /webOS/i
     ];
     return platforms.some(p => navigator.userAgent.match(p));
   };
