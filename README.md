@@ -339,6 +339,7 @@ const postProcessing = {
     src: FreiChenShader
   }
 };
+const loaders = ['OBJ', 'MTL'];
 
 export const App = () => (
   <div className={'composition'}>
@@ -356,6 +357,7 @@ export const App = () => (
       }}
       cssRenderer={true}
       layerRendering={true}
+      loaders={loaders}
       routes={routes}
       postProcessing={postProcessing}
     >
