@@ -16,7 +16,6 @@ import { Action } from './Action';
 import { Motion } from './Motion';
 import TWEEN from '@tweenjs/tween.js';
 import config from './config';
-import loader from '../images/loader.gif';
 import '../css/styles.css';
 
 export class Composition extends Component {
@@ -125,29 +124,34 @@ export class Composition extends Component {
       <Fragment>
         <div
           ref={c => this.container = c}
-          className={'container'}
+          className={'rtc-container'}
         >
           <div
             id={'portal'}
-            className={'renderer-container'}
+            className={'rtc-renderer-container'}
           />
           <div
             ref={c => this.glContainer = c}
-            className={'renderer-container'}
+            className={'rtc-renderer-container'}
           />
           <div
             ref={c => this.cssContainer = c}
-            className={'renderer-container'}
+            className={'rtc-renderer-container'}
           />
           {loading && (
-            <div className={'loader-container'}>
-              <div className={'loader-container gradient'}>
-                <img
-                  className={'loader'}
-                  src={loader}
-                  alt={'loader'}
-                />
-                <div className={'loader text-loader'}>
+            <div className={'rtc-loader-container'}>
+              <div className={'rtc-loader-container rtc-gradient'}>
+                {[...Array(7)].map((h, hi) => (
+                  <div
+                    key={hi}
+                    className={`rtc-hexagon rtc-${hi === 0 ? 'center' : `side${hi}`}`}
+                  >
+                    <div className={'rtc-hp1'} />
+                    <div className={'rtc-hp1 rtc-hp2'} />
+                    <div className={'rtc-hp1 rtc-hp3'} />
+                  </div>
+                ))}
+                <div className={'rtc-text-loader'}>
                   Loading resources ({loaded} of {total})
                 </div>
               </div>

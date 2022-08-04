@@ -1,9 +1,9 @@
-.container {
+.rtc-container {
   position: relative;
   width: 100%;
   height: 100%;
 }
-.renderer-container {
+.rtc-renderer-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -11,34 +11,103 @@
   height: 100%;
   overflow: hidden
 }
-.loader-container {
+.rtc-loader-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: #000;
   overflow: hidden;
+  background: #000;
   z-index: 1000;
 }
-.loader {
+.rtc-text-loader {
   position: absolute;
+  top: 90px;
   left: 0;
   right: 0;
-  top: 0;
   bottom: 0;
-  width: 128px;
-  height: 128px;
+  width: 260px;
+  height: 30px;
   margin: auto;
-}
-.text-loader {
-  top: 260px;
-  width: 225px;
   font-size: 18px;
   color: #77d8ff;
 }
-.gradient {
+.rtc-gradient {
   background: linear-gradient(217deg, rgba(26, 49, 49, 1), rgba(26, 49, 49, 0)),
   linear-gradient(127deg, rgba(30, 30, 30, 1), rgba(30, 30, 30, 0)),
   linear-gradient(336deg, rgba(77, 68, 113, 1), rgba(77, 68, 113, 0));
+}
+
+.rtc-hexagon {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  height: 30px;
+  width: 30px;	
+  transition: all .3s;
+  animation-name: rtc-pulse;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+.rtc-hp1 {
+  position: absolute;
+  top: 5px;
+  width: 30px;
+  height: 17px;
+  background: #77d8ff;
+}
+.rtc-hp2 {
+  transform: rotate(60deg);
+}
+.rtc-hp3 {
+  transform: rotate(120deg);
+}
+
+.rtc-center {
+  margin-left: -15px;
+  margin-top: -15px;
+}
+.rtc-side1 {
+  margin-left: -47px;
+  margin-top: -15px;
+  animation-delay: .2s;
+}
+.rtc-side2 {
+  margin-left: -31px;
+  margin-top: -43px;
+  animation-delay: .4s;
+}
+.rtc-side3 {
+  margin-left: 1px;
+  margin-top: -43px;
+  animation-delay: .6s;
+}
+.rtc-side4 {
+  margin-left: 17px;
+  margin-top: -15px;
+  animation-delay: .8s;
+}
+.rtc-side5 {
+  margin-left: 1px;
+  margin-top: 13px;
+  animation-delay: 1s;
+}
+.rtc-side6 {
+  margin-left: -31px;
+  margin-top: 13px;
+  animation-delay: 1.2s;
+}
+
+@keyframes rtc-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
