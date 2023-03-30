@@ -328,6 +328,12 @@ export class Composition extends Component {
   onUpdate = handler => this.onUpdateHandlers.push(handler);
 
   /**
+   * @function clearUpdateHandlers
+   * Clear onUpdate handlers
+   */
+  clearUpdateHandlers = () => this.onUpdateHandlers = [];
+
+  /**
    * @function update
    * 1. Update children
    * 2. In case post processing enabled, render composer or layer by layer
