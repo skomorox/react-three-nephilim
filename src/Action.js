@@ -87,21 +87,18 @@ export class Action {
    * Animate objects (params.from) using tween.js (https://github.com/tweenjs/tween.js).
    * Execute callback function, if set, after.
    */
-  animate = ({ from, to, easing, duration, callback }) => {
+  animate = ({ from, to, easing, duration = 500, callback }) => {
 
     const tweenPromises = [];
     const parts = easing ? easing.split('-') : ['exponential', 'out'];
     const e = TWEEN.Easing[this.manager.capitalize(parts[0])][this.manager.capitalize(parts[1])];
-    const dur = duration || 500;
-
-    TWEEN.removeAll();
 
     from.forEach((f, i) => {
       if (from[i].position && to[i].position) {
         ((from, to) => {
           tweenPromises.push(new Promise(resolve => {
             new TWEEN.Tween(from.position)
-              .to({ x: to.position.x, y: to.position.y, z: to.position.z }, dur)
+              .to({ x: to.position.x, y: to.position.y, z: to.position.z }, duration)
               .easing(e).start().onComplete(() => resolve());
           }));
         })(from[i], to[i]);
@@ -110,7 +107,7 @@ export class Action {
         ((from, to) => {
           tweenPromises.push(new Promise(resolve => {
             new TWEEN.Tween(from.rotation)
-              .to({ x: to.rotation.x, y: to.rotation.y, z: to.rotation.z }, dur)
+              .to({ x: to.rotation.x, y: to.rotation.y, z: to.rotation.z }, duration)
               .easing(e).start().onComplete(() => resolve());
           }));
         })(from[i], to[i]);
@@ -119,7 +116,7 @@ export class Action {
         ((from, to) => {
           tweenPromises.push(new Promise(resolve => {
             new TWEEN.Tween(from.scale)
-              .to({ x: to.scale.x, y: to.scale.y, z: to.scale.z }, dur)
+              .to({ x: to.scale.x, y: to.scale.y, z: to.scale.z }, duration)
               .easing(e).start().onComplete(() => resolve());
           }));
         })(from[i], to[i]);
@@ -128,7 +125,7 @@ export class Action {
         ((from, to) => {
           tweenPromises.push(new Promise(resolve => {
             new TWEEN.Tween(from)
-              .to({ value: to.value }, dur)
+              .to({ value: to.value }, duration)
               .easing(e).start().onComplete(() => resolve());
           }));
         })(from[i], to[i]);
