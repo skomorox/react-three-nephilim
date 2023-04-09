@@ -453,6 +453,12 @@ export class Composition extends Component {
   };
 
   /**
+   * @function resetActions
+   * Stop actions execution
+   */
+  resetActions = () => TWEEN.removeAll();
+
+  /**
    * @function execActionsSequence
    * @param {String[]} actionIds
    * @param {Object} params
