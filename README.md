@@ -1,13 +1,13 @@
-# react-three-composition
-Composition is a React framework for Three.js allowing you to easily create sophisticated animated scenes.
-Composition introducing Scene-Controller concept, where instead of regular Views, navigation is carried out between Scenes in 3D space.
-The idea is that global THREE.Scene consists of several Composition Scenes (THREE.Group) - "Views", and Compostion carries out "routing" between them -
+# react-three-nephilim
+Nephilim is a React framework for Three.js allowing you to easily create sophisticated animated scenes.
+Nephilim introducing Scene-Controller concept, where instead of regular Views, navigation is carried out between Scenes in 3D space.
+The idea is that global THREE.Scene consists of several Scenes (THREE.Group) - "Views", and Nephilim carries out "routing" between them -
 moves currently active Scene behind the scenes and brings another Scene to front.
-This allows to achieve results that could be checked out <a href="http://skomorox.herokuapp.com">here</a>.
+This allows to achieve results that could be checked out <a href="http://nephilim.herokuapp.com">here</a>.
 
-Composition includes following features:
+Nephilim includes following features:
 - Intuitive React Components;
-- Adds Scene-Controller structure to application powered by three.js;
+- Adds Scene-Controller structure to application powered by Three.js;
 - Mixed GL and HTML scenes powered by WebGlRenderer and CSS3DRenderer;
 - Animated actions, several types of motions (random/static position, rotation, scale, mouse tracking, morph);
 - Several types of composition of GL and/or HTML objects within a container;
@@ -20,17 +20,17 @@ Composition includes following features:
 Requires react >17
 
 # Installation
-- $npm i react-three-composition
+- $npm i react-three-nephilim
 
 # Build
-- $cd react-three-composition
+- $cd react-three-nephilim
 - $npm i
 - $npm run transpile
 
 # Usage
 
 ```javascript
-.composition {
+.nephilim {
   position: absolute;
   top: 0;
   left: 0;
@@ -45,12 +45,12 @@ Requires react >17
 Basic html example:
 ```javascript
 import React from 'react';
-import Composition, { Hypertext } from 'react-three-composition';
+import Nephilim, { Hypertext } from 'react-three-nephilim';
 import './css/style.css';
 
 export const App = () => (
-  <div className={'composition'}>
-    <Composition
+  <div className={'nephilim'}>
+    <Nephilim
       camera={{
         type: 'perspective',
         fov: 40,
@@ -79,7 +79,7 @@ export const App = () => (
           Hello World Motion
         </div>
       </Hypertext>
-    </Composition>
+    </Nephilim>
   </div>
 );
 ```
@@ -87,12 +87,12 @@ export const App = () => (
 Basic mesh example:
 ```javascript
 import React from 'react';
-import Composition, { Mesh } from 'react-three-composition';
+import Nephilim, { Mesh } from 'react-three-nephilim';
 import './css/style.css';
 
 export const App = () => (
-  <div className={'composition'}>
-    <Composition
+  <div className={'nephilim'}>
+    <Nephilim
       camera={{
         type: 'perspective',
         fov: 40,
@@ -118,7 +118,7 @@ export const App = () => (
           position: { axes: 'xyz', maxValue: 100, randVelocity: 1 }
         }}
       />
-    </Composition>
+    </Nephilim>
   </div>
 );
 ```
@@ -126,12 +126,12 @@ export const App = () => (
 Mixed example:
 ```javascript
 import React from 'react';
-import Composition, { Mesh, Hypertext } from 'react-three-composition';
+import Nephilim, { Mesh, Hypertext } from 'react-three-nephilim';
 import './css/style.css';
 
 export const App = () => (
-  <div className={'composition'}>
-    <Composition
+  <div className={'nephilim'}>
+    <Nephilim
       camera={{
         type: 'perspective',
         fov: 40,
@@ -170,7 +170,7 @@ export const App = () => (
           position: { axes: 'xyz', maxValue: 100, randVelocity: 1 }
         }}
       />
-    </Composition>
+    </Nephilim>
   </div>
 );
 ```
@@ -178,7 +178,7 @@ export const App = () => (
 More complex example - components, hook, extend Scene:
 ```javascript
 import React, { useState } from 'react';
-import Composition, { Scene, Container, Mesh, Hypertext, Light } from 'react-three-composition';
+import Nephilim, { Scene, Container, Mesh, Hypertext, Light } from 'react-three-nephilim';
 import './css/style.css';
 
 const actions = {
@@ -210,8 +210,8 @@ const MainScene = () => {
   const [manager, setManager] = useState(null);
 
   // Scene could either have children or be extended by AnotherScene with custom render() {...}
-  // Since MainScene in this case is not related to Composition components, it doesn't have references to manager
-  // manager (Composition singleton) is injected in any related component and could be taken: ref={s => s && setManager(s.manager)}
+  // Since MainScene in this case is not related to Nephilim components, it doesn't have references to manager
+  // manager (Nephilim singleton) is injected in any related component and could be taken: ref={s => s && setManager(s.manager)}
   return (
     <Scene
       ref={s => s && setManager(s.manager)}
@@ -286,8 +286,8 @@ class SecondScene extends Scene {
 }
 
 export const App = () => (
-  <div className={'composition'}>
-    <Composition
+  <div className={'nephilim'}>
+    <Nephilim
       camera={{
         type: 'perspective',
         fov: 40,
@@ -312,12 +312,12 @@ export const App = () => (
         type={'ambient'}
         params={[0xffffff, 0.5]}
       />
-    </Composition>
+    </Nephilim>
   </div>
 );
 ```
 
-Composition settings:
+Nephilim settings:
 ```javascript
 const routes = {
   Main: '/', // <Scene id={'Main'} />
@@ -342,8 +342,8 @@ const postProcessing = {
 const loaders = ['OBJ', 'MTL'];
 
 export const App = () => (
-  <div className={'composition'}>
-    <Composition
+  <div className={'nephilim'}>
+    <Nephilim
       camera={{
         type: 'perspective',
         fov: 40,
@@ -362,7 +362,7 @@ export const App = () => (
       postProcessing={postProcessing}
     >
       {...}
-    </Composition>
+    </Nephilim>
   </div>
 );
 ```
@@ -370,4 +370,4 @@ export const App = () => (
 
 It is not absolutely necessary to use controllers in your app and just follow regular React approach as described in examples,
 but they provide some useful functionality to separate control logic and manage Scenes.
-Advanced examples you can find <a href="http://skomorox.herokuapp.com/examples">here</a>.
+Advanced examples you can find <a href="http://nephilim.herokuapp.com/examples">here</a>.

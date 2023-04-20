@@ -108,7 +108,7 @@ export class Decoration extends Component {
     } else {
       this.visual.parent.remove(this.visual);
     }
-    delete this._compositionParentNode.children[this.id];
+    delete this._nephilimParentNode.children[this.id];
   }
 
   render() {
@@ -292,7 +292,7 @@ export class Decoration extends Component {
           stateNode.visual.add(this.visual);
         }
         stateNode.children[this.id] = this;
-        this._compositionParentNode = stateNode;
+        this._nephilimParentNode = stateNode;
       }
     }
   };

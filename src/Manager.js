@@ -1,7 +1,7 @@
 /*****************************************************************************************************
  * @author Skomorox
- * @class Composition
- * Abstract: Class Composition
+ * @class Manager
+ * Abstract: Class Manager
  *****************************************************************************************************
  */
 
@@ -18,7 +18,7 @@ import TWEEN from '@tweenjs/tween.js';
 import config from './config';
 import '../css/styles.css';
 
-export class Composition extends Component {
+export class Manager extends Component {
   
   /**
    * @function constructor

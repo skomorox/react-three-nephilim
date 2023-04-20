@@ -1,17 +1,17 @@
 {
-  "name": "react-three-composition",
-  "version": "1.1.8",
-  "description": "React Three Composition",
+  "name": "react-three-nephilim",
+  "version": "1.2.0",
+  "description": "3D SPA engine based on React and Three.js",
   "keywords": [
     "react",
     "three",
     "mvc",
     "spa"
   ],
-  "homepage": "https://github.com/Skomorox/react-three-composition",
+  "homepage": "https://github.com/Skomorox/react-three-nephilim",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Skomorox/react-three-composition.git"
+    "url": "https://github.com/Skomorox/react-three-nephilim.git"
   },
   "main": "dist/index.js",
   "scripts": {
