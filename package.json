@@ -1,17 +1,19 @@
 {
   "name": "react-three-nephilim",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "3D SPA engine based on React and Three.js",
   "keywords": [
     "react",
-    "three",
+    "threejs",
+    "react-three",
+    "react-three-spa",
     "mvc",
     "spa"
   ],
-  "homepage": "https://github.com/Skomorox/react-three-nephilim",
+  "homepage": "https://github.com/skomorox/react-three-nephilim",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Skomorox/react-three-nephilim.git"
+    "url": "https://github.com/skomorox/react-three-nephilim.git"
   },
   "main": "dist/index.js",
   "scripts": {

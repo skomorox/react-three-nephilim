@@ -371,3 +371,10 @@ export const App = () => (
 It is not absolutely necessary to use controllers in your app and just follow regular React approach as described in examples,
 but they provide some useful functionality to separate control logic and manage Scenes.
 Advanced examples you can find <a href="http://nephilim.herokuapp.com/examples">here</a>.
+
+# TODO
+- <Geometry />
+- <Material />
+- <Motion />
+- <Route />
+- Enums for all types
