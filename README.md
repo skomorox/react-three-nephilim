@@ -373,8 +373,8 @@ but they provide some useful functionality to separate control logic and manage 
 Advanced examples you can find <a href="http://nephilim.herokuapp.com/examples">here</a>.
 
 # TODO
-- <Geometry />
-- <Material />
-- <Motion />
-- <Route />
+- Geometry Component
+- Material Component
+- Motion Component
+- Route Component
 - Enums for all types
