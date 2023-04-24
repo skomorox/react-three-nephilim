@@ -40,7 +40,7 @@ export class Manager extends Component {
    * 7. Setup THREE.EffectComposer
    * 8. Inject this as manager in Decoration, Action, Motion, Controller classes
    */
-  constructor({ camera, glRenderer, cssRenderer, postProcessing, loaders, isLayerRendering }) {
+  constructor({ camera, glRenderer, cssRenderer, postProcessing, isLayerRendering }) {
 
     super();
     this.state = {
@@ -71,7 +71,7 @@ export class Manager extends Component {
       this.raycaster = new Three.Raycaster();
       this.audioListener = new Three.AudioListener();
       this.camera.add(this.audioListener);
-      this.setLoaders(loaders);
+      this.setLoaders();
       if (glRenderer.autoClear !== undefined) {
         this.glRenderer.autoClear = glRenderer.autoClear;
       }
@@ -268,26 +268,29 @@ export class Manager extends Component {
 
   /**
    * @function setLoaders
-   * @param {String[]} loaders
    * Add resource loaders
    */
-  setLoaders = loaders => {
-    
+  setLoaders = () => {
+    this.loaders = {};
     this.loadingManager = new Three.LoadingManager();
     this.animationLoader = new Three.AnimationLoader(this.loadingManager);
     this.audioLoader = new Three.AudioLoader(this.loadingManager);
     this.textureLoader = new Three.TextureLoader(this.loadingManager);
-    this.loaders = {};
     this.loadingManager.onProgress = (item, loaded, total) => this.setState({ loaded, total });
     this.loadingManager.onLoad = () => this.setState({ loading: false });
+  };
 
-    if (loaders) {
-      loaders.forEach(l => {
-        if (Loaders[l] && !this.loaders[l]) {
-          this.loaders[l] = new Loaders[l](this.loadingManager);
-        }
-      });
-    }
+  /**
+   * @function setCustomLoaders
+   * @param {Array} loaders
+   * Add custom loaders
+   */
+  setCustomLoaders = loaders => {
+    loaders.forEach(l => {
+      if (Loaders[l] && !this.loaders[l]) {
+        this.loaders[l] = new Loaders[l](this.loadingManager);
+      }
+    });
   };
 
   /**
