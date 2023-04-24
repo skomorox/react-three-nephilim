@@ -67,7 +67,7 @@ export class Container extends Decoration {
     
     switch (type) {
       
-      case [Composition.Grid]:
+      case Composition.Grid:
         column = i % cols;
         row = Math.floor(i / cols);
         let x = column * (xStep || 0) + (xStart || 0) + (Math.random() * xRand - xRand);
@@ -81,7 +81,7 @@ export class Container extends Decoration {
         };
         break;
         
-      case [Composition.DepthGrid]:
+      case Composition.DepthGrid:
         column = i % cols;
         row = Math.floor(i / cols) % rows;
         layer = Math.floor(i / (cols * rows));
@@ -92,7 +92,7 @@ export class Container extends Decoration {
         };
         break;
 
-      case [Composition.Cylinder]:
+      case Composition.Cylinder:
         column = i % cols;
         row = Math.floor(i / cols);
         let phi = (Math.PI / cols * 2) * (column + 1);
@@ -107,6 +107,7 @@ export class Container extends Decoration {
         break;
       
       default:
+        position = { x: 0, y: 0, z: 0 };
         break;
     }
 
