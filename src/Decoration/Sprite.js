@@ -6,21 +6,20 @@
  */
 
 import * as Three from 'three';
-import { Decoration } from './Decoration';
 import _ from 'lodash';
- 
+import { Decoration } from './Decoration';
+
 export class Sprite extends Decoration {
- 
-  constructor({ material }) {
-    super();
-    this.setMaterial(material);
-    this.setGeometry();
+
+  componentDidMount() {
+    this.setVisual();
+    super.componentDidMount();
   }
- 
-  setMaterial = ({ params }) => {
+
+  setMaterial = ({ ...params }) => {
     params = _.cloneDeep(params);
     if (params.map) {
-      params.map = this.manager.textureLoader.load(params.map)
+      params.map = this.manager.textureLoader.load(params.map);
     }
     this.material = new Three.SpriteMaterial(params);
   };

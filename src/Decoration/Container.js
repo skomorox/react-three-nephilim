@@ -7,6 +7,7 @@
 
 import { Group, Vector3 } from 'three';
 import { Decoration } from './Decoration';
+import { Composition } from '../Types';
 
 export class Container extends Decoration {
 
@@ -31,7 +32,7 @@ export class Container extends Decoration {
   /**
    * @function calcCompositionState
    * Add Decoration to the Сontainer according to composition settings
-   * Acceptable options are: grid, z-grid, cylinder
+   * Acceptable options are: Composition.Grid, Composition.DepthGrid, Composition.Cylinder
    */  
    calcCompositionState = (visual, i) => {
 
@@ -66,7 +67,7 @@ export class Container extends Decoration {
     
     switch (type) {
       
-      case 'grid':
+      case [Composition.Grid]:
         column = i % cols;
         row = Math.floor(i / cols);
         let x = column * (xStep || 0) + (xStart || 0) + (Math.random() * xRand - xRand);
@@ -80,7 +81,7 @@ export class Container extends Decoration {
         };
         break;
         
-      case 'z-grid':
+      case [Composition.DepthGrid]:
         column = i % cols;
         row = Math.floor(i / cols) % rows;
         layer = Math.floor(i / (cols * rows));
@@ -91,7 +92,7 @@ export class Container extends Decoration {
         };
         break;
 
-      case 'cylinder':
+      case [Composition.Cylinder]:
         column = i % cols;
         row = Math.floor(i / cols);
         let phi = (Math.PI / cols * 2) * (column + 1);
@@ -110,7 +111,9 @@ export class Container extends Decoration {
     }
 
     visual.position.set(position.x, position.y, position.z);
-    if (type === 'cylinder') visual.lookAt(new Vector3(0, position.y, 0));
+    if (type === Composition.Cylinder) {
+      visual.lookAt(new Vector3(0, position.y, 0));
+    }
   };
   
 }

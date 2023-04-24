@@ -1,31 +1,29 @@
 /*****************************************************************************************************
  * @author Skomorox
  * @class Line
- * Abstract: Class Line. THREE.Line, THREE.LineSegments wrapper.
+ * Abstract: Class Line. THREE.Line wrapper.
  *****************************************************************************************************
  */
 
 import * as Three from 'three';
+import * as Types from '../Types';
 import { Decoration } from './Decoration';
- 
+
 export class Line extends Decoration {
- 
-  constructor({ type, geometry, material }) {
-    super();
-    this.setMaterial(material);
-    this.setGeometry(type, geometry);
+
+  componentDidMount() {
+    this.setVisual();
+    super.componentDidMount();
   }
  
-  setMaterial = ({ type, params }) => {
-    this.material = new Three[`Line${this.manager.capitalize(type)}Material`](params);
+  setMaterial = ({ type, ...params }) => {
+    this.material = new Three[type](params);
   };
- 
-  setGeometry = (type, geometry) => {
+
+  setGeometry = geometry => {
+    const { type = Types.Line.Basic } = this.props;
     this.geometry = geometry;
-    this.visual = new Three[type === 'line' ?
-      'Line' :
-      `Line${this.manager.capitalize(type || '')}`
-    ](this.geometry, this.material);
+    this.visual = new Three[type](this.geometry, this.material);
   };
  
   updateMaterial = material => {
@@ -34,4 +32,3 @@ export class Line extends Decoration {
   };
 
 }
- 

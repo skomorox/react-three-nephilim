@@ -7,7 +7,7 @@
  *****************************************************************************************************
  */
  
-import TWEEN from '@tweenjs/tween.js';
+import Tween from '@tweenjs/tween.js';
 
 export class Action {
 
@@ -87,46 +87,44 @@ export class Action {
    * Animate objects (params.from) using tween.js (https://github.com/tweenjs/tween.js).
    * Execute callback function, if set, after.
    */
-  animate = ({ from, to, easing, duration = 500, callback }) => {
+  animate = ({ from, to, easing = Tween.Easing.Exponential.Out, duration = 500, callback }) => {
 
     const tweenPromises = [];
-    const parts = easing ? easing.split('-') : ['exponential', 'out'];
-    const e = TWEEN.Easing[this.manager.capitalize(parts[0])][this.manager.capitalize(parts[1])];
 
     from.forEach((f, i) => {
       if (from[i].position && to[i].position) {
         ((from, to) => {
           tweenPromises.push(new Promise(resolve => {
-            new TWEEN.Tween(from.position)
+            new Tween.Tween(from.position)
               .to({ x: to.position.x, y: to.position.y, z: to.position.z }, duration)
-              .easing(e).start().onComplete(() => resolve());
+              .easing(easing).start().onComplete(() => resolve());
           }));
         })(from[i], to[i]);
       }
       if (from[i].rotation && to[i].rotation) {
         ((from, to) => {
           tweenPromises.push(new Promise(resolve => {
-            new TWEEN.Tween(from.rotation)
+            new Tween.Tween(from.rotation)
               .to({ x: to.rotation.x, y: to.rotation.y, z: to.rotation.z }, duration)
-              .easing(e).start().onComplete(() => resolve());
+              .easing(easing).start().onComplete(() => resolve());
           }));
         })(from[i], to[i]);
       }
       if (from[i].scale && to[i].scale) {
         ((from, to) => {
           tweenPromises.push(new Promise(resolve => {
-            new TWEEN.Tween(from.scale)
+            new Tween.Tween(from.scale)
               .to({ x: to.scale.x, y: to.scale.y, z: to.scale.z }, duration)
-              .easing(e).start().onComplete(() => resolve());
+              .easing(easing).start().onComplete(() => resolve());
           }));
         })(from[i], to[i]);
       }
       if (from[i].value !== undefined) {
         ((from, to) => {
           tweenPromises.push(new Promise(resolve => {
-            new TWEEN.Tween(from)
+            new Tween.Tween(from)
               .to({ value: to.value }, duration)
-              .easing(e).start().onComplete(() => resolve());
+              .easing(easing).start().onComplete(() => resolve());
           }));
         })(from[i], to[i]);
       }

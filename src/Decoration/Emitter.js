@@ -7,6 +7,7 @@
 
 import * as Three from 'three';
 import ParticleSystem, * as Nebula from 'three-nebula';
+import * as Types from '../Types';
 import { Decoration } from './Decoration';
 import { Mesh } from './Mesh';
 import { Sprite } from './Sprite';
@@ -16,10 +17,10 @@ export class Emitter extends Decoration {
   constructor({ material, geometry, rate, initializers, behaviours }) {
     
     super();
-    const body = geometry.type === 'sprite' ?
-      new Sprite({ material }).visual :
-      new Mesh({ material, geometry }).visual;
-    
+    const body = material.type === Types.Material.Sprite ?
+      new Sprite({ material }) :
+      new Mesh({ material, geometry });
+    body.setVisual();
     this.visual = new Nebula.Emitter();
 
     if (rate) {
@@ -36,7 +37,7 @@ export class Emitter extends Decoration {
       }));
     }
 
-    this.visual.addInitializers([new Nebula.Body(body)]);
+    this.visual.addInitializers([new Nebula.Body(body.visual)]);
     this.visual.emit();
   }
    

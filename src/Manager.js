@@ -6,15 +6,15 @@
  */
 
 import React, { Component, Fragment } from 'react';
+import Tween from '@tweenjs/tween.js';
 import * as Three from 'three';
+import * as Loaders from './Loader';
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
 import { EffectComposer, Passes, Shaders } from './EffectComposer';
-import { Loaders } from './Loader';
 import { Decoration } from './Decoration/Decoration';
 import { Controller } from './Controller';
 import { Action } from './Action';
 import { Motion } from './Motion';
-import TWEEN from '@tweenjs/tween.js';
 import config from './config';
 import '../css/styles.css';
 
@@ -59,7 +59,7 @@ export class Manager extends Component {
     this.mouse = new Three.Vector2(-1, -1);
     this.touch = new Three.Vector2(-1, -1);
     this.visual = new Three.Scene();
-    this.camera = new Three[`${this.capitalize(camera.type)}Camera`](
+    this.camera = new Three[camera.type](
       camera.fov, 1,
       camera.near,
       camera.far
@@ -118,6 +118,7 @@ export class Manager extends Component {
 
   render() {
 
+    const { children } = this.props;
     const { loading, loaded, total } = this.state;
 
     return (
@@ -158,7 +159,7 @@ export class Manager extends Component {
             </div>
           )}
         </div>
-        {this.props.children}
+        {children}
       </Fragment>
     );
   }
@@ -282,8 +283,8 @@ export class Manager extends Component {
 
     if (loaders) {
       loaders.forEach(l => {
-        if (Loaders[`${l}Loader`] && !this.loaders[`${l}Loader`]) {
-          this.loaders[`${l}Loader`] = new Loaders[`${l}Loader`](this.loadingManager);
+        if (Loaders[l] && !this.loaders[l]) {
+          this.loaders[l] = new Loaders[l](this.loadingManager);
         }
       });
     }
@@ -363,7 +364,7 @@ export class Manager extends Component {
     if (this.cssRenderer) {
       this.cssRenderer.render(this.visual, this.camera);
     }
-    TWEEN.update();
+    Tween.update();
     this.onUpdateHandlers.forEach(handler => handler());
     requestAnimationFrame(this.update);
   };
@@ -456,7 +457,7 @@ export class Manager extends Component {
    * @function resetActions
    * Stop actions execution
    */
-  resetActions = () => TWEEN.removeAll();
+  resetActions = () => Tween.removeAll();
 
   /**
    * @function execActionsSequence

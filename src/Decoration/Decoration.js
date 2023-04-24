@@ -5,9 +5,11 @@
  *****************************************************************************************************
  */
 
-import { Component } from 'react';
+import _ from 'lodash';
+import { Component, Children } from 'react';
 import { Vector3, PositionalAudio } from 'three'; 
 import { Motion } from '../Motion';
+import { Geometry, Material } from '../Misc';
 
 export class Decoration extends Component {
 
@@ -30,7 +32,7 @@ export class Decoration extends Component {
     this.id = id || this.visual.uuid || this.visual.id;
     this.isGLEvents = this.isGLEvents || isGLEvents;
     this.isGlobal = isGlobal || false;
-    this.isEmitter = this.visual.type === 'Emitter';
+    this.isEmitter = this.visual.type === 'Emitter'; // is emitter?
     this.setVisualState(this.props);
 
     if (audio) this.setAudio(audio);
@@ -64,25 +66,27 @@ export class Decoration extends Component {
     material: prevMaterial,
     audio: prevAudio
   }) {
+    // update material
+    
     const { position, rotation, scale, lookAt, motion, actions, material, audio } = this.props;
     if (
-      (JSON.stringify(position) !== JSON.stringify(prevPosition)) ||
-      (JSON.stringify(rotation) !== JSON.stringify(prevRotation)) ||
-      (JSON.stringify(scale) !== JSON.stringify(prevScale)) ||
-      (JSON.stringify(lookAt) !== JSON.stringify(prevLookAt))
+      !_.isEqual(position, prevPosition) ||
+      !_.isEqual(rotation, prevRotation) || 
+      !_.isEqual(scale, prevScale) ||
+      !_.isEqual(lookAt, prevLookAt)
     ) {
       this.setVisualState({ position, rotation, scale, lookAt });
     }
-    if (JSON.stringify(motion) !== JSON.stringify(prevMotion)) {
+    if (!_.isEqual(motion, prevMotion)) {
       this.setMotion(motion);
     }
-    if (JSON.stringify(actions) !== JSON.stringify(prevActions)) {
+    if (!_.isEqual(actions, prevActions)) {
       this.setActions(actions);
     }
-    if (JSON.stringify(material) !== JSON.stringify(prevMaterial)) {
+    if (!_.isEqual(material, prevMaterial)) {
       this.updateMaterial(material);
     }
-    if (JSON.stringify(audio) !== JSON.stringify(prevAudio)) {
+    if (!_.isEqual(audio, prevAudio)) {
       for (let a in audio) {
         if (audio[a].play) {
           this.audio[a].play();
@@ -114,6 +118,20 @@ export class Decoration extends Component {
   render() {
     return null;
   }
+
+  /**
+   * @function setVisual
+   * Init visual
+   */
+  setVisual = () => {
+    let { material, geometry, children } = this.props;
+    Children.forEach(children, c => {
+      if (c.type === Material) material = c.props;
+      if (c.type === Geometry) geometry = c.props;
+    });
+    this.setMaterial(material);
+    this.setGeometry(geometry, material);
+  };
 
   /**
    * @function setVisualState
