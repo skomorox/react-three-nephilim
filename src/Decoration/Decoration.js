@@ -130,7 +130,7 @@ export class Decoration extends Component {
       if (c.type === Geometry) geometry = c.props;
     });
     this.setMaterial(material);
-    this.setGeometry(geometry, material);
+    this.setGeometry(geometry);
   };
 
   /**

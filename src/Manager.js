@@ -281,16 +281,14 @@ export class Manager extends Component {
   };
 
   /**
-   * @function setCustomLoaders
-   * @param {Array} loaders
+   * @function setCustomLoader
+   * @param loader
    * Add custom loaders
    */
-  setCustomLoaders = loaders => {
-    loaders.forEach(l => {
-      if (Loaders[l] && !this.loaders[l]) {
-        this.loaders[l] = new Loaders[l](this.loadingManager);
-      }
-    });
+  setCustomLoader = l => {
+    if (Loaders[l] && !this.loaders[l]) {
+      this.loaders[l] = new Loaders[l](this.loadingManager);
+    }
   };
 
   /**
