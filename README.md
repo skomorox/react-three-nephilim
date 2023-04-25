@@ -36,6 +36,7 @@ Requires react >17
   left: 0;
   width: 100%;
   height: 100%;
+  background: #fff;
 }
 .button {
   cursor: pointer;
@@ -45,14 +46,14 @@ Requires react >17
 Basic html example:
 ```javascript
 import React from 'react';
-import Nephilim, { Hypertext } from 'react-three-nephilim';
+import Nephilim, { Hypertext, Types } from 'react-three-nephilim';
 import './css/style.css';
 
 export const App = () => (
   <div className={'nephilim'}>
     <Nephilim
       camera={{
-        type: 'perspective',
+        type: Types.Camera.Perspective,
         fov: 40,
         near: 1,
         far: 200000
@@ -70,9 +71,9 @@ export const App = () => (
       <Hypertext
         position={{ z: -300 }}
         motion={{
-          position: { axes: 'xyz', maxValue: 10, velocity: 0.1 },
-          rotation: { axes: 'xyz', maxValue: 10, velocity: 0.01 },
-          scale: { axes: 'xy', maxValue: 5, velocity: 0.01 }
+          position: { axes: Types.Axes.XYZ, maxValue: 10, velocity: 0.1 },
+          rotation: { axes: Types.Axes.XYZ, maxValue: 10, velocity: 0.01 },
+          scale: { axes: Types.Axes.XY, maxValue: 5, velocity: 0.01 }
         }}
       >
         <div style={{ fontSize: 12 }}>
@@ -87,14 +88,14 @@ export const App = () => (
 Basic mesh example:
 ```javascript
 import React from 'react';
-import Nephilim, { Mesh } from 'react-three-nephilim';
+import Nephilim, { Mesh, Material, Geometry, Types } from 'react-three-nephilim';
 import './css/style.css';
 
 export const App = () => (
   <div className={'nephilim'}>
     <Nephilim
       camera={{
-        type: 'perspective',
+        type: Types.Camera.Perspective,
         fov: 40,
         near: 1,
         far: 200000
@@ -103,21 +104,20 @@ export const App = () => (
     >
       <Mesh
         position={{ z: -300 }}
-        geometry={{
-          type: 'box',
-          params: [30, 20, 20]
-        }}
-        material={{
-          type: 'basic',
-          params: {
-            color: 0xffffff
-          }
-        }}
         motion={{
-          rotation: { axes: 'xyz', maxValue: 10, randVelocity: 0.01 },
-          position: { axes: 'xyz', maxValue: 100, randVelocity: 1 }
+          rotation: { axes: Types.Axes.XYZ, maxValue: 10, randVelocity: 0.01 },
+          position: { axes: Types.Axes.XYZ, maxValue: 100, randVelocity: 1 }
         }}
-      />
+      >
+        <Geometry
+          type={Types.Geometry.Box}
+          params={[30, 20, 20]}
+        />
+        <Material
+          type={Types.Material.Basic}
+          color={0xffffff}
+        />
+      </Mesh>
     </Nephilim>
   </div>
 );
@@ -133,7 +133,7 @@ export const App = () => (
   <div className={'nephilim'}>
     <Nephilim
       camera={{
-        type: 'perspective',
+        type: Types.Camera.Perspective,
         fov: 40,
         near: 1,
         far: 200000
@@ -144,9 +144,9 @@ export const App = () => (
       <Hypertext
         position={{ z: -300 }}
         motion={{
-          position: { axes: 'xyz', maxValue: 10, velocity: 0.1 },
-          rotation: { axes: 'xyz', maxValue: 10, velocity: 0.01 },
-          scale: { axes: 'xy', maxValue: 5, velocity: 0.01 }
+          position: { axes: Types.Axes.XYZ, maxValue: 10, velocity: 0.1 },
+          rotation: { axes: Types.Axes.XYZ, maxValue: 10, velocity: 0.01 },
+          scale: { axes: Types.Axes.XY, maxValue: 5, velocity: 0.01 }
         }}
       >
         <div style={{ fontSize: 12, color: 'white' }}>
@@ -156,18 +156,16 @@ export const App = () => (
       <Mesh
         position={{ z: -300 }}
         geometry={{
-          type: 'box',
+          type: Types.Geometry.Box,
           params: [30, 20, 20]
         }}
         material={{
-          type: 'basic',
-          params: {
-            color: 0xffffff
-          }
+          type: Types.Material.Basic,
+          color: 0xffffff
         }}
         motion={{
-          rotation: { axes: 'xyz', maxValue: 10, randVelocity: 0.01 },
-          position: { axes: 'xyz', maxValue: 100, randVelocity: 1 }
+          rotation: { axes: Types.Axes.XYZ, maxValue: 10, randVelocity: 0.01 },
+          position: { axes: Types.Axes.XYZ, maxValue: 100, randVelocity: 1 }
         }}
       />
     </Nephilim>
@@ -178,7 +176,7 @@ export const App = () => (
 More complex example - components, hook, extend Scene:
 ```javascript
 import React, { useState } from 'react';
-import Nephilim, { Scene, Container, Mesh, Hypertext, Light } from 'react-three-nephilim';
+import Nephilim, { Scene, Container, Mesh, Hypertext, Light, Types } from 'react-three-nephilim';
 import './css/style.css';
 
 const actions = {
@@ -231,19 +229,17 @@ const MainScene = () => {
       </Hypertext>
       <Mesh
         geometry={{
-          type: 'box',
+          type: Types.Geometry.Box,
           params: [50, 20, 20]
         }}
         material={{
-          type: 'phong',
-          params: {
-            specular: 0x47e9f5,
-            color: 0x47e9f5
-          }
+          type: Types.Material.Phong,
+          specular: 0x47e9f5,
+          color: 0x47e9f5
         }}
         motion={{
-          rotation: { axes: 'xyz', maxValue: 10, randVelocity: 0.01 },
-          position: { axes: 'xyz', maxValue: 100, randVelocity: 1 }
+          rotation: { axes: Types.Axes.XYZ, maxValue: 10, randVelocity: 0.01 },
+          position: { axes: Types.Axes.XYZ, maxValue: 100, randVelocity: 1 }
         }}
       />
     </Scene>
@@ -265,19 +261,17 @@ class SecondScene extends Scene {
         </Hypertext>
         <Mesh
           geometry={{
-            type: 'sphere',
+            type: Types.Geometry.Sphere,
             params: [20, 100, 100]
           }}
           material={{
-            type: 'phong',
-            params: {
-              specular: 0x47e9f5,
-              color: 0x47e9f5
-            }
+            type: Types.Material.Phong,
+            specular: 0x47e9f5,
+            color: 0x47e9f5
           }}
           motion={{
-            rotation: { axes: 'xyz', maxValue: 10, randVelocity: 0.01 },
-            position: { axes: 'xyz', maxValue: 100, randVelocity: 1 }
+            rotation: { axes: Types.Axes.XYZ, maxValue: 10, randVelocity: 0.01 },
+            position: { axes: Types.Axes.XYZ, maxValue: 100, randVelocity: 1 }
           }}
         />
       </Container>
@@ -289,7 +283,7 @@ export const App = () => (
   <div className={'nephilim'}>
     <Nephilim
       camera={{
-        type: 'perspective',
+        type: Types.Camera.Perspective,
         fov: 40,
         near: 1,
         far: 200000
@@ -305,11 +299,11 @@ export const App = () => (
         actions={actions.second}
       />
       <Light
-        type={'directional'}
+        type={Types.Light.Directional}
         params={[0xffffff, 0.1]}
       />
       <Light
-        type={'ambient'}
+        type={Types.Light.Ambient}
         params={[0xffffff, 0.5]}
       />
     </Nephilim>
@@ -339,13 +333,12 @@ const postProcessing = {
     src: FreiChenShader
   }
 };
-const loaders = ['OBJ', 'MTL'];
 
 export const App = () => (
   <div className={'nephilim'}>
     <Nephilim
       camera={{
-        type: 'perspective',
+        type: Types.Camera.Perspective,
         fov: 40,
         near: 1,
         far: 200000
@@ -357,7 +350,6 @@ export const App = () => (
       }}
       cssRenderer={true}
       layerRendering={true}
-      loaders={loaders}
       routes={routes}
       postProcessing={postProcessing}
     >
@@ -367,6 +359,137 @@ export const App = () => (
 );
 ```
 
+# Supported Types
+
+```javascript
+const Camera = {
+  Cube: 'CubeCamera',
+  Orthographic: 'OrthographicCamera',
+  Perspective: 'PerspectiveCamera',
+  Stereo: 'StereoCamera'
+};
+
+const Geometry = {
+  Box: 'BoxGeometry',
+  Capsule: 'CapsuleGeometry',
+  Circle: 'CircleGeometry',
+  Cone: 'ConeGeometry',
+  Cylinder: 'CylinderGeometry',
+  Dodecahedron: 'DodecahedronGeometry',
+  Extrude: 'ExtrudeGeometry',
+  Icosahedron: 'IcosahedronGeometry',
+  Lathe: 'LatheGeometry',
+  Octahedron: 'OctahedronGeometry',
+  Plane: 'PlaneGeometry',
+  Polyhedron: 'PolyhedronGeometry',
+  Ring: 'RingGeometry',
+  Shape: 'ShapeGeometry',
+  Sphere: 'SphereGeometry',
+  Tetrahedron: 'TetrahedronGeometry',
+  Torus: 'TorusGeometry',
+  TorusKnot: 'TorusKnotGeometry',
+  Tube: 'TubeGeometry'
+};
+
+const Material = {
+  Basic: 'MeshBasicMaterial',
+  Depth: 'MeshDepthMaterial',
+  Distance: 'MeshDistanceMaterial',
+  Lambert: 'MeshLambertMaterial',
+  Matcap: 'MeshMatcapMaterial',
+  Normal: 'MeshNormalMaterial',
+  Phong: 'MeshPhongMaterial',
+  Physical: 'MeshPhysicalMaterial',
+  Standard: 'MeshStandardMaterial',
+  Toon: 'MeshToonMaterial',
+  Points: 'PointsMaterial',
+  LineBasic: 'LineBasicMaterial',
+  LineDashed: 'LineDashedMaterial',
+  Shader: 'ShaderMaterial',
+  Shadow: 'ShadowMaterial',
+  Sprite: 'SpriteMaterial'
+};
+
+const Light = {
+  Ambient: 'AmbientLight',
+  Directional: 'DirectionalLight',
+  Hemisphere: 'HemisphereLight',
+  Point: 'PointLight',
+  Spot: 'SpotLight'
+};
+
+const Line = {
+  Basic: 'Line',
+  Loop: 'LineLoop',
+  Segments: 'LineSegments'
+};
+
+const Loader = {
+  AMF: 'AMFLoader',
+  BasisTexture: 'BasisTextureLoader',
+  BVH: 'BVHLoader',
+  Collada: 'ColladaLoader',
+  DDS: 'DDSLoader',
+  DRACO: 'DRACOLoader',
+  EXR: 'EXRLoader',
+  FBX: 'FBXLoader',
+  Font: 'FontLoader',
+  GCode: 'GCodeLoader',
+  GLTF: 'GLTFLoader',
+  HDRCubeTexture: 'HDRCubeTextureLoader',
+  IFC: 'IFCLoader',
+  KMZ: 'KMZLoader',
+  KTX2: 'KTX2Loader',
+  KTX: 'KTXLoader',
+  LDraw: 'LDrawLoader',
+  LogLuv: 'LogLuvLoader',
+  Lottie: 'LottieLoader',
+  LUT3dl: 'LUT3dlLoader',
+  LUTCube: 'LUTCubeLoader',
+  LWO: 'LWOLoader',
+  MD2: 'MD2Loader',
+  MDD: 'MDDLoader',
+  MMD: 'MMDLoader',
+  MTL: 'MTLLoader',
+  NRRD: 'NRRDLoader',
+  OBJ: 'OBJLoader',
+  PCD: 'PCDLoader',
+  PDB: 'PDBLoader',
+  PLY: 'PLYLoader',
+  PRWM: 'PRWMLoader',
+  PVR: 'PVRLoader',
+  RGBE: 'RGBELoader',
+  RGBM: 'RGBMLoader',
+  Rhino3dm: 'Rhino3dmLoader',
+  STL: 'STLLoader',
+  SVG: 'SVGLoader',
+  TDS: 'TDSLoader',
+  TGA: 'TGALoader',
+  ThreeMF: 'ThreeMFLoader',
+  Tilt: 'TiltLoader',
+  TTF: 'TTFLoader',
+  VOX: 'VOXLoader',
+  VRML: 'VRMLLoader',
+  VTK: 'VTKLoader',
+  XYZ: 'XYZLoader'
+};
+
+const Composition = {
+  Cylinder: 'Cylinder',
+  DepthGrid: 'DepthGrid',
+  Grid: 'Grid'
+};
+
+const Axes = {
+  X: 'x',
+  Y: 'y',
+  Z: 'z',
+  XY: 'xy',
+  XZ: 'xz',
+  YZ: 'yz',
+  XYZ: 'xyz'
+};
+```
 
 It is not absolutely necessary to use controllers in your app and just follow regular React approach as described in examples,
 but they provide some useful functionality to separate control logic and manage Scenes.
@@ -377,4 +500,3 @@ Advanced examples you can find <a href="http://nephilim.herokuapp.com/examples">
 - Material Component
 - Motion Component
 - Route Component
-- Enums for all types
