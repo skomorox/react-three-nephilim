@@ -359,7 +359,7 @@ export const App = () => (
 );
 ```
 
-Nephilim components
+Nephilim components:
 ```javascript
 import Nephilim, {
   GLRenderer, CSSRenderer, Camera,
