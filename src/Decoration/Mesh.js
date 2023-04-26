@@ -11,10 +11,10 @@ import _ from 'lodash';
 import { Decoration } from './Decoration';
 
 export class Mesh extends Decoration {
-  
-  componentDidMount() {
+
+  constructor(props) {
+    super(props);
     this.setVisual();
-    super.componentDidMount();
   }
 
   setMaterial = material => {

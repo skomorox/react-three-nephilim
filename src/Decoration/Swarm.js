@@ -10,9 +10,9 @@ import { Decoration } from './Decoration';
 
 export class Swarm extends Decoration {
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
     this.setVisual();
-    super.componentDidMount();
   }
 
   setMaterial = ({ type, ...params }) => {

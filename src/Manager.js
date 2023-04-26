@@ -5,11 +5,12 @@
  *****************************************************************************************************
  */
 
-import React, { Component, Fragment } from 'react';
+import React, { Children, Component, Fragment } from 'react';
 import Tween from '@tweenjs/tween.js';
 import * as Three from 'three';
 import * as Loaders from './Loader';
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
+import { Camera, GLRenderer, CSSRenderer, Router, PostProcessing, LayerRendering } from './Components';
 import { EffectComposer, Passes, Shaders } from './EffectComposer';
 import { Decoration } from './Decoration/Decoration';
 import { Controller } from './Controller';
@@ -40,9 +41,15 @@ export class Manager extends Component {
    * 7. Setup THREE.EffectComposer
    * 8. Inject this as manager in Decoration, Action, Motion, Controller classes
    */
-  constructor({ camera, glRenderer, cssRenderer, postProcessing, isLayerRendering }) {
+  constructor(props) {
 
-    super();
+    super(props);
+
+    let {
+      camera, glRenderer, cssRenderer,
+      postProcessing, layerRendering, children
+    } = props;
+
     this.state = {
       loading: true,
       loaded: 0,
@@ -55,10 +62,19 @@ export class Manager extends Component {
     this.onUpdateHandlers = [];
     this.isPPEnabled = false;
     this.isActionsEnabled = true;
-    this.isLayerRendering = isLayerRendering || false;
     this.mouse = new Three.Vector2(-1, -1);
     this.touch = new Three.Vector2(-1, -1);
     this.visual = new Three.Scene();
+
+    Children.forEach(children, c => {
+      if (c.type === Camera) camera = c.props;
+      if (c.type === GLRenderer) glRenderer = c.props;
+      if (c.type === CSSRenderer) cssRenderer = true;
+      if (c.type === PostProcessing) postProcessing = true;
+      if (c.type === LayerRendering) layerRendering = true;
+    });
+
+    this.isLayerRendering = layerRendering;
     this.camera = new Three[camera.type](
       camera.fov, 1,
       camera.near,
@@ -211,12 +227,17 @@ export class Manager extends Component {
    * Execute callback after navigation
    */
   setInitialRoute = () => {
-    const { routes } = this.props;
+    let { router, children } = this.props;
     let sceneId = null;
+
+    Children.forEach(children, c => {
+      if (c.type === Router) router = c.props;
+    });
+
     if (this.route) {
       const origin = `/${this.route.split('/')[1]}`;
-      for (let r in routes) {
-        if (routes[r] === origin || routes[r].path === origin) {
+      for (let r in router) {
+        if (router[r] === origin || router[r].path === origin) {
           sceneId = r;
         }
       }
@@ -224,8 +245,8 @@ export class Manager extends Component {
       sceneId = this.activeScene.id;
     }
     if (sceneId) {
-      const callback = (routes && routes[sceneId].callback) ?
-        () => routes[sceneId].callback(this, this.route) :
+      const callback = (router && router[sceneId].callback) ?
+        () => router[sceneId].callback(this, this.route) :
         false;
       this.navigate(sceneId, { callback });
     }
@@ -238,8 +259,13 @@ export class Manager extends Component {
    */
   setPPEffects = effects => {
 
+    const { postProcessing, children } = this.props;
     const { clientWidth, clientHeight } = this.container;
-    const pp = this.props.postProcessing;
+    let pp = postProcessing;
+
+    Children.forEach(children, c => {
+      if (c.type === PostProcessing) pp = c.props;
+    });
 
     if (!pp || !effects?.length) return false;
 
@@ -378,8 +404,13 @@ export class Manager extends Component {
    */
   navigate = (id, params) => {
 
-    const { routes } = this.props;
+    let { router, children } = this.props;
     const scene = this.find(id);
+
+    // TODO: refactor Children.forEach(...)
+    Children.forEach(children, c => {
+      if (c.type === Router) router = c.props;
+    });
 
     if (scene) {
       const events = [
@@ -391,8 +422,8 @@ export class Manager extends Component {
       }
       this.activeScene = scene;
     }
-    if (routes) {
-      window.history.pushState({}, this.activeScene.id, routes[id].path || routes[id]);
+    if (router) {
+      window.history.pushState({}, this.activeScene.id, router[id].path || router[id]);
     }
     if (this.activeScene.ppEffects) {
       this.setPPEffects(this.activeScene.ppEffects);

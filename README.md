@@ -313,7 +313,7 @@ export const App = () => (
 
 Nephilim settings:
 ```javascript
-const routes = {
+const router = {
   Main: '/', // <Scene id={'Main'} />
   Second: '/second' // Also <id>: { path: '/...', callback: (manager, route) => {...} } is acceptable
   // where callback is a function that should be executed after navigation to the Scene
@@ -350,10 +350,50 @@ export const App = () => (
       }}
       cssRenderer={true}
       layerRendering={true}
-      routes={routes}
+      router={router}
       postProcessing={postProcessing}
     >
       {...}
+    </Nephilim>
+  </div>
+);
+```
+
+Nephilim components
+```javascript
+import Nephilim, {
+  GLRenderer, CSSRenderer, Camera,
+  PostProcessing, Router, LayerRendering, Types
+} from 'react-three-nephilim';
+.....
+
+export const App = () =>  (
+  <div className={'nephilim'}>
+    <Nephilim>
+      <Camera
+        type={Types.Camera.Perspective}
+        fov={40}
+        near={1}
+        far={200000}
+      />
+      <GLRenderer
+        alpha={true}
+        antialias={true}
+        autoClear={false}
+      />
+      <CSSRenderer />
+      <LayerRendering />
+      <Router
+        MainScene={'/'}
+        SecondScene={'/second'}
+      />
+      <PostProcessing
+        UnrealBloomPass={{
+          params: [new Vector2(window.innerWidth, window.innerHeight), 3, 0.5, 0]
+        }}
+      />
+      <MainScene {...} />
+      <SecondScene {...} />
     </Nephilim>
   </div>
 );

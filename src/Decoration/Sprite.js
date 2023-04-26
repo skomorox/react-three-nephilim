@@ -11,9 +11,9 @@ import { Decoration } from './Decoration';
 
 export class Sprite extends Decoration {
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
     this.setVisual();
-    super.componentDidMount();
   }
 
   setMaterial = ({ ...params }) => {

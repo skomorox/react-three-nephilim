@@ -9,7 +9,7 @@ import _ from 'lodash';
 import { Component, Children } from 'react';
 import { Vector3, PositionalAudio } from 'three'; 
 import { Motion } from '../Motion';
-import { Geometry, Material } from '../Misc';
+import { Geometry, Material } from '../Components';
 
 export class Decoration extends Component {
 

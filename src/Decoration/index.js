@@ -8,4 +8,3 @@ export { Mesh } from './Mesh';
 export { Scene } from './Scene';
 export { Sprite } from './Sprite';
 export { Swarm } from './Swarm';
-export { Material, Geometry } from '../Misc';
