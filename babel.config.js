@@ -5,8 +5,8 @@ module.exports = function (api) {
     "@babel/preset-react"
   ];
   const plugins = [
-    "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-proposal-optional-chaining"
+    "@babel/plugin-transform-class-properties",
+    "@babel/plugin-transform-optional-chaining"
   ];
   return { presets, plugins };
 };
