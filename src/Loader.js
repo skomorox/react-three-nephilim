@@ -41,15 +41,3 @@ export { VOXLoader } from 'three/examples/jsm/loaders/VOXLoader.js';
 export { VRMLLoader } from 'three/examples/jsm/loaders/VRMLLoader.js';
 export { VTKLoader } from 'three/examples/jsm/loaders/VTKLoader.js';
 export { XYZLoader } from 'three/examples/jsm/loaders/XYZLoader.js';
-
-/* const ExportLoaders = {
-  AMFLoader, BasisTextureLoader, BVHLoader, ColladaLoader, DDSLoader, DRACOLoader, EXRLoader,
-  FBXLoader, FontLoader, GCodeLoader, GLTFLoader, HDRCubeTextureLoader, IFCLoader, KMZLoader,
-  KTX2Loader, KTXLoader, LDrawLoader, LogLuvLoader, LottieLoader, LUT3dlLoader, LUTCubeLoader,
-  LWOLoader, MD2Loader, MDDLoader, MMDLoader, MTLLoader, NRRDLoader, OBJLoader, PCDLoader,
-  PDBLoader, PLYLoader, PRWMLoader, PVRLoader, RGBELoader, RGBMLoader, Rhino3dmLoader, STLLoader,
-  SVGLoader, TDSLoader, TGALoader, ThreeMFLoader, TiltLoader, TTFLoader, VOXLoader, VRMLLoader,
-  VTKLoader, XYZLoader
-};
-
-export { ExportLoaders }; */
