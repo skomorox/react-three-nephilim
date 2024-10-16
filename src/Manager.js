@@ -30,6 +30,7 @@ export class Manager extends Component {
    * @param {Object} postProcessing
    * @param {String[]} loaders
    * @param {Boolean} isLayerRendering
+   * @param {Boolean} isColorManagement
    * 
    * Init application
    * 1. Setup mouse, touch, global Scene and Camera
@@ -46,8 +47,8 @@ export class Manager extends Component {
     super(props);
 
     let {
-      camera, glRenderer, cssRenderer,
-      postProcessing, layerRendering, children
+      camera, glRenderer, cssRenderer, children,
+      postProcessing, isLayerRendering, isColorManagement
     } = props;
 
     this.state = {
@@ -71,10 +72,10 @@ export class Manager extends Component {
       if (c.type === GLRenderer) glRenderer = c.props;
       if (c.type === CSSRenderer) cssRenderer = true;
       if (c.type === PostProcessing) postProcessing = true;
-      if (c.type === LayerRendering) layerRendering = true;
+      if (c.type === LayerRendering) isLayerRendering = true;
     });
 
-    this.isLayerRendering = layerRendering;
+    this.isLayerRendering = isLayerRendering;
     this.camera = new Three[camera.type](
       camera.fov, 1,
       camera.near,
@@ -90,6 +91,10 @@ export class Manager extends Component {
       this.setLoaders();
       if (glRenderer.autoClear !== undefined) {
         this.glRenderer.autoClear = glRenderer.autoClear;
+      }
+      if (isColorManagement === false) {
+        Three.ColorManagement.enabled = false;
+        this.glRenderer.outputColorSpace = Three.LinearSRGBColorSpace;
       }
     } else {
       this.state.loading = false; 
