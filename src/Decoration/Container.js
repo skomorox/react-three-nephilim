@@ -112,9 +112,6 @@ export class Container extends Decoration {
     }
 
     visual.position.set(position.x, position.y, position.z);
-    if (type === Composition.Cylinder) {
-      visual.lookAt(new Vector3(0, position.y, 0));
-    }
   };
   
 }
