@@ -1,6 +1,6 @@
 /*****************************************************************************************************
  * @author Skomorox
- * Components to take props from
+ * Interfaces to take props from
  *****************************************************************************************************
  */
 
@@ -10,12 +10,16 @@ export const CSSRenderer = () => {};
 
 export const PostProcessing = () => {};
 
+export const LayerRendering = () => {};
+
 export const Camera = () => {};
 
 export const Material = () => {};
 
 export const Geometry = () => {};
 
-export const Router = () => {};
+export const Audio = () => {};
 
-export const LayerRendering = () => {};
+export const Motion = () => {};
+
+export const Router = () => {};

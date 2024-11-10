@@ -9,7 +9,7 @@ import _ from 'lodash';
 import { Component, Children } from 'react';
 import { Vector3, PositionalAudio } from 'three'; 
 import { Motion } from '../Motion';
-import { Geometry, Material } from '../Components';
+import * as Interfaces from '../Interfaces';
 
 export class Decoration extends Component {
 
@@ -25,8 +25,8 @@ export class Decoration extends Component {
    */
   componentDidMount() {
 
-    const {
-      id, audio, motion, actions, layer,
+    let {
+      id, audio, motion, actions, layer, children,
       isGlobal, isGLEvents, onClick, onMouseOver
     } = this.props;
     this.id = id || this.visual.uuid || this.visual.id;
@@ -34,6 +34,12 @@ export class Decoration extends Component {
     this.isGlobal = isGlobal || false;
     this.isEmitter = this.visual.type === 'Emitter'; // is emitter?
     this.setVisualState(this.props);
+
+    Children.forEach(children, c => {
+      if (c === null) return false;
+      if (c.type === Interfaces.Audio) audio = c.props;
+      if (c.type === Interfaces.Motion) motion = c.props;
+    });
 
     if (audio) this.setAudio(audio);
     if (motion) this.setMotion(motion);
@@ -126,8 +132,9 @@ export class Decoration extends Component {
   setVisual = () => {
     let { material, geometry, children } = this.props;
     Children.forEach(children, c => {
-      if (c.type === Material) material = c.props;
-      if (c.type === Geometry) geometry = c.props;
+      if (c === null) return false;
+      if (c.type === Interfaces.Material) material = c.props;
+      if (c.type === Interfaces.Geometry) geometry = c.props;
     });
     this.setMaterial(material);
     this.setGeometry(geometry);

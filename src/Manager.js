@@ -5,12 +5,12 @@
  *****************************************************************************************************
  */
 
-import React, { Children, Component, Fragment } from 'react';
+import React, { Component, Children, Fragment } from 'react';
 import Tween from '@tweenjs/tween.js';
 import * as Three from 'three';
 import * as Loaders from './Loader';
+import * as Interfaces from './Interfaces';
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
-import { Camera, GLRenderer, CSSRenderer, Router, PostProcessing, LayerRendering } from './Components';
 import { EffectComposer, Passes, Shaders } from './EffectComposer';
 import { Decoration } from './Decoration/Decoration';
 import { Controller } from './Controller';
@@ -68,11 +68,12 @@ export class Manager extends Component {
     this.visual = new Three.Scene();
 
     Children.forEach(children, c => {
-      if (c.type === Camera) camera = c.props;
-      if (c.type === GLRenderer) glRenderer = c.props;
-      if (c.type === CSSRenderer) cssRenderer = true;
-      if (c.type === PostProcessing) postProcessing = true;
-      if (c.type === LayerRendering) isLayerRendering = true;
+      if (c === null) return false;
+      if (c.type === Interfaces.Camera) camera = c.props;
+      if (c.type === Interfaces.GLRenderer) glRenderer = c.props;
+      if (c.type === Interfaces.CSSRenderer) cssRenderer = true;
+      if (c.type === Interfaces.PostProcessing) postProcessing = true;
+      if (c.type === Interfaces.LayerRendering) isLayerRendering = true;
     });
 
     this.isLayerRendering = isLayerRendering;
@@ -236,7 +237,8 @@ export class Manager extends Component {
     let sceneId = null;
 
     Children.forEach(children, c => {
-      if (c.type === Router) router = c.props;
+      if (c === null) return false;
+      if (c.type === Interfaces.Router) router = c.props;
     });
 
     if (this.route) {
@@ -269,7 +271,8 @@ export class Manager extends Component {
     let pp = postProcessing;
 
     Children.forEach(children, c => {
-      if (c.type === PostProcessing) pp = c.props;
+      if (c === null) return false;
+      if (c.type === Interfaces.PostProcessing) pp = c.props;
     });
 
     if (!pp || !effects?.length) return false;
@@ -414,7 +417,8 @@ export class Manager extends Component {
 
     // TODO: refactor Children.forEach(...)
     Children.forEach(children, c => {
-      if (c.type === Router) router = c.props;
+      if (c === null) return false;
+      if (c.type === Interfaces.Router) router = c.props;
     });
 
     if (scene) {
