@@ -6,7 +6,7 @@
  */
 
 import _ from 'lodash';
-import { Component, Children } from 'react';
+import { Component } from 'react';
 import { Vector3, PositionalAudio } from 'three'; 
 import { Motion } from '../Motion';
 import * as Interfaces from '../Interfaces';
@@ -35,8 +35,7 @@ export class Decoration extends Component {
     this.isEmitter = this.visual.type === 'Emitter'; // is emitter?
     this.setVisualState(this.props);
 
-    Children.forEach(children, c => {
-      if (c === null) return false;
+    this.manager.forEach(children, c => {
       if (c.type === Interfaces.Audio) audio = c.props;
       if (c.type === Interfaces.Motion) motion = c.props;
     });
@@ -131,8 +130,7 @@ export class Decoration extends Component {
    */
   setVisual = () => {
     let { material, geometry, children } = this.props;
-    Children.forEach(children, c => {
-      if (c === null) return false;
+    this.manager.forEach(children, c => {
       if (c.type === Interfaces.Material) material = c.props;
       if (c.type === Interfaces.Geometry) geometry = c.props;
     });

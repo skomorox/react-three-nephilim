@@ -8,7 +8,7 @@
 import React, { Component, Children, Fragment } from 'react';
 import Tween from '@tweenjs/tween.js';
 import * as Three from 'three';
-import * as Loaders from './Loader';
+import * as Loaders from './Loaders';
 import * as Interfaces from './Interfaces';
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
 import { EffectComposer, Passes, Shaders } from './EffectComposer';
@@ -67,8 +67,7 @@ export class Manager extends Component {
     this.touch = new Three.Vector2(-1, -1);
     this.visual = new Three.Scene();
 
-    Children.forEach(children, c => {
-      if (c === null) return false;
+    this.forEach(children, c => {
       if (c.type === Interfaces.Camera) camera = c.props;
       if (c.type === Interfaces.GLRenderer) glRenderer = c.props;
       if (c.type === Interfaces.CSSRenderer) cssRenderer = true;
@@ -236,8 +235,7 @@ export class Manager extends Component {
     let { router, children } = this.props;
     let sceneId = null;
 
-    Children.forEach(children, c => {
-      if (c === null) return false;
+    this.forEach(children, c => {
       if (c.type === Interfaces.Router) router = c.props;
     });
 
@@ -270,8 +268,7 @@ export class Manager extends Component {
     const { clientWidth, clientHeight } = this.container;
     let pp = postProcessing;
 
-    Children.forEach(children, c => {
-      if (c === null) return false;
+    this.forEach(children, c => {
       if (c.type === Interfaces.PostProcessing) pp = c.props;
     });
 
@@ -415,9 +412,7 @@ export class Manager extends Component {
     let { router, children } = this.props;
     const scene = this.find(id);
 
-    // TODO: refactor Children.forEach(...)
-    Children.forEach(children, c => {
-      if (c === null) return false;
+    this.forEach(children, c => {
       if (c.type === Interfaces.Router) router = c.props;
     });
 
@@ -568,6 +563,26 @@ export class Manager extends Component {
   };
 
   /**
+   * @function forEach
+   * @param {Object[]} children
+   * @param {Function} callback
+   * Execute callback for each child Component
+   */
+  forEach = (children, callback) => {
+    Children.forEach(children, c => {
+      if (c === null) return false;
+      callback(c);
+    });
+  };
+
+  /**
+   * @function isSceneActive
+   * @param {String} id
+   * Check if scene is currently active
+   */
+  isSceneActive = id => id === this.activeScene.id;
+
+  /**
    * @function isMobilePlatform
    * Detect mobile platform using navigator.userAgent
    */
@@ -593,17 +608,10 @@ export class Manager extends Component {
   isMobileScreen = () => this.container.clientWidth <= config.MOBILE_SCREEN_WIDTH;
 
   /**
-   * @function isSceneActive
-   * @param {String} id
-   * Check if scene is currently active
-   */
-  isSceneActive = id => id === this.activeScene.id;
-  
-  /**
    * @function capitalize
    * @param {String} v
    * Capitalize string
    */
   capitalize = v => v.charAt(0).toUpperCase() + v.slice(1);
-  
+
 }
