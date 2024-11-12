@@ -12,6 +12,8 @@ export const PostProcessing = () => {};
 
 export const LayerRendering = () => {};
 
+export const Composition = () => {};
+
 export const Camera = () => {};
 
 export const Material = () => {};

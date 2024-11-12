@@ -5,9 +5,10 @@
  *****************************************************************************************************
  */
 
-import { Group, Vector3 } from 'three';
+import { Group } from 'three';
 import { Decoration } from './Decoration';
 import { Composition } from '../Types';
+import * as Interfaces from '../Interfaces';
 
 export class Container extends Decoration {
 
@@ -36,7 +37,11 @@ export class Container extends Decoration {
    */  
    calcCompositionState = (visual, i) => {
 
-    const { composition } = this.props;
+    let { composition, children } = this.props;
+
+    this.manager.forEach(children, c => {
+      if (c.type === Interfaces.Composition) composition = c.props;
+    });
 
     if (!composition) return false;
 
