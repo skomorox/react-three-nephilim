@@ -5,18 +5,18 @@
  *****************************************************************************************************
  */
 
-import React, { Component, Children, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import Tween from '@tweenjs/tween.js';
 import * as Three from 'three';
 import * as Loaders from './Loaders';
-import * as Interfaces from './Interfaces';
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
 import { EffectComposer, Passes, Shaders } from './EffectComposer';
 import { Decoration } from './Decoration/Decoration';
 import { Controller } from './Controller';
 import { Action } from './Action';
 import { Motion } from './Motion';
-import config from './config';
+import { applyInterfaceProps } from './Helpers';
+
 import '../css/styles.css';
 
 export class Manager extends Component {
@@ -46,10 +46,10 @@ export class Manager extends Component {
 
     super(props);
 
-    let {
-      camera, glRenderer, cssRenderer, children,
+    const {
+      camera, glRenderer, cssRenderer,
       postProcessing, isLayerRendering, isColorManagement
-    } = props;
+    } = applyInterfaceProps(props);
 
     this.state = {
       loading: true,
@@ -66,15 +66,6 @@ export class Manager extends Component {
     this.mouse = new Three.Vector2(-1, -1);
     this.touch = new Three.Vector2(-1, -1);
     this.visual = new Three.Scene();
-
-    this.forEach(children, c => {
-      if (c.type === Interfaces.Camera) camera = c.props;
-      if (c.type === Interfaces.GLRenderer) glRenderer = c.props;
-      if (c.type === Interfaces.CSSRenderer) cssRenderer = true;
-      if (c.type === Interfaces.PostProcessing) postProcessing = true;
-      if (c.type === Interfaces.LayerRendering) isLayerRendering = true;
-    });
-
     this.isLayerRendering = isLayerRendering;
     this.camera = new Three[camera.type](
       camera.fov, 1,
@@ -112,7 +103,7 @@ export class Manager extends Component {
     if (window.location.pathname !== '/') {
       this.route = window.location.pathname;
     }
-
+    
     Decoration.prototype.manager = this;
     Controller.prototype.manager = this;
     Action.prototype.manager = this;
@@ -232,12 +223,9 @@ export class Manager extends Component {
    * Execute callback after navigation
    */
   setInitialRoute = () => {
-    let { router, children } = this.props;
-    let sceneId = null;
 
-    this.forEach(children, c => {
-      if (c.type === Interfaces.Router) router = c.props;
-    });
+    const { router } = applyInterfaceProps(this.props);
+    let sceneId = null;
 
     if (this.route) {
       const origin = `/${this.route.split('/')[1]}`;
@@ -264,13 +252,9 @@ export class Manager extends Component {
    */
   setPPEffects = effects => {
 
-    const { postProcessing, children } = this.props;
+    const { postProcessing } = applyInterfaceProps(this.props);
     const { clientWidth, clientHeight } = this.container;
     let pp = postProcessing;
-
-    this.forEach(children, c => {
-      if (c.type === Interfaces.PostProcessing) pp = c.props;
-    });
 
     if (!pp || !effects?.length) return false;
 
@@ -409,12 +393,8 @@ export class Manager extends Component {
    */
   navigate = (id, params) => {
 
-    let { router, children } = this.props;
+    const { router } = applyInterfaceProps(this.props);
     const scene = this.find(id);
-
-    this.forEach(children, c => {
-      if (c.type === Interfaces.Router) router = c.props;
-    });
 
     if (scene) {
       const events = [
@@ -563,55 +543,10 @@ export class Manager extends Component {
   };
 
   /**
-   * @function forEach
-   * @param {Object[]} children
-   * @param {Function} callback
-   * Execute callback for each child Component
-   */
-  forEach = (children, callback) => {
-    Children.forEach(children, c => {
-      if (c === null) return false;
-      callback(c);
-    });
-  };
-
-  /**
    * @function isSceneActive
    * @param {String} id
    * Check if scene is currently active
    */
   isSceneActive = id => id === this.activeScene.id;
-
-  /**
-   * @function isMobilePlatform
-   * Detect mobile platform using navigator.userAgent
-   */
-   isMobilePlatform = () => {
-    const platforms = [
-      /Android/i,
-      /BlackBerry/i,
-      /IEMobile/i,
-      /Opera Mini/i,
-      /Windows Phone/i,
-      /iPhone/i,
-      /iPad/i,
-      /iPod/i,
-      /webOS/i
-    ];
-    return platforms.some(p => navigator.userAgent.match(p));
-  };
-
-  /**
-   * @function isMobileScreen
-   * Check current client width
-   */
-  isMobileScreen = () => this.container.clientWidth <= config.MOBILE_SCREEN_WIDTH;
-
-  /**
-   * @function capitalize
-   * @param {String} v
-   * Capitalize string
-   */
-  capitalize = v => v.charAt(0).toUpperCase() + v.slice(1);
 
 }

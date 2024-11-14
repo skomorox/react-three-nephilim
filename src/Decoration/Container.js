@@ -8,7 +8,7 @@
 import { Group } from 'three';
 import { Decoration } from './Decoration';
 import { Composition } from '../Types';
-import * as Interfaces from '../Interfaces';
+import { applyInterfaceProps, isMobileScreen } from '../Helpers';
 
 export class Container extends Decoration {
 
@@ -37,11 +37,7 @@ export class Container extends Decoration {
    */  
    calcCompositionState = (visual, i) => {
 
-    let { composition, children } = this.props;
-
-    this.manager.forEach(children, c => {
-      if (c.type === Interfaces.Composition) composition = c.props;
-    });
+    const { composition } = applyInterfaceProps(this.props);
 
     if (!composition) return false;
 
@@ -55,7 +51,7 @@ export class Container extends Decoration {
     let row;
     let layer;
     let position;
-    let src = this.manager.isMobileScreen() ? 0 : 1;
+    let src = isMobileScreen(this.manager.container) ? 0 : 1;
 
     cols = cols ? (cols[src] || cols) : 0;
     rows = rows ? (rows[src] || rows) : 0;

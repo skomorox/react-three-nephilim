@@ -11,6 +11,7 @@ import * as Types from '../Types';
 import { Decoration } from './Decoration';
 import { Mesh } from './Mesh';
 import { Sprite } from './Sprite';
+import { capitalize } from '../Helpers';
  
 export class Emitter extends Decoration {
  
@@ -28,12 +29,12 @@ export class Emitter extends Decoration {
     }
     if (initializers) {
       this.visual.addInitializers(Object.keys(initializers).map(i => {
-        return new Nebula[this.manager.capitalize(i)](...initializers[i]);
+        return new Nebula[capitalize(i)](...initializers[i]);
       }));
     }
     if (behaviours) {
       this.visual.addBehaviours(Object.keys(behaviours).map(b => {
-        return new Nebula[this.manager.capitalize(b)](...behaviours[b]);
+        return new Nebula[capitalize(b)](...behaviours[b]);
       }));
     }
 
@@ -45,7 +46,7 @@ export class Emitter extends Decoration {
     const { renderer } = this.props;
     if (!this.nebula) {
       this.nebula = new ParticleSystem();
-      this.nebula.addRenderer(new Nebula[`${this.manager.capitalize(renderer)}Renderer`](
+      this.nebula.addRenderer(new Nebula[`${capitalize(renderer)}Renderer`](
         stateNode.visual,
         Three
       ));

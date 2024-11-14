@@ -9,7 +9,7 @@ import _ from 'lodash';
 import { Component } from 'react';
 import { Vector3, PositionalAudio } from 'three'; 
 import { Motion } from '../Motion';
-import * as Interfaces from '../Interfaces';
+import { applyInterfaceProps, isMobileScreen } from '../Helpers';
 
 export class Decoration extends Component {
 
@@ -26,19 +26,14 @@ export class Decoration extends Component {
   componentDidMount() {
 
     let {
-      id, audio, motion, actions, layer, children,
+      id, audio, motion, actions, layer,
       isGlobal, isGLEvents, onClick, onMouseOver
-    } = this.props;
+    } = applyInterfaceProps(this.props);
     this.id = id || this.visual.uuid || this.visual.id;
     this.isGLEvents = this.isGLEvents || isGLEvents;
     this.isGlobal = isGlobal || false;
     this.isEmitter = this.visual.type === 'Emitter'; // is emitter?
     this.setVisualState(this.props);
-
-    this.manager.forEach(children, c => {
-      if (c.type === Interfaces.Audio) audio = c.props;
-      if (c.type === Interfaces.Motion) motion = c.props;
-    });
 
     if (audio) this.setAudio(audio);
     if (motion) this.setMotion(motion);
@@ -129,11 +124,7 @@ export class Decoration extends Component {
    * Init visual
    */
   setVisual = () => {
-    let { material, geometry, children } = this.props;
-    this.manager.forEach(children, c => {
-      if (c.type === Interfaces.Material) material = c.props;
-      if (c.type === Interfaces.Geometry) geometry = c.props;
-    });
+    const { material, geometry } = applyInterfaceProps(this.props);
     this.setMaterial(material);
     this.setGeometry(geometry);
   };
@@ -166,7 +157,7 @@ export class Decoration extends Component {
     sv === undefined ?
       vv :
       Array.isArray(sv) ?
-        this.manager.isMobileScreen() ?
+        isMobileScreen(this.manager.container) ?
           sv[0] :
           sv[1] :
         sv
