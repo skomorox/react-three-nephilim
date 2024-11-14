@@ -47,7 +47,7 @@ Basic html example:
 ```javascript
 import React from 'react';
 import Nephilim, { Hypertext, Types } from 'react-three-nephilim';
-import './css/style.css';
+import './css/styles.css';
 
 export const App = () => (
   <div className={'nephilim'}>
@@ -89,7 +89,7 @@ Basic mesh example:
 ```javascript
 import React from 'react';
 import Nephilim, { Mesh, Material, Geometry, Types } from 'react-three-nephilim';
-import './css/style.css';
+import './css/styles.css';
 
 export const App = () => (
   <div className={'nephilim'}>
@@ -126,8 +126,8 @@ export const App = () => (
 Mixed example:
 ```javascript
 import React from 'react';
-import Nephilim, { Mesh, Hypertext } from 'react-three-nephilim';
-import './css/style.css';
+import Nephilim, { Hypertext, Mesh, Geometry, Material, Motion, Types } from 'react-three-nephilim';
+import './css/styles.css';
 
 export const App = () => (
   <div className={'nephilim'}>
@@ -153,21 +153,28 @@ export const App = () => (
           Text
         </div>
       </Hypertext>
-      <Mesh
-        position={{ z: -300 }}
-        geometry={{
-          type: Types.Geometry.Box,
-          params: [30, 20, 20]
-        }}
-        material={{
-          type: Types.Material.Basic,
-          color: 0xffffff
-        }}
-        motion={{
-          rotation: { axes: Types.Axes.XYZ, maxValue: 10, randVelocity: 0.01 },
-          position: { axes: Types.Axes.XYZ, maxValue: 100, randVelocity: 1 }
-        }}
-      />
+      <Mesh position={{ z: -300 }}>
+        <Geometry
+          type={Types.Geometry.Box}
+          params={[30, 20, 20]}
+        />
+        <Material
+          type={Types.Material.Basic}
+          color={0xffffff}
+        />
+        <Motion
+          rotation={{
+            axes: Types.Axes.XYZ,
+            maxValue: 10,
+            randVelocity: 0.01
+          }}
+          position={{
+            axes: Types.Axes.XYZ,
+            maxValue: 100,
+            randVelocity: 1
+          }}
+        />
+      </Mesh>
     </Nephilim>
   </div>
 );
@@ -177,7 +184,7 @@ More complex example - components, hook, extend Scene:
 ```javascript
 import React, { useState } from 'react';
 import Nephilim, { Scene, Container, Mesh, Hypertext, Light, Types } from 'react-three-nephilim';
-import './css/style.css';
+import './css/styles.css';
 
 const actions = {
   main: {
@@ -466,7 +473,6 @@ const Line = {
 
 const Loader = {
   AMF: 'AMFLoader',
-  BasisTexture: 'BasisTextureLoader',
   BVH: 'BVHLoader',
   Collada: 'ColladaLoader',
   DDS: 'DDSLoader',
@@ -477,12 +483,11 @@ const Loader = {
   GCode: 'GCodeLoader',
   GLTF: 'GLTFLoader',
   HDRCubeTexture: 'HDRCubeTextureLoader',
-  IFC: 'IFCLoader',
+  IES: 'IESLoader',
   KMZ: 'KMZLoader',
-  KTX2: 'KTX2Loader',
   KTX: 'KTXLoader',
+  KTX2: 'KTX2Loader',
   LDraw: 'LDrawLoader',
-  LogLuv: 'LogLuvLoader',
   Lottie: 'LottieLoader',
   LUT3dl: 'LUT3dlLoader',
   LUTCube: 'LUTCubeLoader',
@@ -496,7 +501,6 @@ const Loader = {
   PCD: 'PCDLoader',
   PDB: 'PDBLoader',
   PLY: 'PLYLoader',
-  PRWM: 'PRWMLoader',
   PVR: 'PVRLoader',
   RGBE: 'RGBELoader',
   RGBM: 'RGBMLoader',
@@ -506,7 +510,6 @@ const Loader = {
   TDS: 'TDSLoader',
   TGA: 'TGALoader',
   ThreeMF: 'ThreeMFLoader',
-  Tilt: 'TiltLoader',
   TTF: 'TTFLoader',
   VOX: 'VOXLoader',
   VRML: 'VRMLLoader',
@@ -534,9 +537,3 @@ const Axes = {
 It is not absolutely necessary to use controllers in your app and just follow regular React approach as described in examples,
 but they provide some useful functionality to separate control logic and manage Scenes.
 Advanced examples you can find <a href="http://nephilim.herokuapp.com/examples">here</a>.
-
-# TODO
-- Geometry Component
-- Material Component
-- Motion Component
-- Route Component
