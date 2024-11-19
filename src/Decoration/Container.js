@@ -51,7 +51,7 @@ export class Container extends Decoration {
     let row;
     let layer;
     let position;
-    let src = isMobileScreen(this.manager.container) ? 0 : 1;
+    let src = isMobileScreen() ? 0 : 1;
 
     cols = cols ? (cols[src] || cols) : 0;
     rows = rows ? (rows[src] || rows) : 0;

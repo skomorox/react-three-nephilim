@@ -386,6 +386,18 @@ export class Manager extends Component {
   };
 
   /**
+   * @function updateLayout
+   * Update Decorations layout
+   */
+  updateLayout = () => {
+    if (this.children) {
+      for (let c in this.children) {
+        this.children[c].updateLayout();
+      }
+    }
+  };
+
+  /**
    * @function navigate
    * @param {String} id
    * @param {Object} params
@@ -436,6 +448,7 @@ export class Manager extends Component {
     }
     this.camera.aspect = clientWidth / clientHeight;
     this.camera.updateProjectionMatrix();
+    this.updateLayout();
   };
 
   /**

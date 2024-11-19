@@ -25,7 +25,7 @@ Requires react >17
 # Build
 - $cd react-three-nephilim
 - $npm i
-- $npm run transpile
+- $npm run build
 
 # Usage
 

@@ -25,7 +25,7 @@ export class Decoration extends Component {
    */
   componentDidMount() {
 
-    let {
+    const {
       id, audio, motion, actions, layer,
       isGlobal, isGLEvents, onClick, onMouseOver
     } = applyInterfaceProps(this.props);
@@ -33,7 +33,7 @@ export class Decoration extends Component {
     this.isGLEvents = this.isGLEvents || isGLEvents;
     this.isGlobal = isGlobal || false;
     this.isEmitter = this.visual.type === 'Emitter'; // is emitter?
-    this.setVisualState(this.props);
+    this.setVisualState();
 
     if (audio) this.setAudio(audio);
     if (motion) this.setMotion(motion);
@@ -135,7 +135,8 @@ export class Decoration extends Component {
    * Set position, rotation and scale of the object
    */
   setVisualState = state => {
-    const vs = this.calcVisualState(state);    
+    if (!state) state = this.props;
+    const vs = this.calcVisualState(state);
     this.visual.position.set(vs.position.x, vs.position.y, vs.position.z);
     if (!this.isEmitter) {
       this.visual.scale.set(vs.scale.x, vs.scale.y, vs.scale.z);
@@ -157,7 +158,7 @@ export class Decoration extends Component {
     sv === undefined ?
       vv :
       Array.isArray(sv) ?
-        isMobileScreen(this.manager.container) ?
+        isMobileScreen() ?
           sv[0] :
           sv[1] :
         sv
@@ -283,6 +284,20 @@ export class Decoration extends Component {
     if (this.children) {
       for (let c in this.children) {
         this.children[c].update(onlyGlobal);
+      }
+    }
+  };
+
+  /**
+   * @function updateLayout
+   * Update Decorations layout
+   */
+  updateLayout = () => {
+    const { position } = this.props;
+    this.setVisualState({ position });
+    if (this.children) {
+      for (let c in this.children) {
+        this.children[c].updateLayout();
       }
     }
   };
