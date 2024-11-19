@@ -49,7 +49,10 @@ export const isMobilePlatform = () => {
  * @function isMobileScreen
  * Check current client width
  */
-export const isMobileScreen = c => c.clientWidth <= config.MOBILE_SCREEN_WIDTH;
+export const isMobileScreen = () => (
+  window.innerWidth <= config.MOBILE_SCREEN_WIDTH &&
+  (window.innerHeight / window.innerWidth) > 0.9
+);
 
 /**
  * @function capitalize
