@@ -1,11 +1,11 @@
 /*****************************************************************************************************
  * @author Skomorox
- * @class Manager
- * Abstract: Class Manager
+ * @class Nephilim
+ * Abstract: Class Nephilim
  *****************************************************************************************************
  */
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Tween from '@tweenjs/tween.js';
 import * as Three from 'three';
 import * as Loaders from './Loaders';
@@ -15,11 +15,10 @@ import { Decoration } from './Decoration/Decoration';
 import { Controller } from './Controller';
 import { Action } from './Action';
 import { Motion } from './Motion';
-import { applyInterfaceProps } from './Helpers';
-
+import { NephilimProvider, applyInterfaceProps, getScreen } from './Helpers';
 import '../css/styles.css';
 
-export class Manager extends Component {
+export class Nephilim extends Component {
   
   /**
    * @function constructor
@@ -52,6 +51,7 @@ export class Manager extends Component {
     } = applyInterfaceProps(props);
 
     this.state = {
+      screen: getScreen(),
       loading: true,
       loaded: 0,
       total: 0
@@ -125,16 +125,16 @@ export class Manager extends Component {
     this.setEventListeners();
     this.setInitialRoute();
     this.update();
-    this.resize();
+    this.onResize();
   }
 
   render() {
 
     const { children } = this.props;
-    const { loading, loaded, total } = this.state;
+    const { loading, loaded, total, screen } = this.state;
 
     return (
-      <Fragment>
+      <NephilimProvider value={{ screen }}>
         <div
           ref={c => this.container = c}
           className={'rtc-container'}
@@ -172,49 +172,19 @@ export class Manager extends Component {
           )}
         </div>
         {children}
-      </Fragment>
+      </NephilimProvider>
     );
   }
 
   /**
    * @function setEventListeners
    * Set window event listeners
-   * onMouseStop - intersectObjects should not be called each time
-   * since this leads to critical decrease of performance
    */
   setEventListeners = () => {
-    window.addEventListener('resize', this.resize);
-    window.addEventListener('mousemove', ({ clientX, clientY }) => {
-
-      const { offsetWidth, offsetHeight } = this.container;
-      const { top, left } = this.container.getBoundingClientRect();
-      this.mouse.x = ((clientX - left) / offsetWidth) * 2 - 1;
-      this.mouse.y = - ((clientY - top) / offsetHeight) * 2 + 1;
-      
-      if (this.glRenderer) {
-        if (this.onMouseStop) clearTimeout(this.onMouseStop);
-        this.onMouseStop = setTimeout(() => {
-          this.findIntersects();
-          if (this.intersects.length) {
-            const visual = this.intersects[0].object;
-            if (visual.onMouseOver) visual.onMouseOver(visual);  
-          }
-        }, 25);
-      }
-    });
-    window.addEventListener('click', () => {
-      if (this.intersects.length) {
-        const visual = this.intersects[0].object;
-        if (visual.onClick) visual.onClick(visual);  
-      }
-    });
-    window.addEventListener('touchmove', ({ changedTouches }) => {
-      const { clientX, clientY } = changedTouches[0];
-      const { offsetWidth, offsetHeight } = this.container;
-      const { top, left } = this.container.getBoundingClientRect();
-      this.touch.x = ((clientX - left) / offsetWidth) * 2 - 1;
-      this.touch.y = - ((clientY - top) / offsetHeight) * 2 + 1;
-    });
+    window.addEventListener('mousemove', this.onMouseMove);
+    window.addEventListener('touchmove', this.onTouchMove);
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('click', this.onClick);
   };
 
   /**
@@ -338,19 +308,6 @@ export class Manager extends Component {
   getAction = id => this.actions[id];
 
   /**
-   * @function onUpdate
-   * @param {Function} handler
-   * Add onUpdate handler
-   */
-  onUpdate = handler => this.onUpdateHandlers.push(handler);
-
-  /**
-   * @function clearUpdateHandlers
-   * Clear onUpdate handlers
-   */
-  clearUpdateHandlers = () => this.onUpdateHandlers = [];
-
-  /**
    * @function update
    * 1. Update children
    * 2. In case post processing enabled, render composer or layer by layer
@@ -429,26 +386,6 @@ export class Manager extends Component {
       ...params,
       enforce: true
     });
-  };
-
-  /**
-   * @function resize
-   * Update Renderer sizes and adjust Camera aspect ration according to new size
-   */
-  resize = () => {
-    const { clientWidth, clientHeight } = this.container;
-    if (this.glRenderer) {
-      this.glRenderer.setSize(clientWidth, clientHeight);
-    }
-    if (this.cssRenderer) {
-      this.cssRenderer.setSize(clientWidth, clientHeight);
-    }
-    if (this.isPPEnabled) {
-      this.composer.setSize(clientWidth, clientHeight);
-    }
-    this.camera.aspect = clientWidth / clientHeight;
-    this.camera.updateProjectionMatrix();
-    this.updateLayout();
   };
 
   /**
@@ -561,5 +498,92 @@ export class Manager extends Component {
    * Check if scene is currently active
    */
   isSceneActive = id => id === this.activeScene.id;
+
+  /**
+   * @function onUpdate
+   * @param {Function} handler
+   * Add onUpdate handler
+   */
+  onUpdate = handler => this.onUpdateHandlers.push(handler);
+
+  /**
+   * @function clearUpdateHandlers
+   * Clear onUpdate handlers
+   */
+  clearUpdateHandlers = () => this.onUpdateHandlers = [];
+
+  /**
+   * @function onMouseMove
+   * Update Mouse position and find intersects
+   */
+  onMouseMove = ({ clientX, clientY }) => {
+
+    const { offsetWidth, offsetHeight } = this.container;
+    const { top, left } = this.container.getBoundingClientRect();
+    this.mouse.x = ((clientX - left) / offsetWidth) * 2 - 1;
+    this.mouse.y = - ((clientY - top) / offsetHeight) * 2 + 1;
+    
+    if (this.glRenderer) {
+      if (this.onMouseStopTimeout) {
+        clearTimeout(this.onMouseStopTimeout);
+      }
+      this.onMouseStopTimeout = setTimeout(() => {
+        this.findIntersects();
+        if (this.intersects.length) {
+          const visual = this.intersects[0].object;
+          if (visual.onMouseOver) visual.onMouseOver(visual);
+        }
+      }, 25);
+    }
+  };
+
+  /**
+   * @function onTouchMove
+   * Update Touch position
+   */
+  onTouchMove = ({ changedTouches }) => {
+    const { clientX, clientY } = changedTouches[0];
+    const { offsetWidth, offsetHeight } = this.container;
+    const { top, left } = this.container.getBoundingClientRect();
+    this.touch.x = ((clientX - left) / offsetWidth) * 2 - 1;
+    this.touch.y = - ((clientY - top) / offsetHeight) * 2 + 1;
+  };
+
+  /**
+   * @function onResize
+   * Update Renderer sizes and adjust Camera aspect ration according to new size
+   */
+  onResize = () => {
+    if (this.onResizeTimeout) {
+      clearTimeout(this.onResizeTimeout);
+    }
+    this.onResizeTimeout = setTimeout(() => {
+      const { clientWidth, clientHeight } = this.container;
+      if (this.glRenderer) {
+        this.glRenderer.setSize(clientWidth, clientHeight);
+      }
+      if (this.cssRenderer) {
+        this.cssRenderer.setSize(clientWidth, clientHeight);
+      }
+      if (this.isPPEnabled) {
+        this.composer.setSize(clientWidth, clientHeight);
+      }
+      this.camera.aspect = clientWidth / clientHeight;
+      this.camera.updateProjectionMatrix();
+      this.setState({ screen: getScreen() });
+      this.updateLayout();
+    }, 20);
+  };
+
+  /**
+   * @function onClick
+   * Click on visual object
+   */
+  onClick = () => {
+    if (this.intersects.length) {
+      const visual = this.intersects[0].object;
+      if (visual.onClick) visual.onClick(visual);  
+    }
+  };
 
 }

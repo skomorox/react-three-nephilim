@@ -112,7 +112,12 @@ const Composition = {
   Grid: 'Grid'
 };
 
-const Axes = {
+const Platform = {
+  DESKTOP: 'desktop',
+  MOBILE: 'mobile'
+};
+
+const Axis = {
   X: 'x',
   Y: 'y',
   Z: 'z',
@@ -124,5 +129,5 @@ const Axes = {
 
 export {
   Camera, Geometry, Material, Light, Line,
-  Loader, Composition, Axes
+  Loader, Composition, Platform, Axis
 };

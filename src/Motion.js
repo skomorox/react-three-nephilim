@@ -30,15 +30,15 @@ export class Motion {
           const velocity = {};
           ['x', 'y', 'z'].forEach(a => {
             const v = params[m].randVelocity;
-            velocity[a] = params[m].axes.includes(a) ? -v + Math.random() * v * 2 : 0;
+            velocity[a] = params[m].axis.includes(a) ? -v + Math.random() * v * 2 : 0;
           });
           this.swarmParams.push({ velocity });
         }
         this.modes[m] = params[m];
-      } else if (params[m].axes) {
-        const axes = params[m].axes.split('');
-        this.modes[m] = { axes: {} };
-        axes.forEach(a => this.modes[m].axes[a] = {
+      } else if (params[m].axis) {
+        const axis = params[m].axis.split('');
+        this.modes[m] = { axis: {} };
+        axis.forEach(a => this.modes[m].axis[a] = {
           relativeValue: 0,
           maxValue: params[m].maxValue,
           velocity: params[m].velocity ?
@@ -59,7 +59,7 @@ export class Motion {
    */
   update = () => {
 
-    let axes = null;
+    let axis = null;
     const { container: { offsetWidth, offsetHeight }, mouse, touch } = this.manager;
 
     for (let m in this.modes) {
@@ -112,30 +112,30 @@ export class Motion {
           break;
         case 'swarm':
           const { array, count } = this.visual.geometry.attributes.position;
-          axes = ['x', 'y', 'z'];
+          axis = ['x', 'y', 'z'];
           for (let c = 0; c < count; c++) {
             const { velocity } = this.swarmParams[c];
-            for (let a = 0; a < axes.length; a++) {
-              array[c * 3 + a] += velocity[axes[a]];
+            for (let a = 0; a < axis.length; a++) {
+              array[c * 3 + a] += velocity[axis[a]];
               if (
                 array[c * 3 + a] < -this.modes[m].maxValue ||
                 array[c * 3 + a] > this.modes[m].maxValue
               ) {
-                velocity[axes[a]] = -velocity[axes[a]];
+                velocity[axis[a]] = -velocity[axis[a]];
               }
             }
           }
           break;
         default:
-          axes = this.modes[m].axes;
-          for (let a in axes) {
-            axes[a].relativeValue += axes[a].velocity;
-            this.visual[m][a] += axes[a].velocity;
+          axis = this.modes[m].axis;
+          for (let a in axis) {
+            axis[a].relativeValue += axis[a].velocity;
+            this.visual[m][a] += axis[a].velocity;
             if (
-              axes[a].relativeValue < -axes[a].maxValue ||
-              axes[a].relativeValue > axes[a].maxValue
+              axis[a].relativeValue < -axis[a].maxValue ||
+              axis[a].relativeValue > axis[a].maxValue
             ) {
-              axes[a].velocity = -axes[a].velocity;
+              axis[a].velocity = -axis[a].velocity;
             }
           }
           break;

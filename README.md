@@ -71,9 +71,9 @@ export const App = () => (
       <Hypertext
         position={{ z: -300 }}
         motion={{
-          position: { axes: Types.Axes.XYZ, maxValue: 10, velocity: 0.1 },
-          rotation: { axes: Types.Axes.XYZ, maxValue: 10, velocity: 0.01 },
-          scale: { axes: Types.Axes.XY, maxValue: 5, velocity: 0.01 }
+          position: { axis: Types.Axis.XYZ, maxValue: 10, velocity: 0.1 },
+          rotation: { axis: Types.Axis.XYZ, maxValue: 10, velocity: 0.01 },
+          scale: { axis: Types.Axis.XY, maxValue: 5, velocity: 0.01 }
         }}
       >
         <div style={{ fontSize: 12 }}>
@@ -105,8 +105,8 @@ export const App = () => (
       <Mesh
         position={{ z: -300 }}
         motion={{
-          rotation: { axes: Types.Axes.XYZ, maxValue: 10, randVelocity: 0.01 },
-          position: { axes: Types.Axes.XYZ, maxValue: 100, randVelocity: 1 }
+          rotation: { axis: Types.Axis.XYZ, maxValue: 10, randVelocity: 0.01 },
+          position: { axis: Types.Axis.XYZ, maxValue: 100, randVelocity: 1 }
         }}
       >
         <Geometry
@@ -144,9 +144,9 @@ export const App = () => (
       <Hypertext
         position={{ z: -300 }}
         motion={{
-          position: { axes: Types.Axes.XYZ, maxValue: 10, velocity: 0.1 },
-          rotation: { axes: Types.Axes.XYZ, maxValue: 10, velocity: 0.01 },
-          scale: { axes: Types.Axes.XY, maxValue: 5, velocity: 0.01 }
+          position: { axis: Types.Axis.XYZ, maxValue: 10, velocity: 0.1 },
+          rotation: { axis: Types.Axis.XYZ, maxValue: 10, velocity: 0.01 },
+          scale: { axis: Types.Axis.XY, maxValue: 5, velocity: 0.01 }
         }}
       >
         <div style={{ fontSize: 12, color: 'white' }}>
@@ -164,12 +164,12 @@ export const App = () => (
         />
         <Motion
           rotation={{
-            axes: Types.Axes.XYZ,
+            axis: Types.Axis.XYZ,
             maxValue: 10,
             randVelocity: 0.01
           }}
           position={{
-            axes: Types.Axes.XYZ,
+            axis: Types.Axis.XYZ,
             maxValue: 100,
             randVelocity: 1
           }}
@@ -245,8 +245,8 @@ const MainScene = () => {
           color: 0x47e9f5
         }}
         motion={{
-          rotation: { axes: Types.Axes.XYZ, maxValue: 10, randVelocity: 0.01 },
-          position: { axes: Types.Axes.XYZ, maxValue: 100, randVelocity: 1 }
+          rotation: { axis: Types.Axis.XYZ, maxValue: 10, randVelocity: 0.01 },
+          position: { axis: Types.Axis.XYZ, maxValue: 100, randVelocity: 1 }
         }}
       />
     </Scene>
@@ -277,8 +277,8 @@ class SecondScene extends Scene {
             color: 0x47e9f5
           }}
           motion={{
-            rotation: { axes: Types.Axes.XYZ, maxValue: 10, randVelocity: 0.01 },
-            position: { axes: Types.Axes.XYZ, maxValue: 100, randVelocity: 1 }
+            rotation: { axis: Types.Axis.XYZ, maxValue: 10, randVelocity: 0.01 },
+            position: { axis: Types.Axis.XYZ, maxValue: 100, randVelocity: 1 }
           }}
         />
       </Container>
@@ -523,7 +523,7 @@ const Composition = {
   Grid: 'Grid'
 };
 
-const Axes = {
+const Axis = {
   X: 'x',
   Y: 'y',
   Z: 'z',

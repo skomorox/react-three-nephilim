@@ -7,8 +7,8 @@
 
 import { Group } from 'three';
 import { Decoration } from './Decoration';
-import { Composition } from '../Types';
-import { applyInterfaceProps, isMobileScreen } from '../Helpers';
+import { Composition, Platform } from '../Types';
+import { applyInterfaceProps, getScreen } from '../Helpers';
 
 export class Container extends Decoration {
 
@@ -51,7 +51,7 @@ export class Container extends Decoration {
     let row;
     let layer;
     let position;
-    let src = isMobileScreen() ? 0 : 1;
+    let src = getScreen() === Platform.MOBILE ? 0 : 1;
 
     cols = cols ? (cols[src] || cols) : 0;
     rows = rows ? (rows[src] || rows) : 0;

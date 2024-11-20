@@ -9,7 +9,8 @@ import _ from 'lodash';
 import { Component } from 'react';
 import { Vector3, PositionalAudio } from 'three'; 
 import { Motion } from '../Motion';
-import { applyInterfaceProps, isMobileScreen } from '../Helpers';
+import { Platform } from '../Types';
+import { applyInterfaceProps, getScreen } from '../Helpers';
 
 export class Decoration extends Component {
 
@@ -158,7 +159,7 @@ export class Decoration extends Component {
     sv === undefined ?
       vv :
       Array.isArray(sv) ?
-        isMobileScreen() ?
+        getScreen() ===  Platform.MOBILE ?
           sv[0] :
           sv[1] :
         sv

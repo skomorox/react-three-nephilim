@@ -1,12 +1,23 @@
-import { Children } from 'react';
+import React, { Children, createContext, useContext, forwardRef } from 'react';
+import { Platform } from './Types';
 import * as Interfaces from './Interfaces';
 import config from './config';
+
+/**
+ * NephilimContext
+ */
+const NephilimContext = createContext();
+
+/**
+ * NephilimProvider
+ */
+export const NephilimProvider = NephilimContext.Provider;
 
 /**
  * @function applyInterfaceProps
  * @param {Object[]} props
  * Apply Interface props
-*/
+ */
 export const applyInterfaceProps = props => {
   const mergedProps = { ...props };
   Children.forEach(props.children, c => {
@@ -27,10 +38,17 @@ export const applyInterfaceProps = props => {
 };
 
 /**
- * @function isMobilePlatform
+ * @function capitalize
+ * @param {String} v
+ * Capitalize string
+ */
+export const capitalize = v => v.charAt(0).toUpperCase() + v.slice(1);
+
+/**
+ * @function getPlatform
  * Detect mobile platform using navigator.userAgent
  */
-export const isMobilePlatform = () => {
+export const getPlatform = () => {
   const platforms = [
     /Android/i,
     /BlackBerry/i,
@@ -42,21 +60,53 @@ export const isMobilePlatform = () => {
     /iPod/i,
     /webOS/i
   ];
-  return platforms.some(p => navigator.userAgent.match(p));
+  if (platforms.some(p => navigator.userAgent.match(p))) {
+    return Platform.MOBILE;
+  }
+  return Platform.DESKTOP;
 };
 
 /**
- * @function isMobileScreen
+ * @function getScreen
  * Check current client width
  */
-export const isMobileScreen = () => (
-  window.innerWidth <= config.MOBILE_SCREEN_WIDTH &&
-  (window.innerHeight / window.innerWidth) > 0.9
-);
+export const getScreen = () => {
+  if (
+    window.innerWidth <= config.MOBILE_SCREEN_WIDTH &&
+    (window.innerHeight / window.innerWidth) > 0.9
+  ) {
+    return Platform.MOBILE;
+  }
+  return Platform.DESKTOP;
+};
 
 /**
- * @function capitalize
- * @param {String} v
- * Capitalize string
+ * @function useNephilim
+ * Nephilim context provider
  */
-export const capitalize = v => v.charAt(0).toUpperCase() + v.slice(1);
+export const useNephilim = () => {
+  const { screen } = useContext(NephilimContext);
+  return {
+    screen,
+    platform: getPlatform()
+  };
+};
+
+/**
+ * @function withNephilim
+ * Nephilim context provider
+ */
+export const withNephilim = NephilimComponent => (
+  forwardRef((props, ref) => (
+    <NephilimContext.Consumer>
+      {({ screen }) => (
+        <NephilimComponent
+          {...props}
+          ref={ref}
+          screen={screen}
+          platform={getPlatform()}
+        />
+      )}
+    </NephilimContext.Consumer>
+  ))
+);
