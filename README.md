@@ -29,26 +29,31 @@ Requires react >17
 
 # API
 ```javascript
-const {
-  deviceScreen, // Types.DESKTOP, Types.MOBILE
-  devicePlatform, // Types.DESKTOP, Types.MOBILE
-  setPPEffects, // Set post processing effects
-  setCustomLoader, // Add custom loader
-  setVisualState, // Set visual state by Decoration id
-  setMotion, // Set Motion by Decoration id
-  getAction, // Get Action by id
-  connectActions, // Link Actions object to given Decoration
-  resetActions, // Stop actions execution
-  executeActionsSequence, // Execute sequence of Actions
-  enablePostProcessing, // Enable / disable post processing
-  enableLayerRendering, // Enable / disable layer by layer rendering
-  find, // Find Decoration by id
-  findAll, // Find Decorations containing given id part
-  navigate, // Navigate to Scene by id
-  onUpdate, // Add onUpdate handler
-  clearUpdateHandlers, // Clear onUpdate handlers
-  isSceneActive // Check if Scene is currently active
-} = useNephilim();
+import { useNephilim } from 'react-three-nephilim';
+
+const MainScene = () => {
+  const {
+    deviceScreen, // Types.DESKTOP, Types.MOBILE
+    devicePlatform, // Types.DESKTOP, Types.MOBILE
+    setPPEffects, // Set post processing effects
+    setCustomLoader, // Add custom loader
+    setVisualState, // Set visual state by Decoration id
+    setMotion, // Set Motion by Decoration id
+    getAction, // Get Action by id
+    connectActions, // Link Actions object to given Decoration
+    resetActions, // Stop actions execution
+    executeActionsSequence, // Execute sequence of Actions
+    enablePostProcessing, // Enable / disable post processing
+    enableLayerRendering, // Enable / disable layer by layer rendering
+    find, // Find Decoration by id
+    findAll, // Find Decorations containing given id part
+    navigate, // Navigate to Scene by id
+    onUpdate, // Add onUpdate handler
+    clearUpdateHandlers, // Clear onUpdate handlers
+    isSceneActive // Check if Scene is currently active
+  } = useNephilim();
+  .....
+};
 ```
 
 # Usage
