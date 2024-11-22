@@ -9,8 +9,8 @@ import _ from 'lodash';
 import { Component } from 'react';
 import { Vector3, PositionalAudio } from 'three'; 
 import { Motion } from '../Motion';
-import { Platform } from '../Types';
-import { applyInterfaceProps, getScreen } from '../Helpers';
+import { Device } from '../Types';
+import { applyInterfaceProps, getDeviceScreen } from '../Helpers';
 
 export class Decoration extends Component {
 
@@ -34,6 +34,7 @@ export class Decoration extends Component {
     this.isGLEvents = this.isGLEvents || isGLEvents;
     this.isGlobal = isGlobal || false;
     this.isEmitter = this.visual.type === 'Emitter'; // is emitter?
+    this.metadata = { state: { position: {}, scale: {}, rotation: {}, lookAt: {} } };
     this.setVisualState();
 
     if (audio) this.setAudio(audio);
@@ -137,7 +138,7 @@ export class Decoration extends Component {
    */
   setVisualState = state => {
     if (!state) state = this.props;
-    const vs = this.calcVisualState(state);
+    const vs = this.calculateVisualState(state);
     this.visual.position.set(vs.position.x, vs.position.y, vs.position.z);
     if (!this.isEmitter) {
       this.visual.scale.set(vs.scale.x, vs.scale.y, vs.scale.z);
@@ -159,7 +160,7 @@ export class Decoration extends Component {
     sv === undefined ?
       vv :
       Array.isArray(sv) ?
-        getScreen() ===  Platform.MOBILE ?
+        getDeviceScreen() ===  Device.MOBILE ?
           sv[0] :
           sv[1] :
         sv
@@ -227,43 +228,51 @@ export class Decoration extends Component {
   getActionState = a => this.actions[a];
 
   /**
-   * @function calcVisualState
+   * @function calculateVisualState
    * @param {Object} state
    * Calculate position, rotation and scale based on current and new state
    */
-  calcVisualState = state => {
-    
-    const visPos = this.visual.position;
-    const visRot = this.visual.rotation;
-    const visScl = this.visual.scale;
-    const visState = {
-      position: { x: visPos.x, y: visPos.y, z: visPos.z },
-      rotation: { x: visRot.x, y: visRot.y, z: visRot.z },
-      scale: { x: visScl.x, y: visScl.y, z: visScl.z }
+  calculateVisualState = state => {
+
+    const { position, rotation, scale } = this.visual;
+    const calculatedState = {
+      position: { x: position.x, y: position.y, z: position.z },
+      rotation: { x: rotation.x, y: rotation.y, z: rotation.z },
+      scale: { x: scale.x, y: scale.y, z: scale.z }
     };
+    // ====
+    this.metadata.state = { position, rotation, scale };
 
     if (state.position) {
-      visState.position.x = this.setStateValue(state.position.x, visPos.x);
-      visState.position.y = this.setStateValue(state.position.y, visPos.y);
-      visState.position.z = this.setStateValue(state.position.z, visPos.z);
+      calculatedState.position.x = this.setStateValue(state.position.x, position.x);
+      calculatedState.position.y = this.setStateValue(state.position.y, position.y);
+      calculatedState.position.z = this.setStateValue(state.position.z, position.z);
+      // ===
+      this.metadata.state.position = state.position;
     }
     if (state.scale) {
-      visState.scale.x = this.setStateValue(state.scale.x, visScl.x);
-      visState.scale.y = this.setStateValue(state.scale.y, visScl.y);
-      visState.scale.z = this.setStateValue(state.scale.z, visScl.z);
+      calculatedState.scale.x = this.setStateValue(state.scale.x, scale.x);
+      calculatedState.scale.y = this.setStateValue(state.scale.y, scale.y);
+      calculatedState.scale.z = this.setStateValue(state.scale.z, scale.z);
+      // ===
+      this.metadata.state.scale = state.scale;
     }
     if (state.rotation) {
-      visState.rotation.x = this.setStateValue(state.rotation.x, visRot.x);
-      visState.rotation.y = this.setStateValue(state.rotation.y, visRot.y);
-      visState.rotation.z = this.setStateValue(state.rotation.z, visRot.z);
+      calculatedState.rotation.x = this.setStateValue(state.rotation.x, rotation.x);
+      calculatedState.rotation.y = this.setStateValue(state.rotation.y, rotation.y);
+      calculatedState.rotation.z = this.setStateValue(state.rotation.z, rotation.z);
+      // ===
+      this.metadata.state.rotation = state.rotation;
     } else if (state.lookAt) {
-      visState.lookAt = {};
-      visState.lookAt.x = this.setStateValue(state.lookAt.x, 0);
-      visState.lookAt.y = this.setStateValue(state.lookAt.y, 0);
-      visState.lookAt.z = this.setStateValue(state.lookAt.z, 0);
+      calculatedState.lookAt = {};
+      calculatedState.lookAt.x = this.setStateValue(state.lookAt.x, 0);
+      calculatedState.lookAt.y = this.setStateValue(state.lookAt.y, 0);
+      calculatedState.lookAt.z = this.setStateValue(state.lookAt.z, 0);
+      // ===
+      this.metadata.state.lookAt = state.lookAt;
     }
 
-    return visState;
+    return calculatedState;
   };
 
   /**
@@ -294,8 +303,8 @@ export class Decoration extends Component {
    * Update Decorations layout
    */
   updateLayout = () => {
-    const { position } = this.props;
-    this.setVisualState({ position });
+    const { state } = this.metadata;
+    this.setVisualState(state);
     if (this.children) {
       for (let c in this.children) {
         this.children[c].updateLayout();

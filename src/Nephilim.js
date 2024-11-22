@@ -15,7 +15,7 @@ import { Decoration } from './Decoration/Decoration';
 import { Controller } from './Controller';
 import { Action } from './Action';
 import { Motion } from './Motion';
-import { NephilimProvider, applyInterfaceProps, getScreen } from './Helpers';
+import { NephilimProvider, applyInterfaceProps, getDeviceScreen } from './Helpers';
 import '../css/styles.css';
 
 export class Nephilim extends Component {
@@ -51,7 +51,7 @@ export class Nephilim extends Component {
     } = applyInterfaceProps(props);
 
     this.state = {
-      screen: getScreen(),
+      deviceScreen: getDeviceScreen(),
       loading: true,
       loaded: 0,
       total: 0
@@ -131,10 +131,28 @@ export class Nephilim extends Component {
   render() {
 
     const { children } = this.props;
-    const { loading, loaded, total, screen } = this.state;
+    const { loading, loaded, total, deviceScreen } = this.state;
 
     return (
-      <NephilimProvider value={{ screen }}>
+      <NephilimProvider value={{
+        deviceScreen,
+        setPPEffects: this.setPPEffects,
+        setCustomLoader: this.setCustomLoader,
+        setVisualState: this.setVisualState,
+        setMotion: this.setMotion,
+        getAction: this.getAction,
+        connectActions: this.connectActions,
+        resetActions: this.resetActions,
+        executeActionsSequence: this.executeActionsSequence,
+        enablePostProcessing: this.enablePostProcessing,
+        enableLayerRendering: this.enableLayerRendering,
+        find: this.find,
+        findAll: this.findAll,
+        navigate: this.navigate,
+        onUpdate: this.onUpdate,
+        clearUpdateHandlers: this.clearUpdateHandlers,
+        isSceneActive: this.isSceneActive
+      }}>
         <div
           ref={c => this.container = c}
           className={'rtc-container'}
@@ -218,7 +236,7 @@ export class Nephilim extends Component {
   /**
    * @function setPPEffects
    * @param {String[]} effects
-   * Set post processing effects only for desktop
+   * Set post processing effects
    */
   setPPEffects = effects => {
 
@@ -268,7 +286,7 @@ export class Nephilim extends Component {
   /**
    * @function setCustomLoader
    * @param loader
-   * Add custom loaders
+   * Add custom loader
    */
   setCustomLoader = l => {
     if (Loaders[l] && !this.loaders[l]) {
@@ -293,19 +311,97 @@ export class Nephilim extends Component {
   setMotion = (id, motion) => this.find(id).setMotion(motion);
 
   /**
-   * @function setTouchPosition
-   * @param {Float} x
-   * @param {Float} y
-   * Set Touch position
-   */
-  setTouchPosition = (x, y) => this.touch.set(x, y);
-
-  /**
    * @function getAction
    * @param {String} id
    * Get Action by id
    */
   getAction = id => this.actions[id];
+
+  /**
+   * @function connectActions
+   * @param {Decoration} decoration
+   * @param {Object} actions
+   * Link Actions object to given Decoration
+   */
+  connectActions = (decoration, actions) => {
+    for (let a in actions) {
+      if (!this.actions[a]) this.actions[a] = new Action();
+      this.actions[a].addDecoration(decoration, actions[a]);
+    }
+  };
+
+  /**
+   * @function resetActions
+   * Stop actions execution
+   */
+  resetActions = () => Tween.removeAll();
+
+  /**
+   * @function execActionsSequence
+   * @param {String[]} actionIds
+   * @param {Object} params
+   * Execute sequence of Actions
+   */
+  executeActionsSequence = (actionIds, params) => {
+    this.actions[actionIds[0]].begin(this.buildActionsSequence(actionIds, 1, params));
+  };
+
+  /**
+   * @function buildActionsSequence
+   * @param {String[]} actionIds
+   * @param {Number} index
+   * @param {Object} params
+   * Build Actions sequence
+   */
+  buildActionsSequence = (actionIds, index, params) => {
+    const p = { ...params };
+    if (actionIds[index]) {
+      p.callback = () => this.actions[actionIds[index]].begin(params);
+    }
+    if (index < actionIds.length - 1) {
+      params = this.buildActionsSequence(actionIds, index + 1, params);
+    }
+    return p;
+  };
+
+  /**
+   * @function enablePostProcessing
+   * @param {Boolean} isEnabled
+   * Enable / disable post processing
+   */
+  enablePostProcessing = isEnabled => this.isPPEnabled = isEnabled;
+
+  /**
+   * @function enableLayerRendering
+   * @param {Boolean} isEnabled
+   * Enable / disable layer by layer rendering
+   */
+  enableLayerRendering = isEnabled => this.isLayerRendering = isEnabled;
+
+  /**
+   * @function find
+   * @param {String} id
+   * Find Decoration by id
+   */
+  find = id => {
+    for (let k in this.children) {
+      const c = this.children[k].find(id);
+      if (c) return c;
+    }
+  };
+
+  /**
+   * @function findAll
+   * @param {String} id
+   * Find Decorations containing given id part
+   */
+  findAll = id => {
+    const all = [];
+    for (let k in this.children) {
+      this.children[k].findAll(id, all);
+    }
+    return all;
+  };
 
   /**
    * @function update
@@ -407,99 +503,6 @@ export class Nephilim extends Component {
   };
 
   /**
-   * @function connectActions
-   * @param {Decoration} decoration
-   * @param {Object} actions
-   * Link Actions object to given Decoration
-   */
-  connectActions = (decoration, actions) => {
-    for (let a in actions) {
-      if (!this.actions[a]) this.actions[a] = new Action();
-      this.actions[a].addDecoration(decoration, actions[a]);
-    }
-  };
-
-  /**
-   * @function resetActions
-   * Stop actions execution
-   */
-  resetActions = () => Tween.removeAll();
-
-  /**
-   * @function execActionsSequence
-   * @param {String[]} actionIds
-   * @param {Object} params
-   * Execute sequence of Actions
-   */
-  execActionsSequence = (actionIds, params) => {
-    this.actions[actionIds[0]].begin(this.buildActionsSequence(actionIds, 1, params));
-  };
-
-  /**
-   * @function buildActionsSequence
-   * @param {String[]} actionIds
-   * @param {Number} index
-   * @param {Object} params
-   * Build Actions sequence
-   */
-  buildActionsSequence = (actionIds, index, params) => {
-    const p = { ...params };
-    if (actionIds[index]) {
-      p.callback = () => this.actions[actionIds[index]].begin(params);
-    }
-    if (index < actionIds.length - 1) {
-      params = this.buildActionsSequence(actionIds, index + 1, params);
-    }
-    return p;
-  };
-
-  /**
-   * @function enablePostProcessing
-   * @param {Boolean} isEnabled
-   * Enable / disable post processing
-   */
-  enablePostProcessing = isEnabled => this.isPPEnabled = isEnabled;
-
-  /**
-   * @function enableLayerRendering
-   * @param {Boolean} isEnabled
-   * Enable / disable layer by layer rendering
-   */
-  enableLayerRendering = isEnabled => this.isLayerRendering = isEnabled;
-
-  /**
-   * @function find
-   * @param {String} id
-   * Find Decoration by id
-   */
-  find = id => {
-    for (let k in this.children) {
-      const c = this.children[k].find(id);
-      if (c) return c;
-    }
-  };
-
-  /**
-   * @function findAll
-   * @param {String} id
-   * Find Decorations containing given id part
-   */
-  findAll = id => {
-    const all = [];
-    for (let k in this.children) {
-      this.children[k].findAll(id, all);
-    }
-    return all;
-  };
-
-  /**
-   * @function isSceneActive
-   * @param {String} id
-   * Check if scene is currently active
-   */
-  isSceneActive = id => id === this.activeScene.id;
-
-  /**
    * @function onUpdate
    * @param {Function} handler
    * Add onUpdate handler
@@ -511,6 +514,13 @@ export class Nephilim extends Component {
    * Clear onUpdate handlers
    */
   clearUpdateHandlers = () => this.onUpdateHandlers = [];
+
+  /**
+   * @function isSceneActive
+   * @param {String} id
+   * Check if Scene is currently active
+   */
+  isSceneActive = id => id === this.activeScene.id;
 
   /**
    * @function onMouseMove
@@ -570,7 +580,7 @@ export class Nephilim extends Component {
       }
       this.camera.aspect = clientWidth / clientHeight;
       this.camera.updateProjectionMatrix();
-      this.setState({ screen: getScreen() });
+      this.setState({ deviceScreen: getDeviceScreen() });
       this.updateLayout();
     }, 20);
   };

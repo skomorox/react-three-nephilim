@@ -1,5 +1,5 @@
 import React, { Children, createContext, useContext, forwardRef } from 'react';
-import { Platform } from './Types';
+import { Device } from './Types';
 import * as Interfaces from './Interfaces';
 import config from './config';
 
@@ -45,10 +45,10 @@ export const applyInterfaceProps = props => {
 export const capitalize = v => v.charAt(0).toUpperCase() + v.slice(1);
 
 /**
- * @function getPlatform
+ * @function getDevicePlatform
  * Detect mobile platform using navigator.userAgent
  */
-export const getPlatform = () => {
+export const getDevicePlatform = () => {
   const platforms = [
     /Android/i,
     /BlackBerry/i,
@@ -61,23 +61,23 @@ export const getPlatform = () => {
     /webOS/i
   ];
   if (platforms.some(p => navigator.userAgent.match(p))) {
-    return Platform.MOBILE;
+    return Device.MOBILE;
   }
-  return Platform.DESKTOP;
+  return Device.DESKTOP;
 };
 
 /**
- * @function getScreen
- * Check current client width
+ * @function getDeviceScreen
+ * Check current screen proportions
  */
-export const getScreen = () => {
+export const getDeviceScreen = () => {
   if (
     window.innerWidth <= config.MOBILE_SCREEN_WIDTH &&
     (window.innerHeight / window.innerWidth) > 0.9
   ) {
-    return Platform.MOBILE;
+    return Device.MOBILE;
   }
-  return Platform.DESKTOP;
+  return Device.DESKTOP;
 };
 
 /**
@@ -85,10 +85,10 @@ export const getScreen = () => {
  * Nephilim context provider
  */
 export const useNephilim = () => {
-  const { screen } = useContext(NephilimContext);
+  const context = useContext(NephilimContext);
   return {
-    screen,
-    platform: getPlatform()
+    ...context,
+    devicePlatform: getDevicePlatform()
   };
 };
 
@@ -99,12 +99,12 @@ export const useNephilim = () => {
 export const withNephilim = NephilimComponent => (
   forwardRef((props, ref) => (
     <NephilimContext.Consumer>
-      {({ screen }) => (
+      {context => (
         <NephilimComponent
           {...props}
+          {...context}
           ref={ref}
-          screen={screen}
-          platform={getPlatform()}
+          devicePlatform={getDevicePlatform()}
         />
       )}
     </NephilimContext.Consumer>

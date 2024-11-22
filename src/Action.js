@@ -53,13 +53,10 @@ export class Action {
     }
 
     for (let d in ad) {
-
       const deco = ad[d].decoration;
       const state = ad[d].state;
-
       from.push(deco.visual);
-      to.push(deco.calcVisualState(state));    
-
+      to.push(deco.calculateVisualState(state));
       if (state.uniforms) {
         for (let u in state.uniforms) {
           from.push(deco.visual.material.uniforms[u]);

@@ -112,7 +112,7 @@ const Composition = {
   Grid: 'Grid'
 };
 
-const Platform = {
+const Device = {
   DESKTOP: 'desktop',
   MOBILE: 'mobile'
 };
@@ -129,5 +129,5 @@ const Axis = {
 
 export {
   Camera, Geometry, Material, Light, Line,
-  Loader, Composition, Platform, Axis
+  Loader, Composition, Device, Axis
 };

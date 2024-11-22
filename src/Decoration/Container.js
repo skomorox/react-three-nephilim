@@ -7,8 +7,8 @@
 
 import { Group } from 'three';
 import { Decoration } from './Decoration';
-import { Composition, Platform } from '../Types';
-import { applyInterfaceProps, getScreen } from '../Helpers';
+import { Composition, Device } from '../Types';
+import { applyInterfaceProps, getDeviceScreen } from '../Helpers';
 
 export class Container extends Decoration {
 
@@ -21,7 +21,7 @@ export class Container extends Decoration {
   componentDidMount() {
     Object.keys(this.children).forEach((k, i) => {
       const c = this.children[k];
-      this.calcCompositionState(c.visual, i);
+      this.calculateCompositionState(c.visual, i);
     });
     super.componentDidMount();
   }
@@ -31,11 +31,11 @@ export class Container extends Decoration {
   }
 
   /**
-   * @function calcCompositionState
+   * @function calculateCompositionState
    * Add Decoration to the Сontainer according to composition settings
    * Acceptable options are: Composition.Grid, Composition.DepthGrid, Composition.Cylinder
    */  
-   calcCompositionState = (visual, i) => {
+  calculateCompositionState = (visual, i) => {
 
     const { composition } = applyInterfaceProps(this.props);
 
@@ -51,7 +51,7 @@ export class Container extends Decoration {
     let row;
     let layer;
     let position;
-    let src = getScreen() === Platform.MOBILE ? 0 : 1;
+    let src = getDeviceScreen() === Device.MOBILE ? 0 : 1;
 
     cols = cols ? (cols[src] || cols) : 0;
     rows = rows ? (rows[src] || rows) : 0;

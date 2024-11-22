@@ -27,6 +27,30 @@ Requires react >17
 - $npm i
 - $npm run build
 
+# API
+```javascript
+const {
+  deviceScreen, // Types.DESKTOP, Types.MOBILE
+  devicePlatform, // Types.DESKTOP, Types.MOBILE
+  setPPEffects, // Set post processing effects
+  setCustomLoader, // Add custom loader
+  setVisualState, // Set visual state by Decoration id
+  setMotion, // Set Motion by Decoration id
+  getAction, // Get Action by id
+  connectActions, // Link Actions object to given Decoration
+  resetActions, // Stop actions execution
+  executeActionsSequence, // Execute sequence of Actions
+  enablePostProcessing, // Enable / disable post processing
+  enableLayerRendering, // Enable / disable layer by layer rendering
+  find, // Find Decoration by id
+  findAll, // Find Decorations containing given id part
+  navigate, // Navigate to Scene by id
+  onUpdate, // Add onUpdate handler
+  clearUpdateHandlers, // Clear onUpdate handlers
+  isSceneActive // Check if Scene is currently active
+} = useNephilim();
+```
+
 # Usage
 
 ```javascript
@@ -182,16 +206,19 @@ export const App = () => (
 
 More complex example - components, hook, extend Scene:
 ```javascript
-import React, { useState } from 'react';
-import Nephilim, { Scene, Container, Mesh, Hypertext, Light, Types } from 'react-three-nephilim';
+import React from 'react';
+import Nephilim, {
+  Scene, Container, Mesh, Hypertext, Light,
+  Types, useNephilim, withNephilim
+} from 'react-three-nephilim';
 import './css/styles.css';
 
 const actions = {
   main: {
-    // 'Main:Navigate' syntax is required only for Navigate action 
+    // 'Main:Navigate' syntax is required only for Navigate action
     // to determine which Scene to apply Navigate to
     // In reqular case it could look like SomeActionName: { position: {...}, rotation: {...}, scale: {...} }
-    // manager.getAction('SomeActionName').begin();
+    // getAction('SomeActionName').begin();
     'Main:Navigate': {
       position: { y: 0 }
     },
@@ -211,15 +238,12 @@ const actions = {
 
 const MainScene = () => {
 
-  // useState hook to take manager from scene
-  const [manager, setManager] = useState(null);
+  // useNephilim hook
+  const { navigate } = useNephilim();
 
   // Scene could either have children or be extended by AnotherScene with custom render() {...}
-  // Since MainScene in this case is not related to Nephilim components, it doesn't have references to manager
-  // manager (Nephilim singleton) is injected in any related component and could be taken: ref={s => s && setManager(s.manager)}
   return (
     <Scene
-      ref={s => s && setManager(s.manager)}
       id={'Main'}
       isInitial={true}
       position={{ y: -1000, z: -500 }}
@@ -229,7 +253,7 @@ const MainScene = () => {
       <Hypertext>
         <div
           className={'button'}
-          onClick={() => manager.navigate('Second')}
+          onClick={() => navigate('Second')}
         >
           Navigate to Second Scene
         </div>
@@ -253,15 +277,19 @@ const MainScene = () => {
   )
 };
 
-class SecondScene extends Scene {
+class Second extends Scene {
+
   render() {
+
+    const { navigate } = this.props;
+
     // Container could either have children or be extended by AnotherContainer with custom render() {...}
     return (
       <Container>
         <Hypertext>
           <div
             className={'button'}
-            onClick={() => this.manager.navigate('Main')}
+            onClick={() => navigate('Main')}
           >
             Back to Main Scene
           </div>
@@ -285,6 +313,9 @@ class SecondScene extends Scene {
     );
   }
 }
+
+// withNephilim HOC
+const SecondScene = withNephilim(Second);
 
 export const App = () => (
   <div className={'nephilim'}>
@@ -521,6 +552,11 @@ const Composition = {
   Cylinder: 'Cylinder',
   DepthGrid: 'DepthGrid',
   Grid: 'Grid'
+};
+
+const Device = {
+  DESKTOP: 'desktop',
+  MOBILE: 'mobile'
 };
 
 const Axis = {
