@@ -1,3 +1,15 @@
+const Decoration = {
+  Container: 'Container',
+  Emitter: 'Emitter',
+  Hypertext: 'Hypertext',
+  Light: 'Light',
+  Line: 'Line',
+  Mesh: 'Mesh',
+  Scene: 'Scene',
+  Sprite: 'Sprite',
+  Swarm: 'Swarm'
+};
+
 const Camera = {
   Cube: 'CubeCamera',
   Orthographic: 'OrthographicCamera',
@@ -113,13 +125,13 @@ const Composition = {
 };
 
 const Platform = {
-  DESKTOP: 'desktop',
-  MOBILE: 'mobile'
+  Desktop: 'desktop',
+  Mobile: 'mobile'
 };
 
 const Orientation = {
-  LANDSCAPE: 'landscape',
-  PORTRAIT: 'portrait'
+  Landscape: 'landscape',
+  Portrait: 'portrait'
 };
 
 const Axis = {
@@ -133,6 +145,6 @@ const Axis = {
 };
 
 export {
-  Camera, Geometry, Material, Light, Line, Loader,
-  Composition, Platform, Orientation, Axis
+  Decoration, Camera, Geometry, Material, Light, Line,
+  Loader, Composition, Platform, Orientation, Axis
 };

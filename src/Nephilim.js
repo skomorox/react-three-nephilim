@@ -15,7 +15,7 @@ import { Decoration } from './Decoration/Decoration';
 import { Controller } from './Controller';
 import { Action } from './Action';
 import { Motion } from './Motion';
-import { NephilimProvider, applyInterfaceProps, getDeviceOrientation } from './Helpers';
+import { NephilimProvider, getDeviceOrientation, withInterface } from './Helpers';
 import '../css/styles.css';
 
 export class Nephilim extends Component {
@@ -48,7 +48,7 @@ export class Nephilim extends Component {
     const {
       camera, glRenderer, cssRenderer,
       postProcessing, isLayerRendering, isColorManagement
-    } = applyInterfaceProps(props);
+    } = withInterface(props);
 
     this.state = {
       deviceOrientation: getDeviceOrientation(),
@@ -212,7 +212,7 @@ export class Nephilim extends Component {
    */
   setInitialRoute = () => {
 
-    const { router } = applyInterfaceProps(this.props);
+    const { router } = withInterface(this.props);
     let sceneId = null;
 
     if (this.route) {
@@ -240,7 +240,7 @@ export class Nephilim extends Component {
    */
   setPPEffects = effects => {
 
-    const { postProcessing } = applyInterfaceProps(this.props);
+    const { postProcessing } = withInterface(this.props);
     const { clientWidth, clientHeight } = this.container;
     let pp = postProcessing;
 
@@ -458,7 +458,7 @@ export class Nephilim extends Component {
    */
   navigate = (id, params) => {
 
-    const { router } = applyInterfaceProps(this.props);
+    const { router } = withInterface(this.props);
     const scene = this.find(id);
 
     if (scene) {

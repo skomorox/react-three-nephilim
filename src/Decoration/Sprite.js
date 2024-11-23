@@ -5,14 +5,16 @@
  *****************************************************************************************************
  */
 
-import * as Three from 'three';
 import _ from 'lodash';
+import * as Three from 'three';
+import * as Types from '../Types';
 import { Decoration } from './Decoration';
 
 export class Sprite extends Decoration {
 
   constructor(props) {
     super(props);
+    this.type = Types.Decoration.Sprite;
     this.setVisual();
   }
 

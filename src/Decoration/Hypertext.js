@@ -5,6 +5,7 @@
  *****************************************************************************************************
  */
 
+import * as Types from '../Types';
 import ReactDOM from 'react-dom';
 import { CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
 import { Decoration } from './Decoration';
@@ -13,6 +14,7 @@ export class Hypertext extends Decoration {
 
   constructor() {
     super();
+    this.type = Types.Decoration.Hypertext;
     this.element = document.createElement('div');
   }
   

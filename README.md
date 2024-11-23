@@ -33,8 +33,8 @@ import { useNephilim } from 'react-three-nephilim';
 
 const MainScene = () => {
   const {
-    devicePlatform, // Platform.DESKTOP, Platform.MOBILE
-    deviceOrientation, // Orientation.LANDSCAPE, Orientation.PORTRAIT
+    devicePlatform, // Platform.Desktop, Platform.Mobile
+    deviceOrientation, // Orientation.Landscape, Orientation.Portrait
     setPPEffects, // Set post processing effects
     setCustomLoader, // Add custom loader
     setVisualState, // Set visual state by Decoration id
@@ -560,13 +560,13 @@ const Composition = {
 };
 
 const Platform = {
-  DESKTOP: 'desktop',
-  MOBILE: 'mobile'
+  Desktop: 'desktop',
+  Mobile: 'mobile'
 };
 
 const Orientation = {
-  LANDSCAPE: 'landscape',
-  PORTRAIT: 'portrait'
+  Landscape: 'landscape',
+  Portrait: 'portrait'
 };
 
 const Axis = {

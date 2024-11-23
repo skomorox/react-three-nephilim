@@ -5,13 +5,14 @@
  *****************************************************************************************************
  */
 
+import * as Types from '../Types';
 import { Container } from './Container';
 
 export class Scene extends Container {
 
   constructor() {
     super();
-    this.isScene = true;
+    this.type = Types.Decoration.Scene;
   }
   
   componentDidMount() {

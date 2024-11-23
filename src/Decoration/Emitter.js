@@ -6,8 +6,8 @@
  */
 
 import * as Three from 'three';
-import ParticleSystem, * as Nebula from 'three-nebula';
 import * as Types from '../Types';
+import ParticleSystem, * as Nebula from 'three-nebula';
 import { Decoration } from './Decoration';
 import { Mesh } from './Mesh';
 import { Sprite } from './Sprite';
@@ -22,6 +22,7 @@ export class Emitter extends Decoration {
       new Sprite({ material }) :
       new Mesh({ material, geometry });
     body.setVisual();
+    this.type = Types.Decoration.Emitter;
     this.visual = new Nebula.Emitter();
 
     if (rate) {

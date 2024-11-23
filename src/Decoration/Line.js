@@ -13,6 +13,7 @@ export class Line extends Decoration {
 
   constructor(props) {
     super(props);
+    this.type = Types.Decoration.Line;
     this.setVisual();
   }
  

@@ -5,15 +5,16 @@
  *****************************************************************************************************
  */
 
+import _ from 'lodash';
 import * as Three from 'three';
 import * as Types from '../Types';
-import _ from 'lodash';
 import { Decoration } from './Decoration';
 
 export class Mesh extends Decoration {
 
   constructor(props) {
     super(props);
+    this.type = Types.Decoration.Mesh;
     this.setVisual();
   }
 

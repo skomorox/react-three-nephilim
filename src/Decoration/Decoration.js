@@ -6,11 +6,11 @@
  */
 
 import _ from 'lodash';
+import * as Three from 'three';
+import * as Types from '../Types';
 import { Component } from 'react';
-import { Vector3, PositionalAudio } from 'three'; 
 import { Motion } from '../Motion';
-import { Orientation } from '../Types';
-import { applyInterfaceProps, getDeviceOrientation } from '../Helpers';
+import { getDeviceOrientation, withInterface } from '../Helpers';
 
 export class Decoration extends Component {
 
@@ -29,11 +29,10 @@ export class Decoration extends Component {
     const {
       id, audio, motion, actions, layer,
       isGlobal, isGLEvents, onClick, onMouseOver
-    } = applyInterfaceProps(this.props);
+    } = withInterface(this.props);
     this.id = id || this.visual.uuid || this.visual.id;
     this.isGLEvents = this.isGLEvents || isGLEvents;
     this.isGlobal = isGlobal || false;
-    this.isEmitter = this.visual.type === 'Emitter'; // is emitter?
     this.metadata = { state: { position: {}, scale: {}, rotation: {}, lookAt: {} } };
     this.setVisualState();
 
@@ -68,9 +67,12 @@ export class Decoration extends Component {
     material: prevMaterial,
     audio: prevAudio
   }) {
-    // update material
-    
-    const { position, rotation, scale, lookAt, motion, actions, material, audio } = this.props;
+
+    const {
+      position, rotation, scale, lookAt,
+      motion, actions, material, audio
+    } = this.props;
+
     if (
       !_.isEqual(position, prevPosition) ||
       !_.isEqual(rotation, prevRotation) || 
@@ -109,7 +111,7 @@ export class Decoration extends Component {
         this.audio[a].stop();
       }
     }
-    if (this.isEmitter) {
+    if (this.type === Types.Decoration.Emitter) {
       this.visual.parent.destroy();
     } else {
       this.visual.parent.remove(this.visual);
@@ -126,7 +128,7 @@ export class Decoration extends Component {
    * Init visual
    */
   setVisual = () => {
-    const { material, geometry } = applyInterfaceProps(this.props);
+    const { material, geometry } = withInterface(this.props);
     this.setMaterial(material);
     this.setGeometry(geometry);
   };
@@ -140,11 +142,11 @@ export class Decoration extends Component {
     if (!state) state = this.props;
     const vs = this.calculateVisualState(state);
     this.visual.position.set(vs.position.x, vs.position.y, vs.position.z);
-    if (!this.isEmitter) {
+    if (this.type !== Types.Decoration.Emitter) {
       this.visual.scale.set(vs.scale.x, vs.scale.y, vs.scale.z);
     }
     if (vs.lookAt) {
-      this.visual.lookAt(new Vector3(vs.lookAt.x, vs.lookAt.y, vs.lookAt.z));
+      this.visual.lookAt(new Three.Vector3(vs.lookAt.x, vs.lookAt.y, vs.lookAt.z));
     } else {
       this.visual.rotation.set(vs.rotation.x, vs.rotation.y, vs.rotation.z);
     }
@@ -160,7 +162,7 @@ export class Decoration extends Component {
     sv === undefined ?
       vv :
       Array.isArray(sv) ?
-        getDeviceOrientation() ===  Orientation.PORTRAIT ?
+        getDeviceOrientation() ===  Types.Orientation.Portrait ?
           sv[0] :
           sv[1] :
         sv
@@ -178,7 +180,7 @@ export class Decoration extends Component {
 
     for (let a in audio) {
       const { src, refDistance, maxDistance, volume, loop, play } = audio[a];
-      this.audio[a] = new PositionalAudio(audioListener);
+      this.audio[a] = new Three.PositionalAudio(audioListener);
       audioLoader.load(src, buffer => {
         this.audio[a].setBuffer(buffer);
         if (refDistance !== undefined) {
@@ -277,13 +279,13 @@ export class Decoration extends Component {
    * and Decorations that should be updated regardless of active Scene
    */
   update = onlyGlobal => {
-    if (this.isScene) {
+    if (this.type === Types.Decoration.Scene) {
       onlyGlobal = this.id !== this.manager.activeScene.id;
     }
     if ((!onlyGlobal || (onlyGlobal && this.isGlobal)) && this.motion) {
       this.motion.update();
     }
-    if (this.isEmitter) {
+    if (this.type === Types.Decoration.Emitter) {
       this.nebula.update();
     }
     if (this.children) {
@@ -299,6 +301,9 @@ export class Decoration extends Component {
    */
   updateLayout = () => {
     const { state } = this.metadata;
+    if (this.type === Types.Decoration.Container) {
+      this.setCompositionState();
+    }
     this.setVisualState(state);
     if (this.children) {
       for (let c in this.children) {
@@ -320,7 +325,7 @@ export class Decoration extends Component {
       if (!stateNode.visual) {
         this.connect(stateNode._reactInternals);
       } else {
-        if (this.isEmitter) {
+        if (this.type === Types.Decoration.Emitter) {
           this.connectEmitter(stateNode);
         } else {
           stateNode.visual.add(this.visual);

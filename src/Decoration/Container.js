@@ -5,24 +5,22 @@
  *****************************************************************************************************
  */
 
-import { Group } from 'three';
+import * as Three from 'three';
+import * as Types from '../Types';
 import { Decoration } from './Decoration';
-import { Composition, Orientation } from '../Types';
-import { applyInterfaceProps, getDeviceOrientation } from '../Helpers';
+import { getDeviceOrientation, withInterface } from '../Helpers';
 
 export class Container extends Decoration {
 
   constructor() {
     super();
+    this.type = Types.Decoration.Container;
+    this.visual = new Three.Group();
     this.children = {};
-    this.visual = new Group();
   }
 
   componentDidMount() {
-    Object.keys(this.children).forEach((k, i) => {
-      const c = this.children[k];
-      this.calculateCompositionState(c.visual, i);
-    });
+    this.setCompositionState();
     super.componentDidMount();
   }
 
@@ -31,13 +29,24 @@ export class Container extends Decoration {
   }
 
   /**
+   * @function setCompositionState
+   * Place Decorations within the Сontainer according to composition settings
+   */  
+  setCompositionState = () => {
+    Object.keys(this.children).forEach((k, i) => {
+      const c = this.children[k];
+      this.calculateCompositionState(c.visual, i);
+    });
+  };
+
+  /**
    * @function calculateCompositionState
    * Add Decoration to the Сontainer according to composition settings
    * Acceptable options are: Composition.Grid, Composition.DepthGrid, Composition.Cylinder
    */  
   calculateCompositionState = (visual, i) => {
 
-    const { composition } = applyInterfaceProps(this.props);
+    const { composition } = withInterface(this.props);
 
     if (!composition) return false;
 
@@ -51,7 +60,7 @@ export class Container extends Decoration {
     let row;
     let layer;
     let position;
-    let src = getDeviceOrientation() === Orientation.PORTRAIT ? 0 : 1;
+    let src = getDeviceOrientation() === Types.Orientation.Portrait ? 0 : 1;
 
     cols = cols ? (cols[src] || cols) : 0;
     rows = rows ? (rows[src] || rows) : 0;
@@ -68,7 +77,7 @@ export class Container extends Decoration {
     
     switch (type) {
       
-      case Composition.Grid:
+      case Types.Composition.Grid:
         column = i % cols;
         row = Math.floor(i / cols);
         let x = column * (xStep || 0) + (xStart || 0) + (Math.random() * xRand - xRand);
@@ -82,7 +91,7 @@ export class Container extends Decoration {
         };
         break;
         
-      case Composition.DepthGrid:
+      case Types.Composition.DepthGrid:
         column = i % cols;
         row = Math.floor(i / cols) % rows;
         layer = Math.floor(i / (cols * rows));
@@ -93,7 +102,7 @@ export class Container extends Decoration {
         };
         break;
 
-      case Composition.Cylinder:
+      case Types.Composition.Cylinder:
         column = i % cols;
         row = Math.floor(i / cols);
         let phi = (Math.PI / cols * 2) * (column + 1);

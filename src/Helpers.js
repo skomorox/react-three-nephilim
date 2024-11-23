@@ -1,6 +1,6 @@
 import React, { Children, createContext, useContext, forwardRef } from 'react';
-import { Platform, Orientation } from './Types';
 import * as Interfaces from './Interfaces';
+import * as Types from './Types';
 
 /**
  * NephilimContext
@@ -11,30 +11,6 @@ const NephilimContext = createContext();
  * NephilimProvider
  */
 export const NephilimProvider = NephilimContext.Provider;
-
-/**
- * @function applyInterfaceProps
- * @param {Object[]} props
- * Apply Interface props
- */
-export const applyInterfaceProps = props => {
-  const mergedProps = { ...props };
-  Children.forEach(props.children, c => {
-    if (c === null) return false;
-    if (c.type === Interfaces.GLRenderer) mergedProps.glRenderer = c.props;
-    if (c.type === Interfaces.CSSRenderer) mergedProps.cssRenderer = c.props;
-    if (c.type === Interfaces.PostProcessing) mergedProps.postProcessing = c.props;
-    if (c.type === Interfaces.LayerRendering) mergedProps.isLayerRendering = c.props;
-    if (c.type === Interfaces.Composition) mergedProps.composition = c.props;
-    if (c.type === Interfaces.Camera) mergedProps.camera = c.props;
-    if (c.type === Interfaces.Material) mergedProps.material = c.props;
-    if (c.type === Interfaces.Geometry) mergedProps.geometry = c.props;
-    if (c.type === Interfaces.Audio) mergedProps.audio = c.props;
-    if (c.type === Interfaces.Motion) mergedProps.motion = c.props;
-    if (c.type === Interfaces.Router) mergedProps.router = c.props;
-  });
-  return mergedProps;
-};
 
 /**
  * @function capitalize
@@ -59,9 +35,9 @@ export const getDevicePlatform = () => {
     /iPod/i,
     /webOS/i
   ].some(p => navigator.userAgent.match(p))) {
-    return Platform.MOBILE;
+    return Types.Platform.Mobile;
   }
-  return Platform.DESKTOP;
+  return Types.Platform.Desktop;
 };
 
 /**
@@ -70,9 +46,9 @@ export const getDevicePlatform = () => {
  */
 export const getDeviceOrientation = () => {
   if ((window.innerHeight / window.innerWidth) >= 1) {
-    return Orientation.PORTRAIT;
+    return Types.Orientation.Portrait;
   }
-  return Orientation.LANDSCAPE;
+  return Types.Orientation.Landscape;
 };
 
 /**
@@ -105,3 +81,27 @@ export const withNephilim = NephilimComponent => (
     </NephilimContext.Consumer>
   ))
 );
+
+/**
+ * @function withInterface
+ * @param {Object[]} props
+ * Merge current Component props with Interface props
+ */
+export const withInterface = props => {
+  const mergedProps = { ...props };
+  Children.forEach(props.children, c => {
+    if (c === null) return false;
+    if (c.type === Interfaces.GLRenderer) mergedProps.glRenderer = c.props;
+    if (c.type === Interfaces.CSSRenderer) mergedProps.cssRenderer = c.props;
+    if (c.type === Interfaces.PostProcessing) mergedProps.postProcessing = c.props;
+    if (c.type === Interfaces.LayerRendering) mergedProps.isLayerRendering = c.props;
+    if (c.type === Interfaces.Composition) mergedProps.composition = c.props;
+    if (c.type === Interfaces.Camera) mergedProps.camera = c.props;
+    if (c.type === Interfaces.Material) mergedProps.material = c.props;
+    if (c.type === Interfaces.Geometry) mergedProps.geometry = c.props;
+    if (c.type === Interfaces.Audio) mergedProps.audio = c.props;
+    if (c.type === Interfaces.Motion) mergedProps.motion = c.props;
+    if (c.type === Interfaces.Router) mergedProps.router = c.props;
+  });
+  return mergedProps;
+};
