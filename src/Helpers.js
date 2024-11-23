@@ -1,7 +1,6 @@
 import React, { Children, createContext, useContext, forwardRef } from 'react';
-import { Device } from './Types';
+import { Platform, Orientation } from './Types';
 import * as Interfaces from './Interfaces';
-import config from './config';
 
 /**
  * NephilimContext
@@ -49,7 +48,7 @@ export const capitalize = v => v.charAt(0).toUpperCase() + v.slice(1);
  * Detect mobile platform using navigator.userAgent
  */
 export const getDevicePlatform = () => {
-  const platforms = [
+  if ([
     /Android/i,
     /BlackBerry/i,
     /IEMobile/i,
@@ -59,25 +58,21 @@ export const getDevicePlatform = () => {
     /iPad/i,
     /iPod/i,
     /webOS/i
-  ];
-  if (platforms.some(p => navigator.userAgent.match(p))) {
-    return Device.MOBILE;
+  ].some(p => navigator.userAgent.match(p))) {
+    return Platform.MOBILE;
   }
-  return Device.DESKTOP;
+  return Platform.DESKTOP;
 };
 
 /**
- * @function getDeviceScreen
+ * @function getDeviceOrientation
  * Check current screen proportions
  */
-export const getDeviceScreen = () => {
-  if (
-    window.innerWidth <= config.MOBILE_SCREEN_WIDTH &&
-    (window.innerHeight / window.innerWidth) > 0.9
-  ) {
-    return Device.MOBILE;
+export const getDeviceOrientation = () => {
+  if ((window.innerHeight / window.innerWidth) >= 1) {
+    return Orientation.PORTRAIT;
   }
-  return Device.DESKTOP;
+  return Orientation.LANDSCAPE;
 };
 
 /**

@@ -9,8 +9,8 @@ import _ from 'lodash';
 import { Component } from 'react';
 import { Vector3, PositionalAudio } from 'three'; 
 import { Motion } from '../Motion';
-import { Device } from '../Types';
-import { applyInterfaceProps, getDeviceScreen } from '../Helpers';
+import { Orientation } from '../Types';
+import { applyInterfaceProps, getDeviceOrientation } from '../Helpers';
 
 export class Decoration extends Component {
 
@@ -160,7 +160,7 @@ export class Decoration extends Component {
     sv === undefined ?
       vv :
       Array.isArray(sv) ?
-        getDeviceScreen() ===  Device.MOBILE ?
+        getDeviceOrientation() ===  Orientation.PORTRAIT ?
           sv[0] :
           sv[1] :
         sv
@@ -240,35 +240,30 @@ export class Decoration extends Component {
       rotation: { x: rotation.x, y: rotation.y, z: rotation.z },
       scale: { x: scale.x, y: scale.y, z: scale.z }
     };
-    // ====
     this.metadata.state = { position, rotation, scale };
 
     if (state.position) {
       calculatedState.position.x = this.setStateValue(state.position.x, position.x);
       calculatedState.position.y = this.setStateValue(state.position.y, position.y);
       calculatedState.position.z = this.setStateValue(state.position.z, position.z);
-      // ===
       this.metadata.state.position = state.position;
     }
     if (state.scale) {
       calculatedState.scale.x = this.setStateValue(state.scale.x, scale.x);
       calculatedState.scale.y = this.setStateValue(state.scale.y, scale.y);
       calculatedState.scale.z = this.setStateValue(state.scale.z, scale.z);
-      // ===
       this.metadata.state.scale = state.scale;
     }
     if (state.rotation) {
       calculatedState.rotation.x = this.setStateValue(state.rotation.x, rotation.x);
       calculatedState.rotation.y = this.setStateValue(state.rotation.y, rotation.y);
       calculatedState.rotation.z = this.setStateValue(state.rotation.z, rotation.z);
-      // ===
       this.metadata.state.rotation = state.rotation;
     } else if (state.lookAt) {
       calculatedState.lookAt = {};
       calculatedState.lookAt.x = this.setStateValue(state.lookAt.x, 0);
       calculatedState.lookAt.y = this.setStateValue(state.lookAt.y, 0);
       calculatedState.lookAt.z = this.setStateValue(state.lookAt.z, 0);
-      // ===
       this.metadata.state.lookAt = state.lookAt;
     }
 

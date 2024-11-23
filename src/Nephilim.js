@@ -15,7 +15,7 @@ import { Decoration } from './Decoration/Decoration';
 import { Controller } from './Controller';
 import { Action } from './Action';
 import { Motion } from './Motion';
-import { NephilimProvider, applyInterfaceProps, getDeviceScreen } from './Helpers';
+import { NephilimProvider, applyInterfaceProps, getDeviceOrientation } from './Helpers';
 import '../css/styles.css';
 
 export class Nephilim extends Component {
@@ -51,7 +51,7 @@ export class Nephilim extends Component {
     } = applyInterfaceProps(props);
 
     this.state = {
-      deviceScreen: getDeviceScreen(),
+      deviceOrientation: getDeviceOrientation(),
       loading: true,
       loaded: 0,
       total: 0
@@ -131,11 +131,11 @@ export class Nephilim extends Component {
   render() {
 
     const { children } = this.props;
-    const { loading, loaded, total, deviceScreen } = this.state;
+    const { loading, loaded, total, deviceOrientation } = this.state;
 
     return (
       <NephilimProvider value={{
-        deviceScreen,
+        deviceOrientation,
         setPPEffects: this.setPPEffects,
         setCustomLoader: this.setCustomLoader,
         setVisualState: this.setVisualState,
@@ -580,7 +580,7 @@ export class Nephilim extends Component {
       }
       this.camera.aspect = clientWidth / clientHeight;
       this.camera.updateProjectionMatrix();
-      this.setState({ deviceScreen: getDeviceScreen() });
+      this.setState({ deviceOrientation: getDeviceOrientation() });
       this.updateLayout();
     }, 20);
   };

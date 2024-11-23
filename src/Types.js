@@ -112,9 +112,14 @@ const Composition = {
   Grid: 'Grid'
 };
 
-const Device = {
+const Platform = {
   DESKTOP: 'desktop',
   MOBILE: 'mobile'
+};
+
+const Orientation = {
+  LANDSCAPE: 'landscape',
+  PORTRAIT: 'portrait'
 };
 
 const Axis = {
@@ -128,6 +133,6 @@ const Axis = {
 };
 
 export {
-  Camera, Geometry, Material, Light, Line,
-  Loader, Composition, Device, Axis
+  Camera, Geometry, Material, Light, Line, Loader,
+  Composition, Platform, Orientation, Axis
 };
