@@ -18,7 +18,7 @@ export class Sprite extends Decoration {
     this.setVisual();
   }
 
-  setMaterial = ({ ...params }) => {
+  setMaterial = params => {
     params = _.cloneDeep(params);
     if (params.map) {
       params.map = this.manager.textureLoader.load(params.map);

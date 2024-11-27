@@ -20,7 +20,7 @@ export class Mesh extends Decoration {
 
   setMaterial = material => {
     if (material.loader) {
-      this.manager.setCustomLoader(material.loader);
+      this.manager.setLoader(material.loader);
       if (material.callback) {
         material.callback(this.manager.loaders, m => this.material = m);
       }
@@ -41,7 +41,7 @@ export class Mesh extends Decoration {
   setGeometry = geometry => {
     if (geometry.loader) {
       this.visual = new Three.Group();
-      this.manager.setCustomLoader(geometry.loader);
+      this.manager.setLoader(geometry.loader);
       if (geometry.callback) {
         geometry.callback(this.manager.loaders, obj => this.visual.add(obj));
       }

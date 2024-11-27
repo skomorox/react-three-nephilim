@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import Tween from '@tweenjs/tween.js';
 import * as Three from 'three';
 import * as Loaders from './Loaders';
-import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
+import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer';
 import { EffectComposer, Passes, Shaders } from './EffectComposer';
 import { Decoration } from './Decoration/Decoration';
 import { Controller } from './Controller';
@@ -79,7 +79,7 @@ export class Nephilim extends Component {
       this.raycaster = new Three.Raycaster();
       this.audioListener = new Three.AudioListener();
       this.camera.add(this.audioListener);
-      this.setLoaders();
+      this.setLoadingManager();
       if (glRenderer.autoClear !== undefined) {
         this.glRenderer.autoClear = glRenderer.autoClear;
       }
@@ -137,7 +137,7 @@ export class Nephilim extends Component {
       <NephilimProvider value={{
         deviceOrientation,
         setPPEffects: this.setPPEffects,
-        setCustomLoader: this.setCustomLoader,
+        setLoader: this.setLoader,
         setVisualState: this.setVisualState,
         setMotion: this.setMotion,
         getAction: this.getAction,
@@ -270,10 +270,10 @@ export class Nephilim extends Component {
   };
 
   /**
-   * @function setLoaders
-   * Add resource loaders
+   * @function setLoadingManager
+   * Init loading manager and add basic loaders
    */
-  setLoaders = () => {
+  setLoadingManager = () => {
     this.loaders = {};
     this.loadingManager = new Three.LoadingManager();
     this.animationLoader = new Three.AnimationLoader(this.loadingManager);
@@ -284,11 +284,11 @@ export class Nephilim extends Component {
   };
 
   /**
-   * @function setCustomLoader
+   * @function setLoader
    * @param loader
    * Add custom loader
    */
-  setCustomLoader = l => {
+  setLoader = l => {
     if (Loaders[l] && !this.loaders[l]) {
       this.loaders[l] = new Loaders[l](this.loadingManager);
     }

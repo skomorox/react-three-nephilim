@@ -36,7 +36,7 @@ const MainScene = () => {
     devicePlatform, // Platform.Desktop, Platform.Mobile
     deviceOrientation, // Orientation.Landscape, Orientation.Portrait
     setPPEffects, // Set post processing effects
-    setCustomLoader, // Add custom loader
+    setLoader, // Add custom loader
     setVisualState, // Set visual state by Decoration id
     setMotion, // Set Motion by Decoration id
     getAction, // Get Action by id
