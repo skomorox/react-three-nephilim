@@ -1,6 +1,7 @@
 const Decoration = {
   Container: 'Container',
   Emitter: 'Emitter',
+  Glass: 'Glass',
   Hypertext: 'Hypertext',
   Light: 'Light',
   Line: 'Line',
@@ -56,6 +57,11 @@ const Material = {
   Shader: 'ShaderMaterial',
   Shadow: 'ShadowMaterial',
   Sprite: 'SpriteMaterial'
+};
+
+const Glass = {
+  Reflector: 'Reflector',
+  Refractor: 'Refractor'
 };
 
 const Light = {
@@ -145,6 +151,6 @@ const Axis = {
 };
 
 export {
-  Decoration, Camera, Geometry, Material, Light, Line,
-  Loader, Composition, Platform, Orientation, Axis
+  Decoration, Camera, Geometry, Material, Glass, Light,
+  Line, Loader, Composition, Platform, Orientation, Axis
 };

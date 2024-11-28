@@ -5,6 +5,7 @@ export { Hypertext } from './Hypertext';
 export { Light } from './Light';
 export { Line } from './Line';
 export { Mesh } from './Mesh';
+export { Glass } from './Glass';
 export { Scene } from './Scene';
 export { Sprite } from './Sprite';
 export { Swarm } from './Swarm';

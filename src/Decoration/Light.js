@@ -10,9 +10,16 @@ import * as Types from '../Types';
 import { Decoration } from './Decoration';
 
 export class Light extends Decoration {
-  constructor({ type, probe, params }) {
-    super();
+  
+  constructor(props) {
+    super(props);
     this.type = Types.Decoration.Light;
-    this.visual = new Three[`${type}${probe ? 'Probe' : ''}`](...params);
+    this.setVisual();
   }
+
+  setVisual = () => {
+    const { type, probe, params } = this.props;
+    this.visual = new Three[`${type}${probe ? 'Probe' : ''}`](...params);
+  };
+
 }
