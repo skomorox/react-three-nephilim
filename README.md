@@ -445,6 +445,19 @@ export const App = () =>  (
 # Supported Types
 
 ```javascript
+const Decoration = {
+  Container: 'Container',
+  Emitter: 'Emitter',
+  Glass: 'Glass',
+  Hypertext: 'Hypertext',
+  Light: 'Light',
+  Line: 'Line',
+  Mesh: 'Mesh',
+  Scene: 'Scene',
+  Sprite: 'Sprite',
+  Swarm: 'Swarm'
+};
+
 const Camera = {
   Cube: 'CubeCamera',
   Orthographic: 'OrthographicCamera',
@@ -491,6 +504,11 @@ const Material = {
   Shader: 'ShaderMaterial',
   Shadow: 'ShadowMaterial',
   Sprite: 'SpriteMaterial'
+};
+
+const Glass = {
+  Reflector: 'Reflector',
+  Refractor: 'Refractor'
 };
 
 const Light = {
