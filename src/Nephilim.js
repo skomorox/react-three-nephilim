@@ -249,19 +249,25 @@ export class Nephilim extends Component {
     this.isPPEnabled = true;
     this.composer.passes.length = 1;
 
-    effects.forEach((eff, ei) => {
+    effects.forEach((e, ei) => {
       let ppEffect = null;
-      if (eff.includes('Shader')) {
-        ppEffect = new Passes.ShaderPass(pp[eff].src || Shaders[eff]);
-        if (pp[eff].uniforms) {
-          for (let u in pp[eff].uniforms) {
-            ppEffect.uniforms[u].value = pp[eff].uniforms[u];
+      if (e.includes('Shader')) {
+        ppEffect = new Passes.ShaderPass(pp[e].src || Shaders[e]);
+        if (pp[e].uniforms) {
+          for (let u in pp[e].uniforms) {
+            ppEffect.uniforms[u].value = pp[e].uniforms[u];
           }
         }
       } else {
-        const Pass = pp[eff].src || Passes[eff];
-        const params = pp[eff].params || [];
-        ppEffect = new Pass(...params);
+        const Pass = pp[e].src || Passes[e];
+        const params = [];
+        if (pp[e].isScene) {
+          params.push(this.visual);
+        }
+        if (pp[e].isCamera) {
+          params.push(this.camera);
+        }
+        ppEffect = new Pass(...params, ...(pp[e].params || []));
       }
       ppEffect.renderToScreen = ei === effects.length - 1;
       this.composer.addPass(ppEffect);

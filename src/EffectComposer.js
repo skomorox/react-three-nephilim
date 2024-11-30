@@ -11,7 +11,6 @@ import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass';
 import { HalftonePass } from 'three/examples/jsm/postprocessing/HalftonePass';
 import { LUTPass } from 'three/examples/jsm/postprocessing/LUTPass';
 import { MaskPass, ClearMaskPass } from 'three/examples/jsm/postprocessing/MaskPass';
-import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { RenderPixelatedPass } from 'three/examples/jsm/postprocessing/RenderPixelatedPass';
@@ -22,7 +21,6 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass';
 import { SSAARenderPass } from 'three/examples/jsm/postprocessing/SSAARenderPass';
 import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass';
-import { SSRPass } from 'three/examples/jsm/postprocessing/SSRPass';
 import { TAARenderPass } from 'three/examples/jsm/postprocessing/TAARenderPass';
 import { TexturePass } from 'three/examples/jsm/postprocessing/TexturePass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
@@ -101,9 +99,9 @@ import {
 
 const Passes = {
   Pass, AfterimagePass, BloomPass, BokehPass, ClearPass, CubeTexturePass, DotScreenPass,
-  FilmPass, GlitchPass, GTAOPass, HalftonePass, LUTPass, MaskPass, ClearMaskPass, OutlinePass,
-  OutputPass, RenderPass, RenderPixelatedPass, RenderTransitionPass, SAOPass, SavePass, ShaderPass,
-  SMAAPass, SSAARenderPass, SSAOPass, SSRPass, TAARenderPass, TexturePass, UnrealBloomPass
+  FilmPass, GlitchPass, GTAOPass, HalftonePass, LUTPass, MaskPass, ClearMaskPass, OutputPass,
+  RenderPass, RenderPixelatedPass, RenderTransitionPass, SAOPass, SavePass, ShaderPass,
+  SMAAPass, SSAARenderPass, SSAOPass, TAARenderPass, TexturePass, UnrealBloomPass
 };
 
 const Shaders = {
