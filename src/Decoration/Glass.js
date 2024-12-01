@@ -27,14 +27,15 @@ export class Glass extends Decoration {
 
   setGeometry = (geometry, params) => {
     const { type } = this.props;
+    
     const Visual = type === Types.Glass.Reflector ? Reflector : Refractor;
     if (geometry.loader) {
+      this.visual = new Three.Group();
       this.manager.setLoader(geometry.loader);
-      if (geometry.callback) {
-        geometry.callback(this.manager.loaders, obj => {
-          this.visual = new Visual(obj, params);
-        });
-      }
+      this.manager.loaders[geometry.loader].load(geometry.src, obj => {
+        this.geometry = obj.children[0].geometry;
+        this.visual.add(new Visual(this.geometry, params));
+      });
     } else {
       this.geometry = geometry.uuid ? geometry : new Three[geometry.type](...geometry.params);
       this.visual = new Visual(this.geometry, params);
