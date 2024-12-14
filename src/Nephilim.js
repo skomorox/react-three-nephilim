@@ -298,6 +298,7 @@ export class Nephilim extends Component {
     if (Loaders[l] && !this.loaders[l]) {
       this.loaders[l] = new Loaders[l](this.loadingManager);
     }
+    return this.loaders[l];
   };
 
   /**

@@ -25,4 +25,5 @@ export class Swarm extends Decoration {
     this.geometry = geometry;
     this.visual = new Three.Points(this.geometry, this.material);
   };
+  
 }

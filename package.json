@@ -1,6 +1,6 @@
 {
   "name": "react-three-nephilim",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "3D SPA engine based on React and Three.js",
   "keywords": [
     "react",
