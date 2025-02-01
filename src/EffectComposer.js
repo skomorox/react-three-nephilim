@@ -53,7 +53,6 @@ import { KaleidoShader } from 'three/examples/jsm/shaders/KaleidoShader';
 import { LuminosityHighPassShader } from 'three/examples/jsm/shaders/LuminosityHighPassShader';
 import { LuminosityShader } from 'three/examples/jsm/shaders/LuminosityShader';
 import { MirrorShader } from 'three/examples/jsm/shaders/MirrorShader';
-import { MMDToonShader } from 'three/examples/jsm/shaders/MMDToonShader';
 import { NormalMapShader } from 'three/examples/jsm/shaders/NormalMapShader';
 import { OutputShader } from 'three/examples/jsm/shaders/OutputShader';
 import { PoissonDenoiseShader } from 'three/examples/jsm/shaders/PoissonDenoiseShader';
@@ -111,7 +110,7 @@ const Shaders = {
   FilmShader, FocusShader, FreiChenShader, FXAAShader, GammaCorrectionShader, GodRaysDepthMaskShader,
   GodRaysGenerateShader, GodRaysCombineShader, GodRaysFakeSunShader, HalftoneShader, HorizontalBlurShader,
   HorizontalTiltShiftShader, HueSaturationShader, KaleidoShader, LuminosityHighPassShader, LuminosityShader,
-  MirrorShader, MMDToonShader, NormalMapShader, OutputShader, PoissonDenoiseShader, RGBShiftShader, SepiaShader,
+  MirrorShader, NormalMapShader, OutputShader, PoissonDenoiseShader, RGBShiftShader, SepiaShader,
   SMAAEdgesShader, SMAAWeightsShader, SMAABlendShader, SobelOperatorShader, SSAOShader, SSAODepthShader,
   SSAOBlurShader, SSRShader, SSRDepthShader, SSRBlurShader, SubsurfaceScatteringShader, TechnicolorShader,
   ToonShaderHatching, ToonShaderDotted, TriangleBlurShader, UnpackDepthRGBAShader, VelocityShader,

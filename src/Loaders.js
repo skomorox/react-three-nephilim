@@ -20,7 +20,6 @@ export { LUTCubeLoader } from 'three/examples/jsm/loaders/LUTCubeLoader';
 export { LWOLoader } from 'three/examples/jsm/loaders/LWOLoader';
 export { MD2Loader } from 'three/examples/jsm/loaders/MD2Loader';
 export { MDDLoader } from 'three/examples/jsm/loaders/MDDLoader';
-export { MMDLoader } from 'three/examples/jsm/loaders/MMDLoader';
 export { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 export { NRRDLoader } from 'three/examples/jsm/loaders/NRRDLoader';
 export { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
