@@ -11,6 +11,7 @@ import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass';
 import { HalftonePass } from 'three/examples/jsm/postprocessing/HalftonePass';
 import { LUTPass } from 'three/examples/jsm/postprocessing/LUTPass';
 import { MaskPass, ClearMaskPass } from 'three/examples/jsm/postprocessing/MaskPass';
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { RenderPixelatedPass } from 'three/examples/jsm/postprocessing/RenderPixelatedPass';
@@ -21,6 +22,7 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass';
 import { SSAARenderPass } from 'three/examples/jsm/postprocessing/SSAARenderPass';
 import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass';
+import { SSRPass } from 'three/examples/jsm/postprocessing/SSRPass';
 import { TAARenderPass } from 'three/examples/jsm/postprocessing/TAARenderPass';
 import { TexturePass } from 'three/examples/jsm/postprocessing/TexturePass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
@@ -57,6 +59,7 @@ import { NormalMapShader } from 'three/examples/jsm/shaders/NormalMapShader';
 import { OutputShader } from 'three/examples/jsm/shaders/OutputShader';
 import { PoissonDenoiseShader } from 'three/examples/jsm/shaders/PoissonDenoiseShader';
 import { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader';
+import { SAOShader } from 'three/examples/jsm/shaders/SAOShader';
 import { SepiaShader } from 'three/examples/jsm/shaders/SepiaShader';
 import { SobelOperatorShader } from 'three/examples/jsm/shaders/SobelOperatorShader';
 import { SubsurfaceScatteringShader } from 'three/examples/jsm/shaders/SubsurfaceScatteringShader';
@@ -76,6 +79,11 @@ import {
   GodRaysCombineShader,
   GodRaysFakeSunShader
 } from 'three/examples/jsm/shaders/GodRaysShader.js';
+import {
+  GTAOShader,
+  GTAODepthShader,
+  GTAOBlendShader
+} from 'three/examples/jsm/shaders/GTAOShader.js';
 import {
   SMAAEdgesShader,
   SMAAWeightsShader,
@@ -98,9 +106,9 @@ import {
 
 const Passes = {
   Pass, AfterimagePass, BloomPass, BokehPass, ClearPass, CubeTexturePass, DotScreenPass,
-  FilmPass, GlitchPass, GTAOPass, HalftonePass, LUTPass, MaskPass, ClearMaskPass, OutputPass,
-  RenderPass, RenderPixelatedPass, RenderTransitionPass, SAOPass, SavePass, ShaderPass,
-  SMAAPass, SSAARenderPass, SSAOPass, TAARenderPass, TexturePass, UnrealBloomPass
+  FilmPass, GlitchPass, GTAOPass, HalftonePass, LUTPass, MaskPass, ClearMaskPass, OutlinePass,
+  OutputPass, RenderPass, RenderPixelatedPass, RenderTransitionPass, SAOPass, SavePass, ShaderPass,
+  SMAAPass, SSAARenderPass, SSAOPass, SSRPass, TAARenderPass, TexturePass, UnrealBloomPass
 };
 
 const Shaders = {
@@ -108,12 +116,12 @@ const Shaders = {
   BokehShader, BrightnessContrastShader, ColorCorrectionShader, ColorifyShader, ConvolutionShader,
   CopyShader, DepthLimitedBlurShader, DigitalGlitchShader, DOFMipMapShader, DotScreenShader, ExposureShader,
   FilmShader, FocusShader, FreiChenShader, FXAAShader, GammaCorrectionShader, GodRaysDepthMaskShader,
-  GodRaysGenerateShader, GodRaysCombineShader, GodRaysFakeSunShader, HalftoneShader, HorizontalBlurShader,
-  HorizontalTiltShiftShader, HueSaturationShader, KaleidoShader, LuminosityHighPassShader, LuminosityShader,
-  MirrorShader, NormalMapShader, OutputShader, PoissonDenoiseShader, RGBShiftShader, SepiaShader,
-  SMAAEdgesShader, SMAAWeightsShader, SMAABlendShader, SobelOperatorShader, SSAOShader, SSAODepthShader,
-  SSAOBlurShader, SSRShader, SSRDepthShader, SSRBlurShader, SubsurfaceScatteringShader, TechnicolorShader,
-  ToonShaderHatching, ToonShaderDotted, TriangleBlurShader, UnpackDepthRGBAShader, VelocityShader,
+  GodRaysGenerateShader, GodRaysCombineShader, GodRaysFakeSunShader, GTAOShader, GTAODepthShader, GTAOBlendShader,
+  HalftoneShader, HorizontalBlurShader, HorizontalTiltShiftShader, HueSaturationShader, KaleidoShader,
+  LuminosityHighPassShader, LuminosityShader, MirrorShader, NormalMapShader, OutputShader, PoissonDenoiseShader,
+  RGBShiftShader, SAOShader, SepiaShader, SMAAEdgesShader, SMAAWeightsShader, SMAABlendShader, SobelOperatorShader,
+  SSAOShader, SSAODepthShader, SSAOBlurShader, SSRShader, SSRDepthShader, SSRBlurShader, SubsurfaceScatteringShader,
+  TechnicolorShader, ToonShaderHatching, ToonShaderDotted, TriangleBlurShader, UnpackDepthRGBAShader, VelocityShader,
   VerticalBlurShader, VerticalTiltShiftShader, VignetteShader, VolumeShader, WaterRefractionShader
 };
 
